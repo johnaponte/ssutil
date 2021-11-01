@@ -1,0 +1,15 @@
+Package: samplesizeutil
+Title: Utilities for Sample Size calculation
+Version: 0.1
+Authors@R: Authors@R: person(
+            given = "John J.",
+            family = "Aponte",
+            role = c("aut", "cre"),
+            email = "john.j.aponte@gmail.com",
+            comment = c(ORCID = "0000-0002-3014-3673"))
+Description: Utlities for the sample size estimation and
+             simulations of clinical trial.
+License: AGPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2

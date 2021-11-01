@@ -1,7 +1,7 @@
 Package: SampleSizeU
 Title: Utilities for Sample Size calculation
-Version: 0.1.1.9001
-Authors@R:person(
+Version: 0.1.1
+Authors@R: person(
             given = "John J.",
             family = "Aponte",
             role = c("aut", "cre"),
@@ -16,3 +16,6 @@ RoxygenNote: 7.1.2
 Suggests: 
     spelling
 Language: en-US
+Imports: 
+    stats,
+    stringr

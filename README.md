@@ -1,2 +1,2 @@
-# cviassutil
-Sample size utilities
+# SampleSizeUtil
+An `R` package with sample size utilities.

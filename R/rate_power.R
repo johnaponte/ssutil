@@ -14,8 +14,7 @@ require(stringr)
 #' detected with the specified power and sample size
 #' @export
 #' @importFrom stringr str_pad
-#' @importFrom stats uniroot
-#' @importFrom stats dbinom
+#' @importFrom stats binom.test
 #' @examples
 #' rate_power(30,0.9)
 #' rate_power(c(30,50,100), c(0.9))
@@ -26,7 +25,8 @@ rate_power<- function(subjects, power){
     for (powerj in power) {
       stopifnot(as.integer(ni)==ni)
       stopifnot(0 < powerj & powerj < 1)
-      ss <-uniroot(function(x){powerj-(1-dbinom(0,ni,x))}, interval=c(0,1))$root
+      #ss <-uniroot(function(x){powerj-(1-dbinom(0,ni,x))}, interval=c(0,1))$root
+      ss<- binom.test(0,ni,p=powerj, alternative = "less")$conf.int[2]
       res = c(res, ni, powerj,ss)
     }
   }
@@ -36,12 +36,17 @@ rate_power<- function(subjects, power){
   rem
 }
 
+
+
 #' @export
-print.rate_power <- function(x, ...){
+format.rate_power <- function(x, digits=3, ...){
+  stopifnot(inherits(x,"rate_power"))
+  scale <- -floor(log10(x[,3]))
+  val = x[,3]*(10^scale)
+  valf <- format(val, digits=digits, ...)
   if (nrow(x) == 1) {
-    scale <- -floor(log10(x[1,3]))
-    val = round(x[1,3]*(10^scale),2)
-    cat(
+    res_str <-
+    paste(
       "An study with ",
     x[1,1],
       " participants would have ",
@@ -49,35 +54,26 @@ print.rate_power <- function(x, ...){
     "% power to detect at least one",
     " event if the true proportion of",
     " events is at least ",
-    val,
+    valf,
     " per ",
     10^scale,
     " participants.",
     sep = "")
   } else {
-      cat("According to the number of participants, ",
+      res_str <-
+        paste("According to the number of participants, ",
           "the table shows the power to detect at\n ",
-          "least event given a true proportion of events or higher\n\n")
-      cat("")
+          "least event given a true proportion of events or higher\n\n",
+          sep = " ")
       subjects <- x[,1]
       powert <- paste0(x[,2]*100,"%")
-      restext <- apply(
-        x,
-        1,
-        function(y){
-          scale <- -floor(log10(y[3]))
-          val = round(y[3]*(10^scale),2)
-          paste(
-            formatC(val,format = "f", digits = 2),
-            "per",
-            10^scale,
-            "participants")
-        }
-      )
+      restext <-  paste(valf, "per",10^scale,"participants")
       width1 = max(8, max(nchar(subjects)))
       width2 = max(5, max(nchar(powert)))
       width3 = max(10, max(nchar(restext)))
-      cat("|",
+      res_str <-
+        paste(res_str,
+          "|",
           str_pad("Subjects", width1),
           "|",
           str_pad("Power", width2),
@@ -85,8 +81,9 @@ print.rate_power <- function(x, ...){
           str_pad("Proportion", width3),
           "|\n", sep = "")
 
-      cat(
-          "|",
+      res_str <-
+        paste(res_str,
+              "|",
           paste0(rep("-",width1), collapse=""),
           "|",
           paste0(rep("-",width2), collapse=""),
@@ -96,8 +93,9 @@ print.rate_power <- function(x, ...){
 
 
       for (i in c(1:nrow(x))){
-        cat(
-          "|",
+        res_str <-
+          paste(res_str,
+                "|",
           str_pad(subjects[i],width1),
           "|",
           str_pad(powert[i], width2),
@@ -106,13 +104,22 @@ print.rate_power <- function(x, ...){
           "|\n", sep="")
       }
   }
-
+ res_str
 }
 
 
+#' @export
+print.rate_power<- function(x,...){
+  stopifnot(inherits(x,"rate_power"))
+  cat(format(x,...))
+  invisible(x)
+}
+
+#
+# # Examples
 # xx<- rate_power(30,0.9)
 # xx
 #
 # yy<- rate_power(c(30,50,100), c(0.8))
 # yy
-#
+

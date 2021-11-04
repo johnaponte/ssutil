@@ -2,11 +2,10 @@
 # 20211101 by JJAVE
 require(stringr)
 
-#' Power to detect a rate
+#' Rate of events to observe at least one event
 #'
 #' Estimate which is the true proportion required to observe
 #' at least one event given a sample size and a power
-#'
 #'
 #' @param subjects sample size
 #' @param power power

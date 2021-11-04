@@ -2,7 +2,7 @@
 # 20211101 by JJAVE
 require(stringr)
 
-#' Rate for a given power
+#' Power to detect a rate
 #'
 #' Estimate which is the true proportion required to observe
 #' at least one event given a sample size and a power
@@ -10,15 +10,15 @@ require(stringr)
 #'
 #' @param subjects sample size
 #' @param power power
-#' @return and s3 object of class rate_power with the proportion that can be
+#' @return and s3 object of class power_single_rate with the proportion that can be
 #' detected with the specified power and sample size
 #' @export
 #' @importFrom stringr str_pad
 #' @importFrom stats binom.test
 #' @examples
-#' rate_power(30,0.9)
-#' rate_power(c(30,50,100), c(0.9))
-rate_power<- function(subjects, power){
+#' power_single_rate(30,0.9)
+#' power_single_rate(c(30,50,100), c(0.9))
+power_single_rate<- function(subjects, power){
   # Check parameters
   res <- numeric()
   for (ni in subjects) {
@@ -32,15 +32,15 @@ rate_power<- function(subjects, power){
   }
   rem <- matrix(res, ncol=3, byrow = T)
   colnames(rem)<- c("n","power","proportion")
-  class(rem)<- c(class(rem),"rate_power")
+  class(rem)<- c(class(rem),"power_single_rate")
   rem
 }
 
 
 
 #' @export
-format.rate_power <- function(x, digits=3, ...){
-  stopifnot(inherits(x,"rate_power"))
+format.power_single_rate <- function(x, digits=3, ...){
+  stopifnot(inherits(x,"power_single_rate"))
   scale <- -floor(log10(x[,3]))
   val = x[,3]*(10^scale)
   valf <- format(val, digits=digits, ...)
@@ -109,17 +109,17 @@ format.rate_power <- function(x, digits=3, ...){
 
 
 #' @export
-print.rate_power<- function(x,...){
-  stopifnot(inherits(x,"rate_power"))
+print.power_single_rate<- function(x,...){
+  stopifnot(inherits(x,"power_single_rate"))
   cat(format(x,...))
   invisible(x)
 }
 
 #
 # # Examples
-# xx<- rate_power(30,0.9)
+# xx<- power_single_rate(30,0.9)
 # xx
 #
-# yy<- rate_power(c(30,50,100), c(0.8))
+# yy<- power_single_rate(c(30,50,100), c(0.8))
 # yy
 

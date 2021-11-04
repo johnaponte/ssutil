@@ -7,7 +7,7 @@
 #'
 #' This function estimates the empirical power to select the most promising group as
 #' the best group, when the outcome is normally distributed, assuming that
-#' the mean of the most promising group is at least `pdif` higher than the other groups.
+#' the mean of the most promising group is at least `dif` higher than the other groups.
 #'
 #' The function allows to evaluate several outcomes at the same time, in which
 #' case evaluates if the most promising group is the best for all outcomes.

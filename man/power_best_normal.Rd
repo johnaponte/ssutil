@@ -28,7 +28,7 @@ where the best group was selected as best for all outcomes.
 \description{
 This function estimates the empirical power to select the most promising group as
 the best group, when the outcome is normally distributed, assuming that
-the mean of the most promising group is at least \code{pdif} higher than the other groups.
+the mean of the most promising group is at least \code{dif} higher than the other groups.
 }
 \details{
 The function allows to evaluate several outcomes at the same time, in which

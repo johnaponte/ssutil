@@ -1,5 +1,8 @@
+# SampleSizeU 0.3.0
+* Added the function power_best_binomial and associates
+
 # SampleSizeU 0.2.0
-* Added the function power_best_normal
+* Added the function power_best_normal and associates
 
 # SampleSizeU 0.1.1
 

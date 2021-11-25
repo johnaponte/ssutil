@@ -1,3 +1,6 @@
+# SampleSizeU 0.4.0
+* Added the function power_equivalence_normal
+
 # SampleSizeU 0.3.0
 * Added the function power_best_binomial and associates
 

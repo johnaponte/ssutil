@@ -1,6 +1,6 @@
 Package: SampleSizeU
 Title: Utilities for Sample Size calculation
-Version: 0.3.0
+Version: 0.4.0
 Authors@R: person(
             given = "John J.",
             family = "Aponte",

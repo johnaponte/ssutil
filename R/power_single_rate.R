@@ -24,8 +24,7 @@ power_single_rate<- function(subjects, power){
     for (powerj in power) {
       stopifnot(as.integer(ni)==ni)
       stopifnot(0 < powerj & powerj < 1)
-      #ss <-uniroot(function(x){powerj-(1-dbinom(0,ni,x))}, interval=c(0,1))$root
-      ss<- binom.test(0,ni,p=powerj, alternative = "less")$conf.int[2]
+      ss <-uniroot(function(x){powerj-(1-dbinom(0,ni,x))}, interval=c(0,1))$root
       res = c(res, ni, powerj,ss)
     }
   }

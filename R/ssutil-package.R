@@ -1,4 +1,4 @@
-#'  Utilities for Sample Size calculation
+#'  ssutil: Utilities for Sample Size calculation
 #'
 #'  Utilities for the sample size estimation and
 #'  simulations of clinical trials.

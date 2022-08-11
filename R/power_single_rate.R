@@ -14,6 +14,8 @@ require(stringr)
 #' @export
 #' @importFrom stringr str_pad
 #' @importFrom stats binom.test
+#' @importFrom stats dbinom
+#' @importFrom stats uniroot
 #' @examples
 #' power_single_rate(30,0.9)
 #' power_single_rate(c(30,50,100), c(0.9))

@@ -6,3 +6,11 @@
 #' @keywords internal
 "_PACKAGE"
 NULL
+
+utils::globalVariables(
+  c(
+    "power",
+    "prob",
+    "pred"
+    )
+)

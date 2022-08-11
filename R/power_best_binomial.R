@@ -268,8 +268,8 @@ ggplot_prob_lowest_power <- function(x){
   stopifnot("Not an object of class prob_lower_power!"=
             inherits(x,"prob_lowest_power"))
   ggplot(x$simulation) +
-    aes(x = x$prob, y = x$power*100) + geom_point() +
-    geom_line(aes(y=x$pred*100),color = "blue") +
+    aes(x = prob, y = power*100) + geom_point() +
+    geom_line(aes(y=pred*100),color = "blue") +
     ggtitle("Power to detect the best group",
             subtitle =
               paste(

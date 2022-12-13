@@ -30,14 +30,14 @@ power_equivalence_normal(
 \item{conf.level}{confidence level of the interval}
 }
 \value{
-the power to declare equivalence
+a tibble with the power to declare equivalence and 95\% CI
 }
 \description{
 Estimate the empirical power to detect equivalence assuming a true
-no difference in normally distributed outcomes, using pairwise t.test
+no difference in normally distributed outcomes, using t.test on all pair
 comparisons between the different groups. Equivalence is declared if the
 confidence interval of the difference are within the lower limit (\code{llimit})
-and the upper limit (\code{ulimit})
+and the upper limit (\code{ulimit}) for all comparisons
 }
 \examples{
 # Lot to lot equivalence for three lots, assuming a standard deviation

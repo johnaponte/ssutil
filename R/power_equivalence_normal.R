@@ -4,7 +4,7 @@
 #' Empirical power for equivalence
 #'
 #' Estimate the empirical power to detect equivalence assuming a true
-#' no difference in normally distributed outcomes, using pairwise t.test
+#' no difference in normally distributed outcomes, using t.test on all pair
 #' comparisons between the different groups. Equivalence is declared if the
 #' confidence interval of the difference are within the lower limit (\code{llimit})
 #' and the upper limit (\code{ulimit}) for all comparisons
@@ -62,7 +62,6 @@ power_equivalence_normal <- function(
               )
           all(y)
         }, 0)
-
     out <- tidy(binom.test(sum(vres), length(vres)))[,c(1,5,6)]
     names(out)[1]<- "power"
     out
@@ -86,4 +85,4 @@ power_equivalence_normal <- function(
 #   nsimul = 1000,
 #   conf.level = 0.95
 # )
-
+#

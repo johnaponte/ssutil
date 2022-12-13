@@ -7,7 +7,7 @@
 #' no difference in normally distributed outcomes, using pairwise t.test
 #' comparisons between the different groups. Equivalence is declared if the
 #' confidence interval of the difference are within the lower limit (\code{llimit})
-#' and the upper limit (\code{ulimit})
+#' and the upper limit (\code{ulimit}) for all comparisons
 #'
 #' @param ngroups number of groups to compare
 #' @param npergroup number of observations per group
@@ -16,9 +16,10 @@
 #' @param ulimit upper limit for equivalence
 #' @param nsimul number of simulations
 #' @param conf.level confidence level of the interval
-#' @return the power to declare equivalence
+#' @return a tibble with the power to declare equivalence and 95% CI
 #' @importFrom stats t.test
 #' @importFrom utils combn
+#' @importFrom broom tidy
 #' @export
 #' @examples
 #' # Lot to lot equivalence for three lots, assuming a standard deviation
@@ -61,23 +62,28 @@ power_equivalence_normal <- function(
               )
           all(y)
         }, 0)
-    mean(vres)
+
+    out <- tidy(binom.test(sum(vres), length(vres)))[,c(1,5,6)]
+    names(out)[1]<- "power"
+    out
 }
 
-ngroups = 3
-npergroup = 177
-sd = 0.403
-llimit = log10(2/3)
-ulimit = log10(3/2)
-nsimul = 10000
-conf.level = 0.95
+#
+# ngroups = 3
+# npergroup = 177
+# sd = 0.403
+# llimit = log10(2/3)
+# ulimit = log10(3/2)
+# nsimul = 10000
+# conf.level = 0.95
+#
+# power_equivalence_normal(
+#   ngroups = 3,
+#   npergroup = 172,
+#   sd = 0.403,
+#   llimit = log10(2/3),
+#   ulimit = log10(3/2),
+#   nsimul = 1000,
+#   conf.level = 0.95
+# )
 
-power_equivalence_normal(
-  ngroups = 3,
-  npergroup = 172,
-  sd = 0.403,
-  llimit = log10(2/3),
-  ulimit = log10(3/2),
-  nsimul = 1000,
-  conf.level = 0.95
-)

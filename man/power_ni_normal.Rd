@@ -5,22 +5,23 @@
 \title{Empirical power for non-inferiority}
 \usage{
 power_ni_normal(
-  ntest,
+  nsimul,
   npergroup,
-  sd,
+  ntest,
   ni_limit,
   test_req,
   test_opt,
-  nsimul,
+  sd,
+  corr = 0,
   conf.level = 0.95
 )
 }
 \arguments{
-\item{ntest}{number of test to compare}
+\item{nsimul}{number of simulations}
 
 \item{npergroup}{number of observations per group}
 
-\item{sd}{standard deviation of the distribution. can be a single number for all test or a vector with sd for each test}
+\item{ntest}{number of test to compare}
 
 \item{ni_limit}{limit to declare non-inferiority of a test. It can be a single number of a vector with limits for each test}
 
@@ -29,12 +30,15 @@ power_ni_normal(
 \item{test_opt}{Number of the test that must accomplish non-inferiority from the rest of
 the test non required}
 
-\item{nsimul}{number of simulations}
+\item{sd}{standard deviation of the distribution. can be a single number for all test or a vector with sd for each test}
+
+\item{corr}{correlation between the tests. If not included or 0, not correlation is included.
+if a single value, similar correlation between all test. Otherwise a vector of correlation between each pair of test}
 
 \item{conf.level}{confidence level of the interval. One number for all test or a vector to specify a different conf.level for each test}
 }
 \value{
-a tibble with the power to declare non inferiority and 95\% CI
+a tibble with the power to declare non inferiority and 95\% CI around the power
 }
 \description{
 Estimate the empirical power to detect non-inferiority assuming a true
@@ -44,19 +48,34 @@ interval of the comparison is higher than the non-inferiority limit.
 Overall non-inferiority is declared as a rule for specific test or a number
 of test from the group (ie 3 of the five are non-inferior)
 }
+\note{
+If only one test, correlation is not taken into account.
+
+If correlation is specified as a vector, it must represent all combinations
+between test in order: i.e. (1,2),(1,3),(1,4),..,(1,ntest),(2,3),(2,4)..(2,ntest)... (1-ntest,1-ntest)
+
+For example with 3 test with correlation between test = c(0.2,0.3,0.4)
+would produce the correlation matrix:\tabular{cccc}{
+    \tab [ ,1] \tab [ ,2] \tab [ ,3] \cr
+   [1, ] \tab 1 \tab 0.2 \tab 0.3 \cr
+   [2, ] \tab 0.2 \tab 1 \tab 0.4 \cr
+   [3, ] \tab 0.3 \tab 0.4 \tab 1 \cr
+}
+}
 \examples{
 # Non-Inferiority for 7 test, from which the first two must accomplish
 # non-inferiority and 3 of the left 5 must accomplish non inferiority
 # sd and ni_limit is the same for the 7 tests. sd is in log10 scale
 
 power_ni_normal(
-ntest = 7,
+nsimul = 1000,
 npergroup = 250,
-sd = 0.4,
+ntest = 7,
 ni_limit = log10(2/3),
 test_req = 2,
 test_opt = 3,
-nsimul = 1000,
+sd = 0.4,
+corr= 0,
 conf.level = 0.95
 )
 }

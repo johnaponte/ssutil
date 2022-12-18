@@ -1,6 +1,6 @@
 Package: ssutil
 Title: Utilities for Sample Size calculation
-Version: 0.4.1
+Version: 0.5
 Authors@R: person(
             given = "John J.",
             family = "Aponte",
@@ -23,4 +23,5 @@ Imports:
     stringr,
     ggplot2,
     magrittr,
-    broom
+    broom,
+    MASS

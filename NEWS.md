@@ -1,3 +1,6 @@
+# ssutil 0.5.0
+* Added the power_ni_normal function
+
 # ssutil 0.4.1
 * Fix a mistake in the graphs ggplot_prob_lowest_power
 * Fix some global variables and imports

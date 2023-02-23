@@ -20,7 +20,7 @@
 #' @export
 #' @return a list with the non-inferiority margin, number of events and maximum
 #' hazard ratio and events in the experimental to declare Non inferiority
-ni_flemming <- function(ve_lci, alpha = 0.025, power = 0.90){
+ni_fleming <- function(ve_lci, alpha = 0.025, power = 0.90){
   stopifnot("ve_lci Should be a value between 0 and 1"= ve_lci > 0 & ve_lci < 1)
   stopifnot("alpha should be a value between 0 and 1" = alpha > 0 & alpha < 1)
   stopifnot("power should be a value between 0 and 1" = power > 0 & power < 1)

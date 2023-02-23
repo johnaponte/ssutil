@@ -64,6 +64,7 @@ power_equivalence_normal <- function(
         }, 0)
     out <- tidy(binom.test(sum(vres), length(vres)))[,c(1,5,6)]
     names(out)[1]<- "power"
+    cbind(out,"nsim" = length(vres))
     out
 }
 

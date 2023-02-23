@@ -28,6 +28,8 @@
 #' @param npergroup number of subjects in each group
 #' @param nsimul number of simulations
 #' @importFrom stats rnorm
+#' @importFrom stats binom.test
+#' @importFrom broom tidy
 #' @export
 #' @returns The empirical power expressed as the proportion of the simulations
 #' where the best group was selected as best for all outcomes.
@@ -108,6 +110,7 @@ power_best_normal <-
       sd = rep(sd, noutcomes)
     if (length(dif == 1))
       dif = rep(dif, noutcomes)
+    meandif <- mean + dif
 
     # Maximum number of participants per group
     # Extra observations are removed later
@@ -124,7 +127,14 @@ power_best_normal <-
       }
     }
     # To confirm the correct disposition of values
-    #amv<-array(meanvec,dim=c(maxpnpergroup,pngroups,pnoutcomes))
+    # amv<-array(
+    #   meanvec,
+    #   dim=c(maxnpergroup,ngroups, noutcomes),
+    #   dimnames = list(
+    #     paste0("Subj ",1:maxnpergroup),
+    #     paste0("Grp ",1:ngroups),
+    #     paste0("Outcome",1:noutcomes)))
+    # amv
 
     # Vector of the standard deviations
     sdvec <- vector()
@@ -133,8 +143,9 @@ power_best_normal <-
         sdvec <- c(sdvec, rep(sd[i], maxnpergroup))
       }
     }
-    # To confirm the correct disposition of values
-    #asd<-array(sdvec,dim=c(maxpnpergroup,pngroups,pnoutcomes))
+    # # To confirm the correct disposition of values
+    # asd<-array(sdvec,dim=c(maxnpergroup,ngroups,noutcomes))
+    # asd
 
     # Simulations of trials
     simrest <-
@@ -169,8 +180,11 @@ power_best_normal <-
                           meansone <-
                             apply(simulone[, , outn], 2, mean,na.rm = TRUE)
                           # which row is the best, if a tie, sample 1
-                          bestone <-
-                            sample(which(meansone == max(meansone)), 1)
+                          bestone <- which(meansone == max(meansone))
+                          # if there is a tie select one of the best
+                          if (length(bestone)>1){
+                            bestone <- sample(bestone,1)
+                          }
                           # True if the best groups is the best
                           ifelse(bestone == 1, TRUE, FALSE)
                         },
@@ -178,9 +192,21 @@ power_best_normal <-
                ifelse(all(is_first_the_best), 1, 0)
              }, 0.0)
 
-    # Calculate the power
-    mean(simrest)
+
+    # Calculate the power and 95% confidence interval
+    out <- tidy(binom.test(sum(simrest), length(simrest)))[,c(1,5,6)]
+    names(out)[1]<- "power"
+    cbind(out,"nsim" = length(simrest))
   }
+
+
+  noutcomes = 2
+  mean = 1
+  sd = 1
+  dif = 0.2
+  ngroups= 3
+  npergroup= c(30,25,25)
+  nsimul=100
 
 # require(plyr)
 # require(ggplot2)

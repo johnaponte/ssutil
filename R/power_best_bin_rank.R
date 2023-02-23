@@ -14,16 +14,19 @@
 #'
 #' It assume each outcome follows a binomial distribution and they are independent between them.
 #' The outcomes may have the same probability and same difference between the most promising
-#' group and the others, or they can be defined differently by outcome. In either case,
-#' the most promising has to be the best for all outcomes.
+#' group and the others, or they can be defined differently by outcome. Differently
+#' from power_best_binomial, in which the
+#' the most promising has to be the best for all outcomes,
+#' this simulation consider the sum of the ranks for each test and return
+#' the power to the first group to be selected as the best
 #'
 #' The number of subjects per group can be the same or can be specified
 #' for each group. If specified, the most promising group is always the first group.
 #'
+#'
 #' @param noutcomes number of outcomes to evaluate
 #' @param prob the probability  in the rest of the groups for each outcome
-#' @param dif difference between the most promising and the rest of the
-#'  groups for each outcome
+#' @param dif difference between the most promising and the rest of the groups for each outcome
 #' @param ngroups number of groups to compare
 #' @param npergroup number of subjects in each group
 #' @param nsimul number of simulations
@@ -38,22 +41,23 @@
 #' # Power to select the best group if the difference between the best and
 #' # the the other two groups is 0.2. One outcome and three groups of 30 subjects
 #' #
-#' power_best_binomial(
+#' power_best_bin_rank(
 #'   noutcomes = 1,
 #'   prob = 0.5,
 #'   dif = 0.2,
 #'   ngroups= 3,
 #'   npergroup= 30,
-#'   nsimul=1000
+#'   nsimul=10000
 #'
 #' }
-power_best_binomial <-
-  function(noutcomes,
-           prob,
-           dif,
-           ngroups,
-           npergroup,
-           nsimul) {
+power_best_bin_rank <-
+  function(
+    noutcomes,
+    prob,
+    dif,
+    ngroups,
+    npergroup,
+    nsimul) {
 
     # Checks and data management
     stopifnot("Incorrect length of npergroup!" =
@@ -106,8 +110,8 @@ power_best_binomial <-
     }
 
     ## To confirm the correct disposition of probvec
-    # aprob<-array(probvec,dim=c(ngroups, noutcomes))
-    # aprob
+     aprob<-array(probvec,dim=c(ngroups, noutcomes))
+     aprob
 
     # Vector of the sizes
     sizevec <- vector()
@@ -115,8 +119,8 @@ power_best_binomial <-
         sizevec <- c(sizevec, npergroup)
     }
     ## To confirm the correct disposition of values
-    #asize<-array(sizevec,dim=c(ngroups,noutcomes))
-    #asize
+    asize<-array(sizevec,dim=c(ngroups,noutcomes))
+    asize
 
     # Simulations of trials
     simrest <-
@@ -132,22 +136,14 @@ power_best_binomial <-
                          probvec) / sizevec,
                    dim = c(ngroups, noutcomes)
                  )
-
-                # Check by column (outcomes) if the first group is the best
-                # in all groups (rows). If a tie in max randomly select one
-                # if a tie, the return is a list
-                best_group <-
-                  apply(simulone,2,function(x){which(x == max(x))})
-                if (is.list(best_group)){
-                  # If is a list select randomly one when more than one
-                  best_group = vapply(
-                    best_group,
-                    function(x){
-                      ifelse(length(x)==1,x,sample(x,1))},
-                    0)
-                }
-                # return 1 if the first group is the best of all
-                ifelse(all(best_group == 1), 1, 0)
+                # Ranks each test and sum the ranks by group
+                sumranks <- apply(apply(simulone,2,rank,ties.method = "random"),1,sum)
+                # Select the groups with maximum ranks
+                bestgrp <- which(sumranks == max(sumranks))
+                # In case of ties randomly select one of the groups
+                bestgrp <- ifelse(length(bestgrp)>1,sample(bestgrp,1),bestgrp)
+                # Return 1 if the best group is the first
+                ifelse(bestgrp == 1,1,0)
              }, 0.0 )
 
     # Calculate the power and 95% confidence interval
@@ -157,12 +153,10 @@ power_best_binomial <-
   }
 
 
-
-
-#' Probability with lowest power to detect a difference
+#' Probability with lowest power to detect a difference using ranks
 #'
 #' Estimates the probability of the less promising groups with the
-#' lowest power to detect a difference between groups.
+#' lowest power to detect a difference between groups using ranks
 #' A simulation is made for a grid of probabilities and a quadratic
 #' function is fitted to the estimated powers by probability. The
 #' function returns the minimum probability from the quadratic function.
@@ -183,12 +177,12 @@ power_best_binomial <-
 #' @importFrom stats glm
 #' @importFrom stats coef
 #' @importFrom stats predict
-lowest_prop_best_binomial <- function(
-  dif,
-  ngroups,
-  npergroup,
-  nsimul,
-  prob = seq(from=0.05,to=0.95, by = 0.01)
+lowest_prop_best_bin_rank <- function(
+    dif,
+    ngroups,
+    npergroup,
+    nsimul,
+    prob = seq(from=0.05,to=0.95, by = 0.01)
 ){
 
   stopifnot("dif should be of length 1!" = length(dif)==1)
@@ -212,14 +206,15 @@ lowest_prop_best_binomial <- function(
     ddply(
       .(prob,dif,ngroups,npergroup,nsimul),
       function(x){
-          power = power_best_binomial(
+          power_best_bin_rank(
             noutcomes = 1,
             prob = x$prob,
             dif = x$dif,
             ngroups = x$ngroups,
             npergroup = x$npergroup,
             nsimul = x$nsimul
-        )
+          )
+
       }
     )
 
@@ -243,25 +238,25 @@ lowest_prop_best_binomial <- function(
       npergroups = npergroup,
       simulation = sim_res
     ),
-    class = c("prob_lowest_power","list")
+    class = c("prob_lowest_power_rank","list")
   )
 
 }
 
 #' @export
-format.prob_lowest_power<- function(x, digits = 3, nsmall = 2, ...){
+format.prob_lowest_power_rank<- function(x, digits = 3, nsmall = 2, ...){
   str <-
     paste(
       "The probability in the least favorable groups with lowest power to",
       "detect the best groups with a difference of ",x$dif, "among", x$ngroups,
-      "groups of", x$npergroup, "participants in each group is: ",
+      "groups of", x$npergroup, "participants in each group using ranks is: ",
       format(x$minprob, digits, nsmall),"\n"
     )
   cat(str)
 }
 
 #' @export
-print.prob_lowest_power <- function(x,...){
+print.prob_lowest_power_rank <- function(x,...){
   format(x, ...)
   invisible(x)
 }
@@ -279,13 +274,13 @@ print.prob_lowest_power <- function(x,...){
 #' lpb <- lowest_prop_best_binomial(dif = 0.2, ngroups = 5, npergroup = 25, nsimul = 10000)
 #' ggplot_prob_lowest_power(lpb)
 #' }
-ggplot_prob_lowest_power <- function(x){
+ggplot_prob_lowest_power_rank <- function(x){
   stopifnot("Not an object of class prob_lower_power!"=
-            inherits(x,"prob_lowest_power"))
+              inherits(x,"prob_lowest_power_rank"))
   ggplot(x$simulation) +
     aes(x = prob, y = power*100) + geom_point() +
     geom_line(aes(y=pred*100),color = "blue") +
-    ggtitle("Power to detect the best group",
+    ggtitle("Power to detect the best group based on ranks",
             subtitle =
               paste(
                 "Difference: ",
@@ -302,25 +297,25 @@ ggplot_prob_lowest_power <- function(x){
 }
 
 # # to debug
+# require(plyr)
+# require(tidyverse, warn.conflicts = F)
+# require(broom)
+# require(ggplot2)
+#
 # noutcomes = 1
-# prob = c(0.41)
+# prob = c(0.7)
 # dif = c(0.24)
 # ngroups= 5
 # npergroup= c(25)
-# nsimul=10000
+# nsimul=1000
 #
 # # to test
-# power_best_binomial(noutcomes,prob,dif,ngroups,npergroup,nsimul)
+# power_best_bin_rank(noutcomes,prob,dif,ngroups,npergroup,nsimul)
 #
 # # Lowest power
-# require(plyr)
-# require(ggplot2)
-# xx <- lowest_prop_best_binomial(dif = 0.2, ngroups = 5, npergroup = 25, nsimul = 10000)
+# xx <- lowest_prop_best_bin_rank(dif = 0.1, ngroups = 5, npergroup = 300, nsimul = 1000)
 # xx
-# ggplot_prob_lowest_power(xx)
-
-
-
+# ggplot_prob_lowest_power_rank(xx)
 
 
 

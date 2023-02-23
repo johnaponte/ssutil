@@ -144,13 +144,13 @@ power_ni_normal <- function(
 }
 
 
-power_ni_normal(
-nsimul = 1000,
-npergroup = 250,
-ntest = 7,
-ni_limit = log10(2/3),
-test_req = 2,
-test_opt = 3,
-sd = 0.4,
-conf.level = 0.95
-)
+# power_ni_normal(
+# nsimul = 1000,
+# npergroup = 250,
+# ntest = 7,
+# ni_limit = log10(2/3),
+# test_req = 2,
+# test_opt = 3,
+# sd = 0.4,
+# conf.level = 0.95
+# )

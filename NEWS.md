@@ -1,3 +1,6 @@
+# ssutil 0.8.0
+-   power_best_norm_rank: to empirically find the power for normal distributions
+    based on ranks 
 # ssutil 0.7.0
 -   Add a function to calculate non-inferiority in vaccine trials following
     Flemming et al

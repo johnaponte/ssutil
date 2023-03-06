@@ -1,0 +1,204 @@
+# Function to simulate trials and estimate empirical power from trials
+# by JJAV 20211028
+
+
+
+#' Power to select the best group by ranks
+#'
+#' This function estimates the empirical power to select the most promising group as
+#' the best group, when the outcome is normally distributed, assuming that
+#' the mean of the most promising group is at least `dif` higher than the other groups.
+#' and the best group is selected by summing the ranks of each outcome
+#'
+#' The function allows to evaluate several outcomes at the same time, in which
+#' case evaluates if the most promising group is the best for all outcomes.
+#'
+#' It assume each outcome is normally distributed and they are independent between them.
+#' The outcomes may have the same mean, sd and same difference between the most promising
+#' group and the others, or they can be defined differently by outcome.
+#'
+#' The number of subjects per group can be the same or can be specified
+#' for each group. If specified, the most promising group is always the first group.
+#'
+#' @param noutcomes number of outcomes to evaluate
+#' @param mean mean value for the rest of the groups for each outcome
+#' @param sd standard deviation for for each outcome
+#' @param dif difference between the most promising and the rest of the groups for each outcome
+#' @param ngroups number of groups to compare
+#' @param npergroup number of subjects in each group
+#' @param nsimul number of simulations
+#' @importFrom stats rnorm
+#' @importFrom stats binom.test
+#' @importFrom broom tidy
+#' @export
+#' @returns The empirical power expressed as the proportion of the simulations
+#' where the best group was selected as best for all outcomes.
+#' @examples
+#' \dontrun{
+#' # Power to select the best group if the difference between the best and
+#' # the the other two groups is 0.2. One outcome and three groups of 30 subjects
+#' #
+#' power_best_normal(
+#'   noutcomes = 1,
+#'   mean = 1,
+#'   sd = 1,
+#'   dif = 0.2,
+#'   ngroups= 3,
+#'   npergroup= 30,
+#'   nsimul=10000
+#' )
+#' #
+#' # Power to select the best group if the difference between the best and
+#' # the the other two groups is 0.2. three outcomes and three groups of 30 subjects
+#' #
+#' power_best_normal(
+#'   noutcomes = 3,
+#'   mean = 1,
+#'   sd = 1,
+#'   dif = 0.2,
+#'   ngroups= 3,
+#'   npergroup= 30,
+#'   nsimul=10000
+#' )
+#' #
+#' # Power to select the best group if the difference between the best and
+#' # the the other two groups is 0.2. three outcome and three groups of 30 subjects
+#' # Each outcome has its own parameters
+#' #
+#' power_best_norm_rank(
+#'   noutcomes = 3,
+#'   mean = c(1,1.5,2),
+#'   sd = c(1,0.8,1.5),
+#'   dif = c(0.2,0.15,0.3),
+#'   ngroups= 3,
+#'   npergroup= 30,
+#'   nsimul=1000
+#' )
+#' #
+#' # Power to select the best group if the difference between the best and
+#' # the the other two groups is 0.2. three outcomes and three groups, the
+#' # first group with 30 subjects and the rest with 25 subjects
+#' #
+#' power_best_norm_rank(
+#'   noutcomes = 3,
+#'   mean = 1,
+#'   sd = 1,
+#'   dif = 0.2,
+#'   ngroups= 3,
+#'   npergroup= c(30,25,25),
+#'   nsimul=1000
+#' )
+#' }
+power_best_norm_rank <-
+  function(noutcomes,
+           mean,
+           sd,
+           dif,
+           ngroups,
+           npergroup,
+           nsimul) {
+
+    # Checks and data management
+    stopifnot(length(npergroup) == 1 | length(npergroup) == ngroups)
+    stopifnot(length(mean) == 1 | length(mean) == noutcomes)
+    stopifnot(length(sd) == 1 | length(sd) == noutcomes)
+    stopifnot(length(dif) == 1 | length(dif) == noutcomes)
+
+    if (length(mean) == 1)
+      mean = rep(mean, noutcomes)
+    if (length(sd) == 1)
+      sd = rep(sd, noutcomes)
+    if (length(dif == 1))
+      dif = rep(dif, noutcomes)
+    meandif <- mean + dif
+
+    # Maximum number of participants per group
+    # Extra observations are removed later
+    maxnpergroup <- max(npergroup)
+
+    # Vector of the means
+    meanvec <- vector()
+    for (i in 1:noutcomes) {
+      for (j in 1:ngroups) {
+        if (j == 1)
+          meanvec <-c(meanvec, rep(mean[i] + dif[i], maxnpergroup))
+        else
+          meanvec <- c(meanvec, rep(mean[i], maxnpergroup))
+      }
+    }
+    # To confirm the correct disposition of values
+    # amv<-array(
+    #   meanvec,
+    #   dim=c(maxnpergroup,ngroups, noutcomes),
+    #   dimnames = list(
+    #     paste0("Subj ",1:maxnpergroup),
+    #     paste0("Grp ",1:ngroups),
+    #     paste0("Outcome",1:noutcomes)))
+    # amv
+
+    # Vector of the standard deviations
+    sdvec <- vector()
+    for (i in 1:noutcomes) {
+      for (j in 1:ngroups) {
+        sdvec <- c(sdvec, rep(sd[i], maxnpergroup))
+      }
+    }
+    # # To confirm the correct disposition of values
+    # asd<-array(sdvec,dim=c(maxnpergroup,ngroups,noutcomes))
+    # asd
+
+    # Simulations of trials
+    simrest <-
+      vapply(c(1:nsimul),
+             function(xx) {
+               # Simulate one trial, the result is a multidimensional array with
+               # dimensions maxnpergroups, ngroups, noutcomes
+               simulone <-
+                 array(
+                   rnorm(maxnpergroup * ngroups * noutcomes,
+                         meanvec,
+                         sdvec),
+                   dim = c(maxnpergroup, ngroups, noutcomes)
+                 )
+
+               # Groups maybe of different size
+               # Change to NA if more obs than needed for the group
+               if (length(npergroup) > 1) {
+                 for (i in 1:length(npergroup)) {
+                   if (npergroup[i] < maxnpergroup) {
+                     simulone[c((npergroup[i]+1):maxnpergroup), i,] <- NA
+                   }
+                 }
+               }
+
+               # Return the ranks of each group by outcome based on the mean
+               ranks <-
+                 apply(matrix(c(1:noutcomes)),1,
+                        # a loop for each outcome
+                        function(outn) {
+                          # the mean of each group but allows different length per group
+                          meansone <-
+                            apply(simulone[, , outn], 2, mean,na.rm = TRUE)
+                          rank(meansone, ties.method = "random")
+                        })
+               # Sum the ranks by group
+               sumranks<- apply(ranks,1,sum)
+               # Rank the groups based on the sum of ranks by outcome
+               rankgroup <- rank(sumranks, ties.method = "random")
+               # Return 1 if the max rank is in group 1
+               ifelse(rankgroup[1] == ngroups, 1, 0)
+          }, 0.0)
+    # Calculate the power and 95% confidence interval
+    out <- tidy(binom.test(sum(simrest), length(simrest)))[,c(1,5,6)]
+    names(out)[1]<- "power"
+    cbind(out,"nsim" = length(simrest))
+  }
+
+# To debug the function
+# noutcomes = 5
+# mean = 1
+# sd = 1
+# dif = 0.2
+# ngroups= 3
+# npergroup= 25
+# nsimul=1000

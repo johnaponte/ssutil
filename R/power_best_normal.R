@@ -102,7 +102,7 @@ power_best_normal <-
       mean = rep(mean, noutcomes)
     if (length(sd) == 1)
       sd = rep(sd, noutcomes)
-    if (length(dif == 1))
+    if (length(dif) == 1)
       dif = rep(dif, noutcomes)
     meandif <- mean + dif
 

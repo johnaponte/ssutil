@@ -107,12 +107,15 @@ power_best_norm_rank <-
     stopifnot(length(sd) == 1 | length(sd) == noutcomes)
     stopifnot(length(dif) == 1 | length(dif) == noutcomes)
     stopifnot(length(weights) == 1 | length(weights) == noutcomes)
-    if (length(sd) == 1)
+    if (length(sd) == 1){
       sd = rep(sd, noutcomes)
-    if (length(dif == 1))
+    }
+    if (length(dif) == 1) {
       dif = rep(dif, noutcomes)
-    if (length(weights == 1))
+    }
+    if (length(weights) == 1) {
       weights = rep(weights, noutcomes)
+    }
 
     # Weights are scaled to be the number of outcomes
     weightsc = weights/sum(weights)*noutcomes
@@ -135,13 +138,13 @@ power_best_norm_rank <-
     }
     ## To confirm the correct disposition of values
     # amv<-array(
-    #   meanvec,
-    #   dim=c(maxnpergroup,ngroups, noutcomes),
-    #   dimnames = list(
-    #     paste0("Subj ",1:maxnpergroup),
-    #     paste0("Grp ",1:ngroups),
-    #     paste0("Outcome",1:noutcomes)))
-    # amv
+    #    meanvec,
+    #    dim=c(maxnpergroup,ngroups, noutcomes),
+    #    dimnames = list(
+    #      paste0("Subj ",1:maxnpergroup),
+    #      paste0("Grp ",1:ngroups),
+    #      paste0("Outcome",1:noutcomes)))
+    #  amv
 
     # Vector of the standard deviations
     sdvec <- vector()
@@ -150,6 +153,7 @@ power_best_norm_rank <-
         sdvec <- c(sdvec, rep(sd[i], maxnpergroup))
       }
     }
+
     # # To confirm the correct disposition of values
     # asd<-array(sdvec,dim=c(maxnpergroup,ngroups,noutcomes))
     # asd
@@ -204,10 +208,21 @@ power_best_norm_rank <-
   }
 
 # To debug the function
+# library(tidyverse)
+# library(broom)
 # noutcomes = 5
 # sd = 1
 # dif = 0.2
 # weights = c(0.3, 0.3, 0.1, 0.1, 0.1)
 # ngroups= 3
 # npergroup= 25
-# nsimul=1000
+# nsimul=10
+#
+# power_best_norm_rank (
+#   noutcomes,
+#   sd,
+#   dif,
+#   weights,
+#   ngroups,
+#   npergroup,
+#   nsimul)

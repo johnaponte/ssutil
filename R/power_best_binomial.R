@@ -87,7 +87,7 @@ power_best_binomial <-
     if (length(prob) == 1)
       prob = rep(prob, noutcomes)
 
-    if (length(dif == 1))
+    if (length(dif) == 1)
       dif = rep(dif, noutcomes)
 
     stopifnot("Prob - dif should be greater than 0 and lower than 1"=
@@ -96,7 +96,7 @@ power_best_binomial <-
     stopifnot("noutcomes must be greater than 0"=
                 noutcomes > 0)
 
-    if (length(npergroup == 1))
+    if (length(npergroup) == 1)
       npergroup = rep(npergroup, ngroups)
 
     # Probability matrix

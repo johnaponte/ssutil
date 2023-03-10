@@ -7,7 +7,7 @@
 #'
 #' This function estimates the empirical power to select the most promising group as
 #' the best group, when the outcome is normally distributed, assuming that
-#' the mean of the most promising group is at least `dif` higher than the other groups.
+#' the mean of the rest of the groups  `dif` lower than the most promising group.
 #'
 #' The function allows to evaluate several outcomes at the same time, in which
 #' case evaluates if the most promising group is the best for all outcomes.
@@ -21,7 +21,6 @@
 #' for each group. If specified, the most promising group is always the first group.
 #'
 #' @param noutcomes number of outcomes to evaluate
-#' @param mean mean value for the rest of the groups for each outcome
 #' @param sd standard deviation for for each outcome
 #' @param dif difference between the most promising and the rest of the groups for each outcome
 #' @param ngroups number of groups to compare
@@ -40,7 +39,6 @@
 #' #
 #' power_best_normal(
 #'   noutcomes = 1,
-#'   mean = 1,
 #'   sd = 1,
 #'   dif = 0.2,
 #'   ngroups= 3,
@@ -53,7 +51,6 @@
 #' #
 #' power_best_normal(
 #'   noutcomes = 3,
-#'   mean = 1,
 #'   sd = 1,
 #'   dif = 0.2,
 #'   ngroups= 3,
@@ -67,7 +64,6 @@
 #' #
 #' power_best_normal(
 #'   noutcomes = 3,
-#'   mean = c(1,1.5,2),
 #'   sd = c(1,0.8,1.5),
 #'   dif = c(0.2,0.15,0.3),
 #'   ngroups= 3,
@@ -81,7 +77,6 @@
 #' #
 #' power_best_normal(
 #'   noutcomes = 3,
-#'   mean = 1,
 #'   sd = 1,
 #'   dif = 0.2,
 #'   ngroups= 3,
@@ -91,7 +86,6 @@
 #' }
 power_best_normal <-
   function(noutcomes,
-           mean,
            sd,
            dif,
            ngroups,
@@ -121,9 +115,9 @@ power_best_normal <-
     for (i in 1:noutcomes) {
       for (j in 1:ngroups) {
         if (j == 1)
-          meanvec <-c(meanvec, rep(mean[i] + dif[i], maxnpergroup))
+          meanvec <-c(meanvec, rep(0, maxnpergroup))
         else
-          meanvec <- c(meanvec, rep(mean[i], maxnpergroup))
+          meanvec <- c(meanvec, rep(-dif[i], maxnpergroup))
       }
     }
     # To confirm the correct disposition of values

@@ -4,12 +4,10 @@
 \alias{power_best_normal}
 \title{Power to select the best group}
 \usage{
-power_best_normal(noutcomes, mean, sd, dif, ngroups, npergroup, nsimul)
+power_best_normal(noutcomes, sd, dif, ngroups, npergroup, nsimul)
 }
 \arguments{
 \item{noutcomes}{number of outcomes to evaluate}
-
-\item{mean}{mean value for the rest of the groups for each outcome}
 
 \item{sd}{standard deviation for for each outcome}
 
@@ -28,7 +26,7 @@ where the best group was selected as best for all outcomes.
 \description{
 This function estimates the empirical power to select the most promising group as
 the best group, when the outcome is normally distributed, assuming that
-the mean of the most promising group is at least \code{dif} higher than the other groups.
+the mean of the rest of the groups  \code{dif} lower than the most promising group.
 }
 \details{
 The function allows to evaluate several outcomes at the same time, in which
@@ -49,7 +47,6 @@ for each group. If specified, the most promising group is always the first group
 #
 power_best_normal(
   noutcomes = 1,
-  mean = 1,
   sd = 1,
   dif = 0.2,
   ngroups= 3,
@@ -62,7 +59,6 @@ power_best_normal(
 #
 power_best_normal(
   noutcomes = 3,
-  mean = 1,
   sd = 1,
   dif = 0.2,
   ngroups= 3,
@@ -76,7 +72,6 @@ power_best_normal(
 #
 power_best_normal(
   noutcomes = 3,
-  mean = c(1,1.5,2),
   sd = c(1,0.8,1.5),
   dif = c(0.2,0.15,0.3),
   ngroups= 3,
@@ -90,7 +85,6 @@ power_best_normal(
 #
 power_best_normal(
   noutcomes = 3,
-  mean = 1,
   sd = 1,
   dif = 0.2,
   ngroups= 3,

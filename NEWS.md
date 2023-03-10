@@ -1,3 +1,12 @@
+# ssutil 0.10.0
+-   power_best_binomial and power_best_normal has been updated to match
+    their rank equivalents on the fact the dif is the difference with the
+    rest of the groups. For binomial, the prob is the probability in the most
+    promising group (i.e the most promising is higher and the rest are lower).
+    In the previous version, the prob where for the rest and the dif for how high
+    was the most promising. Now the prob is for the most promising and the dif
+    represents how low are the rest of the groups
+
 # ssutil 0.9.0
 -   Inclusion of weights on power_best_norm_ranks and power_best_bin_rank to allow.
     The API is not backwards compatible for this two functions.

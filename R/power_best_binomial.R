@@ -21,7 +21,7 @@
 #' for each group. If specified, the most promising group is always the first group.
 #'
 #' @param noutcomes number of outcomes to evaluate
-#' @param prob the probability  in the rest of the groups for each outcome
+#' @param prob the probability  in the most promising group
 #' @param dif difference between the most promising and the rest of the
 #'  groups for each outcome
 #' @param ngroups number of groups to compare
@@ -83,40 +83,36 @@ power_best_binomial <-
     stopifnot("ngroups should be an integer!" =
                 abs((trunc(ngroups) - ngroups)) < 1e-16)
 
+
     if (length(prob) == 1)
       prob = rep(prob, noutcomes)
 
     if (length(dif == 1))
       dif = rep(dif, noutcomes)
 
-    if (length(npergroup == 1))
-      npergroup = rep(npergroup, ngroups)
+    stopifnot("Prob - dif should be greater than 0 and lower than 1"=
+                all(prob - dif < 1) & all(prob-dif > 0))
 
-    # Probability in the best group
-    prob_best <- prob + dif
-    stopifnot("Prob + dif should be greater than 0 and lower than 1"=
-      all(prob_best < 1) & all(prob_best > 0))
     stopifnot("noutcomes must be greater than 0"=
                 noutcomes > 0)
 
-    # Vector of the probabilities for simulations
-    probvec <- vector()
-    for (i in 1:noutcomes) {
-      probvec <- c(probvec,prob_best[i], rep(prob[i],ngroups-1))
-    }
+    if (length(npergroup == 1))
+      npergroup = rep(npergroup, ngroups)
 
-    ## To confirm the correct disposition of probvec
-    # aprob<-array(probvec,dim=c(ngroups, noutcomes))
-    # aprob
+    # Probability matrix
+    probm <- matrix(
+      c(prob, rep(prob-dif,ngroups-1)),
+      byrow =T,
+      ncol = noutcomes)
 
-    # Vector of the sizes
-    sizevec <- vector()
-    for (i in 1:noutcomes) {
-        sizevec <- c(sizevec, npergroup)
-    }
-    ## To confirm the correct disposition of values
-    #asize<-array(sizevec,dim=c(ngroups,noutcomes))
-    #asize
+
+    # Probability vector
+    probvec <- as.vector(probm)
+
+    # matrix of sizes
+    sizem <- matrix(rep(npergroup, noutcomes), byrow = F, ncol = noutcomes)
+    sizevec <- as.vector(sizem)
+
 
     # Simulations of trials
     simrest <-
@@ -161,7 +157,7 @@ power_best_binomial <-
 
 #' Probability with lowest power to detect a difference
 #'
-#' Estimates the probability of the less promising groups with the
+#' Estimates the probability of the best promising groups with the
 #' lowest power to detect a difference between groups.
 #' A simulation is made for a grid of probabilities and a quadratic
 #' function is fitted to the estimated powers by probability. The
@@ -204,7 +200,7 @@ lowest_prop_best_binomial <- function(
       npergroup = npergroup,
       nsimul = nsimul
     ) %>%
-    filter(prob+dif < 1)
+    filter(prob-dif < 1 & power-dif > 0)
 
   # The simulations
   sim_res <-
@@ -252,8 +248,8 @@ lowest_prop_best_binomial <- function(
 format.prob_lowest_power<- function(x, digits = 3, nsmall = 2, ...){
   str <-
     paste(
-      "The probability in the least favorable groups with lowest power to",
-      "detect the best groups with a difference of ",x$dif, "among", x$ngroups,
+      "The probability in the most favorable groups with lowest power to",
+      "detect the best group with a difference of ",x$dif, "among", x$ngroups,
       "groups of", x$npergroup, "participants in each group is: ",
       format(x$minprob, digits, nsmall),"\n"
     )
@@ -295,7 +291,7 @@ ggplot_prob_lowest_power <- function(x){
                 "; N per group: ",
                 x$npergroup)) +
     labs(caption = paste("Estimated lowest power for probability:", format(x$minprob, digits = 2, nsmall = 2))) +
-    scale_x_continuous("Probability on the least promising groups") +
+    scale_x_continuous("Probability on the most promising groups") +
     scale_y_continuous("Power (%)") +
     theme(plot.caption.position = "plot", plot.caption = element_text(hjust = 0))
 

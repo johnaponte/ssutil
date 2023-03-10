@@ -27,7 +27,7 @@ lowest_prop_best_binomial(
 an S3 object of class prob_lowest_power
 }
 \description{
-Estimates the probability of the less promising groups with the
+Estimates the probability of the best promising groups with the
 lowest power to detect a difference between groups.
 A simulation is made for a grid of probabilities and a quadratic
 function is fitted to the estimated powers by probability. The

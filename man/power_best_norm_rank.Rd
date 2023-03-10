@@ -28,17 +28,14 @@ where the best group was selected as best for all outcomes.
 \description{
 This function estimates the empirical power to select the most promising group as
 the best group, when the outcome is normally distributed, assuming that
-the mean of the most promising group is at least \code{dif} higher than the other groups.
+the mean of the rest of the groups is at least \code{dif} lower than the most promising group.
 and the best group is selected by summing weighted ranks for each outcome
-}
-\details{
-The function allows to evaluate several outcomes at the same time, in which
-case evaluates if the most promising group is the best for all outcomes.
-
+#'
 It assume each outcome is normally distributed and they are independent between them.
 The outcomes may have the same mean, sd and same difference between the most promising
 group and the others, or they can be defined differently by outcome.
-
+}
+\details{
 The number of subjects per group can be the same or can be specified
 for each group. If specified, the most promising group is always the first group
 

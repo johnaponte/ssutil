@@ -9,7 +9,7 @@ power_best_binomial(noutcomes, prob, dif, ngroups, npergroup, nsimul)
 \arguments{
 \item{noutcomes}{number of outcomes to evaluate}
 
-\item{prob}{the probability  in the rest of the groups for each outcome}
+\item{prob}{the probability  in the most promising group}
 
 \item{dif}{difference between the most promising and the rest of the
 groups for each outcome}

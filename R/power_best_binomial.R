@@ -200,7 +200,7 @@ lowest_prop_best_binomial <- function(
       npergroup = npergroup,
       nsimul = nsimul
     ) %>%
-    filter(prob-dif < 1 & power-dif > 0)
+    filter(prob-dif < 1 & prob-dif > 0)
 
   # The simulations
   sim_res <-
@@ -298,6 +298,8 @@ ggplot_prob_lowest_power <- function(x){
 }
 
 # # to debug
+# library(tidyverse)
+# library(broom)
 # noutcomes = 1
 # prob = c(0.41)
 # dif = c(0.24)
@@ -314,9 +316,9 @@ ggplot_prob_lowest_power <- function(x){
 # xx <- lowest_prop_best_binomial(dif = 0.2, ngroups = 5, npergroup = 25, nsimul = 10000)
 # xx
 # ggplot_prob_lowest_power(xx)
-
-
-
-
-
-
+#
+#
+#
+#
+#
+#

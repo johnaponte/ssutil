@@ -5,15 +5,21 @@
 \title{Probability with lowest power to detect a difference using ranks}
 \usage{
 lowest_prop_best_bin_rank(
+  noutcomes,
   dif,
+  weights,
   ngroups,
   npergroup,
   nsimul,
-  prob = seq(from = 0.05, to = 0.95, by = 0.01)
+  prob
 )
 }
 \arguments{
+\item{noutcomes}{number of outcomes to evaluate}
+
 \item{dif}{difference between the best and the least promising groups}
+
+\item{weights}{weights to rank the outcomes. if 1, same weight is given to all outcomes}
 
 \item{ngroups}{number of groups}
 
@@ -27,11 +33,10 @@ lowest_prop_best_bin_rank(
 an S3 object of class prob_lowest_power
 }
 \description{
-Estimates the probability of the less promising groups with the
-lowest power to detect a difference between groups using ranks
-A simulation is made for a grid of probabilities and a quadratic
-function is fitted to the estimated powers by probability. The
+Estimates the probability of the most promising groups with the
+lowest power to select as best the most promising using ranks
+A simulation is made for a grid of probabilities for the next bests and
+a quadratic function is fitted to the estimated powers by probability. The
 function returns the minimum probability from the quadratic function.
 function.
-It is restricted to 1 outcome.
 }

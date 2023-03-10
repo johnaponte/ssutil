@@ -1,3 +1,7 @@
+# ssutil 0.9.0
+-   Inclusion of weights on power_best_norm_ranks and power_best_bin_rank to allow.
+    The API is not backwards compatible for this two functions.
+
 # ssutil 0.8.0
 -   power_best_norm_rank: to empirically find the power for normal distributions
     based on ranks 

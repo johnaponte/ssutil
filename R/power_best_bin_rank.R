@@ -10,7 +10,7 @@
 #' the probability of the most promising group is at least `dif` higher than the least promising groups.
 #'
 #' The function allows to evaluate several outcomes at the same time, in which
-#' case evaluates if the most promising group is the best for all outcomes.
+#' case evaluates if the most promising group is the best with higher rank
 #'
 #' It assume each outcome follows a binomial distribution and they are independent between them.
 #' The outcomes may have the same probability and same difference between the most promising
@@ -20,6 +20,10 @@
 #' this simulation consider the sum of the ranks for each test and return
 #' the power to the first group to be selected as the best
 #'
+#' The outcomes can be weighted to give more importance to some outcomes than
+#' others. The weights are scaled to sum the total number of outcomes. A weight
+#' of 1 will give the same weight to all outcomes.
+#'
 #' The number of subjects per group can be the same or can be specified
 #' for each group. If specified, the most promising group is always the first group.
 #'
@@ -27,6 +31,7 @@
 #' @param noutcomes number of outcomes to evaluate
 #' @param prob the probability  in the rest of the groups for each outcome
 #' @param dif difference between the most promising and the rest of the groups for each outcome
+#' @param weights weights to rank the outcomes. if 1, same weight is given to all outcomes
 #' @param ngroups number of groups to compare
 #' @param npergroup number of subjects in each group
 #' @param nsimul number of simulations
@@ -45,7 +50,8 @@
 #'   noutcomes = 1,
 #'   prob = 0.5,
 #'   dif = 0.2,
-#'   ngroups= 3,
+#'   weights = 1,
+#'   ngroups = 3,
 #'   npergroup= 30,
 #'   nsimul=10000
 #'
@@ -55,6 +61,7 @@ power_best_bin_rank <-
     noutcomes,
     prob,
     dif,
+    weights,
     ngroups,
     npergroup,
     nsimul) {
@@ -87,40 +94,45 @@ power_best_bin_rank <-
     stopifnot("ngroups should be an integer!" =
                 abs((trunc(ngroups) - ngroups)) < 1e-16)
 
+    stopifnot(length(weights) == 1 | length(weights) == noutcomes)
+
+    if (length(weights) == 1)
+        weights = rep(weights, noutcomes)
+
+    # Weights are scaled to be the number of outcomes
+    weightsc = weights/sum(weights)*noutcomes
+
+    # Make the matrix of weight to multiply the ranks
+    weightsm <- matrix(rep(weightsc,ngroups), ncol = noutcomes, byrow = T)
+
     if (length(prob) == 1)
       prob = rep(prob, noutcomes)
 
     if (length(dif == 1))
       dif = rep(dif, noutcomes)
 
-    if (length(npergroup == 1))
-      npergroup = rep(npergroup, ngroups)
+    stopifnot("Prob - dif should be greater than 0 and lower than 1"=
+                all(prob - dif < 1) & all(prob-dif > 0))
 
-    # Probability in the best group
-    prob_best <- prob + dif
-    stopifnot("Prob + dif should be greater than 0 and lower than 1"=
-      all(prob_best < 1) & all(prob_best > 0))
     stopifnot("noutcomes must be greater than 0"=
                 noutcomes > 0)
 
-    # Vector of the probabilities for simulations
-    probvec <- vector()
-    for (i in 1:noutcomes) {
-      probvec <- c(probvec,prob_best[i], rep(prob[i],ngroups-1))
-    }
+    if (length(npergroup == 1))
+      npergroup = rep(npergroup, ngroups)
 
-    ## To confirm the correct disposition of probvec
-     aprob<-array(probvec,dim=c(ngroups, noutcomes))
-     aprob
+    # Probability matrix
+    probm <- matrix(
+      c(prob, rep(prob-dif,ngroups-1)),
+      byrow =T,
+      ncol = noutcomes)
 
-    # Vector of the sizes
-    sizevec <- vector()
-    for (i in 1:noutcomes) {
-        sizevec <- c(sizevec, npergroup)
-    }
-    ## To confirm the correct disposition of values
-    asize<-array(sizevec,dim=c(ngroups,noutcomes))
-    asize
+
+    # Probability vector
+    probvec <- as.vector(probm)
+
+    # matrix of sizes
+    sizem <- matrix(rep(npergroup, noutcomes), byrow = F, ncol = noutcomes)
+    sizevec <- as.vector(sizem)
 
     # Simulations of trials
     simrest <-
@@ -131,19 +143,22 @@ power_best_bin_rank <-
                # dimensions ngroups (rows), noutcomes(cols)
                simulone <-
                  array(
-                   rbinom( ngroups * noutcomes,
-                         sizevec,
-                         probvec) / sizevec,
+                   rbinom(
+                     ngroups * noutcomes,
+                     sizevec,
+                     probvec) / sizevec,
                    dim = c(ngroups, noutcomes)
                  )
-                # Ranks each test and sum the ranks by group
-                sumranks <- apply(apply(simulone,2,rank,ties.method = "random"),1,sum)
-                # Select the groups with maximum ranks
-                bestgrp <- which(sumranks == max(sumranks))
-                # In case of ties randomly select one of the groups
-                bestgrp <- ifelse(length(bestgrp)>1,sample(bestgrp,1),bestgrp)
-                # Return 1 if the best group is the first
-                ifelse(bestgrp == 1,1,0)
+                # Ranks each test
+                ranks <- apply(simulone,2,rank,ties.method = "random")
+                # Weight the ranks
+                ranksw = ranks*weightsm
+                # Sum the ranks for each group
+                sumranks <- apply(ranksw,1,sum)
+                # rank the groups
+                rankgroup <- rank(sumranks, ties.method = "random")
+                # Return 1 if the max rank is in group 1
+                ifelse(rankgroup[1] == ngroups, 1, 0)
              }, 0.0 )
 
     # Calculate the power and 95% confidence interval
@@ -155,15 +170,16 @@ power_best_bin_rank <-
 
 #' Probability with lowest power to detect a difference using ranks
 #'
-#' Estimates the probability of the less promising groups with the
-#' lowest power to detect a difference between groups using ranks
-#' A simulation is made for a grid of probabilities and a quadratic
-#' function is fitted to the estimated powers by probability. The
+#' Estimates the probability of the most promising groups with the
+#' lowest power to select as best the most promising using ranks
+#' A simulation is made for a grid of probabilities for the next bests and
+#' a quadratic function is fitted to the estimated powers by probability. The
 #' function returns the minimum probability from the quadratic function.
 #' function.
-#' It is restricted to 1 outcome.
 #'
+#' @param noutcomes number of outcomes to evaluate
 #' @param dif difference between the best and the least promising groups
+#' @param weights weights to rank the outcomes. if 1, same weight is given to all outcomes
 #' @param ngroups number of groups
 #' @param npergroup number of subjects per group
 #' @param nsimul number of simulations
@@ -178,43 +194,37 @@ power_best_bin_rank <-
 #' @importFrom stats coef
 #' @importFrom stats predict
 lowest_prop_best_bin_rank <- function(
-    dif,
+    noutcomes,
+    dif  ,
+    weights,
     ngroups,
     npergroup,
     nsimul,
-    prob = seq(from=0.05,to=0.95, by = 0.01)
+    prob
 ){
-
-  stopifnot("dif should be of length 1!" = length(dif)==1)
-  stopifnot("ngroups should be of length 1!"= length(ngroups)==1)
-  stopifnot("npergroup should be of length 1!" = length(npergroup) == 1)
 
   # The simulation matrix
   sim_matrix <-
     expand.grid(
-      prob = prob,
-      dif = dif,
-      ngroups = ngroups,
-      npergroup = npergroup,
-      nsimul = nsimul
-    ) %>%
-    filter(prob+dif < 1)
+      prob=  seq(from= 0.01, to= 0.99, length.out = 50) ,
+      dif = dif) %>%
+    filter(prob-dif < 1 & prob-dif > 0 )
 
   # The simulations
   sim_res <-
     sim_matrix %>%
     ddply(
-      .(prob,dif,ngroups,npergroup,nsimul),
+      .(prob, dif),
       function(x){
           power_best_bin_rank(
-            noutcomes = 1,
+            noutcomes = noutcomes,
             prob = x$prob,
             dif = x$dif,
-            ngroups = x$ngroups,
-            npergroup = x$npergroup,
-            nsimul = x$nsimul
+            weights = weights,
+            ngroups = ngroups,
+            npergroup = npergroup,
+            nsimul = nsimul
           )
-
       }
     )
 
@@ -224,6 +234,7 @@ lowest_prop_best_bin_rank <- function(
 
   # Find the minimum as the root of the first derivative of the model
   minprob = -coef(fit)["prob"]/coef(fit)["I(prob^2)"]/2
+  minpow = predict(fit, data.frame(prob = minprob))
 
   # Update the simulation results with the prediction of the quadratic model
   sim_res <- sim_res %>%
@@ -233,30 +244,32 @@ lowest_prop_best_bin_rank <- function(
   structure(
     list(
       minprob = minprob,
+      minpow = minpow,
       dif = dif,
       ngroups = ngroups,
       npergroups = npergroup,
       simulation = sim_res
     ),
-    class = c("prob_lowest_power_rank","list")
+    class = c("prob_lowest_power_bin_rank","list")
   )
 
 }
 
 #' @export
-format.prob_lowest_power_rank<- function(x, digits = 3, nsmall = 2, ...){
+format.prob_lowest_power_bin_rank<- function(x, digits = 3, nsmall = 2, ...){
   str <-
     paste(
-      "The probability in the least favorable groups with lowest power to",
-      "detect the best groups with a difference of ",x$dif, "among", x$ngroups,
-      "groups of", x$npergroup, "participants in each group using ranks is: ",
+      "The probability in the most promising group with lowest power to",
+      "rank as best the most promising group if there is a difference of ",
+      x$dif, "with the rest of", x$ngroups, " and",
+       x$npergroup, "participants in each group is: ",
       format(x$minprob, digits, nsmall),"\n"
     )
   cat(str)
 }
 
 #' @export
-print.prob_lowest_power_rank <- function(x,...){
+print.prob_lowest_power_bin_rank <- function(x,...){
   format(x, ...)
   invisible(x)
 }
@@ -274,9 +287,9 @@ print.prob_lowest_power_rank <- function(x,...){
 #' lpb <- lowest_prop_best_binomial(dif = 0.2, ngroups = 5, npergroup = 25, nsimul = 10000)
 #' ggplot_prob_lowest_power(lpb)
 #' }
-ggplot_prob_lowest_power_rank <- function(x){
+ggplot_prob_lowest_power_bin_rank <- function(x){
   stopifnot("Not an object of class prob_lower_power!"=
-              inherits(x,"prob_lowest_power_rank"))
+              inherits(x,"prob_lowest_power_bin_rank"))
   ggplot(x$simulation) +
     aes(x = prob, y = power*100) + geom_point() +
     geom_line(aes(y=pred*100),color = "blue") +
@@ -290,7 +303,7 @@ ggplot_prob_lowest_power_rank <- function(x){
                 "; N per group: ",
                 x$npergroup)) +
     labs(caption = paste("Estimated lowest power for probability:", format(x$minprob, digits = 2, nsmall = 2))) +
-    scale_x_continuous("Probability on the least promising groups") +
+    scale_x_continuous("Probability on the most promising groups") +
     scale_y_continuous("Power (%)") +
     theme(plot.caption.position = "plot", plot.caption = element_text(hjust = 0))
 
@@ -298,24 +311,54 @@ ggplot_prob_lowest_power_rank <- function(x){
 
 # # to debug
 # require(plyr)
-# require(tidyverse, warn.conflicts = F)
+# require(tidyverse)
 # require(broom)
 # require(ggplot2)
 #
-# noutcomes = 1
+# noutcomes = 5
 # prob = c(0.7)
 # dif = c(0.24)
-# ngroups= 5
+# weights = c(0.4,0.3,0.1,0.1,0.1)
+# ngroups= 3
 # npergroup= c(25)
+#
 # nsimul=1000
 #
 # # to test
-# power_best_bin_rank(noutcomes,prob,dif,ngroups,npergroup,nsimul)
+# power_best_bin_rank(noutcomes,prob,dif, weights,ngroups,npergroup,nsimul)
 #
-# # Lowest power
-# xx <- lowest_prop_best_bin_rank(dif = 0.1, ngroups = 5, npergroup = 300, nsimul = 1000)
+#
+# # Find the difference proportion at which we have 90% power to
+# xx <- lowest_prop_best_bin_rank(noutcomes= noutcomes, dif = 0.01,  weights = 1, ngroups = ngroups, npergroup= npergroup,nsimul = 1000)
 # xx
-# ggplot_prob_lowest_power_rank(xx)
-
+# ggplot_prob_lowest_power_bin_rank(xx)
+#
+# # Find the lowest difference with 90% power
+#
+# minpowdf <-
+#   tibble(
+#     prob = 0.7,
+#     dif =  seq(0.05,0.2, length.out = 100)
+#   ) %>%
+#   filter(prob-dif > 0 ) %>%
+#   ddply(
+#     .(dif),
+#     function(x){
+#        power_best_bin_rank(
+#          noutcomes = 5,
+#          prob = x$prob,
+#          dif = x$dif,
+#          weights = 1,
+#          ngroups = 3,
+#          npergroup = 25,
+#          nsimul = 1000
+#        )
+#     }
+#   )
+#
+# minpowdf
+#
+# ggplot(minpowdf) + aes(x=dif, y = power, ymin = conf.low, ymax = conf.high) + geom_point()  + geom_smooth(se = F)
+#
 
 

@@ -4,7 +4,7 @@
 \alias{power_best_bin_rank}
 \title{Power to select the best group}
 \usage{
-power_best_bin_rank(noutcomes, prob, dif, ngroups, npergroup, nsimul)
+power_best_bin_rank(noutcomes, prob, dif, weights, ngroups, npergroup, nsimul)
 }
 \arguments{
 \item{noutcomes}{number of outcomes to evaluate}
@@ -12,6 +12,8 @@ power_best_bin_rank(noutcomes, prob, dif, ngroups, npergroup, nsimul)
 \item{prob}{the probability  in the rest of the groups for each outcome}
 
 \item{dif}{difference between the most promising and the rest of the groups for each outcome}
+
+\item{weights}{weights to rank the outcomes. if 1, same weight is given to all outcomes}
 
 \item{ngroups}{number of groups to compare}
 
@@ -30,7 +32,7 @@ the probability of the most promising group is at least \code{dif} higher than t
 }
 \details{
 The function allows to evaluate several outcomes at the same time, in which
-case evaluates if the most promising group is the best for all outcomes.
+case evaluates if the most promising group is the best with higher rank
 
 It assume each outcome follows a binomial distribution and they are independent between them.
 The outcomes may have the same probability and same difference between the most promising
@@ -39,6 +41,10 @@ from power_best_binomial, in which the
 the most promising has to be the best for all outcomes,
 this simulation consider the sum of the ranks for each test and return
 the power to the first group to be selected as the best
+
+The outcomes can be weighted to give more importance to some outcomes than
+others. The weights are scaled to sum the total number of outcomes. A weight
+of 1 will give the same weight to all outcomes.
 
 The number of subjects per group can be the same or can be specified
 for each group. If specified, the most promising group is always the first group.
@@ -52,7 +58,8 @@ power_best_bin_rank(
   noutcomes = 1,
   prob = 0.5,
   dif = 0.2,
-  ngroups= 3,
+  weights = 1,
+  ngroups = 3,
   npergroup= 30,
   nsimul=10000
 

@@ -4,16 +4,16 @@
 \alias{power_best_norm_rank}
 \title{Power to select the best group by ranks}
 \usage{
-power_best_norm_rank(noutcomes, mean, sd, dif, ngroups, npergroup, nsimul)
+power_best_norm_rank(noutcomes, sd, dif, weights, ngroups, npergroup, nsimul)
 }
 \arguments{
 \item{noutcomes}{number of outcomes to evaluate}
 
-\item{mean}{mean value for the rest of the groups for each outcome}
-
 \item{sd}{standard deviation for for each outcome}
 
 \item{dif}{difference between the most promising and the rest of the groups for each outcome}
+
+\item{weights}{weights to rank the outcomes. if 1, same weight is given to all outcomes}
 
 \item{ngroups}{number of groups to compare}
 
@@ -29,7 +29,7 @@ where the best group was selected as best for all outcomes.
 This function estimates the empirical power to select the most promising group as
 the best group, when the outcome is normally distributed, assuming that
 the mean of the most promising group is at least \code{dif} higher than the other groups.
-and the best group is selected by summing the ranks of each outcome
+and the best group is selected by summing weighted ranks for each outcome
 }
 \details{
 The function allows to evaluate several outcomes at the same time, in which
@@ -40,45 +40,52 @@ The outcomes may have the same mean, sd and same difference between the most pro
 group and the others, or they can be defined differently by outcome.
 
 The number of subjects per group can be the same or can be specified
-for each group. If specified, the most promising group is always the first group.
+for each group. If specified, the most promising group is always the first group
+
+If weights are included, they will be internally re-scaled to add to the
+number of outcomes
+
+The difference parameter presents how the best group is above the next best
+groups.
 }
 \examples{
 \dontrun{
 # Power to select the best group if the difference between the best and
 # the the other two groups is 0.2. One outcome and three groups of 30 subjects
 #
-power_best_normal(
+power_best_norm_rank(
   noutcomes = 1,
-  mean = 1,
   sd = 1,
   dif = 0.2,
+  weights = 1,
   ngroups= 3,
   npergroup= 30,
-  nsimul=10000
+  nsimul=1000
 )
 #
 # Power to select the best group if the difference between the best and
 # the the other two groups is 0.2. three outcomes and three groups of 30 subjects
 #
-power_best_normal(
+power_best_norm_rank(
   noutcomes = 3,
-  mean = 1,
   sd = 1,
   dif = 0.2,
+  weights = 1
   ngroups= 3,
   npergroup= 30,
-  nsimul=10000
+  nsimul=1000
 )
 #
 # Power to select the best group if the difference between the best and
 # the the other two groups is 0.2. three outcome and three groups of 30 subjects
-# Each outcome has its own parameters
+# Each outcome has its own parameters and bigger weight is given to first oucome
 #
 power_best_norm_rank(
   noutcomes = 3,
   mean = c(1,1.5,2),
   sd = c(1,0.8,1.5),
   dif = c(0.2,0.15,0.3),
+  weights = c(0.5,0.3,0.2)
   ngroups= 3,
   npergroup= 30,
   nsimul=1000
@@ -93,6 +100,7 @@ power_best_norm_rank(
   mean = 1,
   sd = 1,
   dif = 0.2,
+  weights = 1,
   ngroups= 3,
   npergroup= c(30,25,25),
   nsimul=1000

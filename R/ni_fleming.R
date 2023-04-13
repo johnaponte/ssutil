@@ -43,14 +43,14 @@ ni_fleming <- function(ve_lci, alpha = 0.025, power = 0.90){
   # Number of events using a single proportion problem
   nsize = nBinomial1Sample(ph0,phi,alpha,1-power,n=1:10000, conservative = T)
 
-  # Estimate the maximum ratio that acomplish NI
+  # Estimate the maximum ratio that accomplish NI
   max_hr <- NA
   max_i <- NA
   for (i in 1:nsize){
     ptest <- binom.test(i,nsize,p = 0.5)
     hr = ptest$estimate/(1-ptest$estimate)
-    hr_uci = ptest$conf.int[2]/(1-ptest$conf.int[2])
-    if (hr_uci < delta) {
+    mhr_uci = ptest$conf.int[2]/(1-ptest$conf.int[2])
+    if (mhr_uci < delta) {
       max_hr = hr
       max_i = i
     }

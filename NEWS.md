@@ -1,5 +1,5 @@
 # ssutil 0.10.1
-- Update messages of ni_flemming
+- Update messages of ni_fleming
 
 # ssutil 0.10.0
 -   power_best_binomial and power_best_normal has been updated to match
@@ -19,7 +19,7 @@
     based on ranks 
 # ssutil 0.7.0
 -   Add a function to calculate non-inferiority in vaccine trials following
-    Flemming et al
+    Fleming et al
 # ssutil 0.6.0
 -   Fixed an error on power_test_binomial as when not a tie, the sample 
     function select randomly a number instead between 1 and the number, 

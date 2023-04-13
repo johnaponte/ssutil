@@ -1,3 +1,6 @@
+# ssutil 0.10.1
+- Update messages of ni_flemming
+
 # ssutil 0.10.0
 -   power_best_binomial and power_best_normal has been updated to match
     their rank equivalents on the fact the dif is the difference with the

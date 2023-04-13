@@ -56,10 +56,13 @@ ni_fleming <- function(ve_lci, alpha = 0.025, power = 0.90){
     }
   }
   list(
-    "Non-inferior margin" = delta,
+    "Upper limit of the HR used to estimate the sample size" = hr_uci,
+    "Non-inferior margin in HR scale" = delta,
+    "Alpha" = alpha,
+    "Power" = power,
     "Total number of events" = nsize,
-    "Max HR to declare NI" = max_hr,
-    "Max number of events" = max_i
+    "Max HR to declare NI" = as.numeric(max_hr),
+    "Max number of events in the experimental group" = max_i
   )
 }
 

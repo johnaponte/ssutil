@@ -12,15 +12,17 @@
 #' sample 1 binomial is calculated, how the confidence intervals for the
 #' proportion are estimated but it is closed enough. Here we use sample1binomial
 #' from gsDesign and exact confidence intervals
+#'
 #' @param ve_lci Lower limit of the vaccine efficacy
 #' @param alpha Error type 1
 #' @param power Power
-
+#' @param use70 Assume new vaccine is at least 30% instead of half of the current vaccine, otherwise half of the VE
 #' @importFrom gsDesign nBinomial1Sample
 #' @export
 #' @return a list with the non-inferiority margin, number of events and maximum
 #' hazard ratio and events in the experimental to declare Non inferiority
-ni_fleming <- function(ve_lci, alpha = 0.025, power = 0.90){
+#'
+ni_fleming <- function(ve_lci, alpha = 0.025, power = 0.90, use70 = FALSE){
   stopifnot("ve_lci Should be a value between 0 and 1"= ve_lci > 0 & ve_lci < 1)
   stopifnot("alpha should be a value between 0 and 1" = alpha > 0 & alpha < 1)
   stopifnot("power should be a value between 0 and 1" = power > 0 & power < 1)
@@ -30,7 +32,11 @@ ni_fleming <- function(ve_lci, alpha = 0.025, power = 0.90){
   hr_uci <- 1-ve_lci
 
   # Non inferior margin
-  delta = 1/(hr_uci/sqrt(hr_uci))
+  if (use70) {
+    delta = 1/(hr_uci/sqrt(0.70))
+  } else {
+    delta = 1/(hr_uci/sqrt(hr_uci))
+  }
 
   # In VE terms for difference between groups
   vh0 = 0
@@ -62,7 +68,12 @@ ni_fleming <- function(ve_lci, alpha = 0.025, power = 0.90){
     "Power" = power,
     "Total number of events" = nsize,
     "Max HR to declare NI" = unname(max_hr),
-    "Max number of events in the experimental group" = max_i
+    "Max number of events in the experimental group" = max_i,
+    "Non-inferior criteria: "= ifelse(
+                                use70,
+                                "At least 30% VE in new vaccine",
+                                "At least half of the VE in the new vaccine")
+
   )
 }
 

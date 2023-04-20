@@ -1,3 +1,6 @@
+# ssutil 0.11.0
+-  Add criteria of 30% in the ni_fleming 
+
 # ssutil 0.10.1
 - Update messages of ni_fleming
 

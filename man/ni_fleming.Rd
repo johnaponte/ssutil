@@ -4,7 +4,7 @@
 \alias{ni_fleming}
 \title{Non inferiority for vaccine efficacy}
 \usage{
-ni_fleming(ve_lci, alpha = 0.025, power = 0.9, use70 = FALSE)
+ni_fleming(ve_lci, alpha = 0.025, power = 0.9, use70 = FALSE, preserve = 0.5)
 }
 \arguments{
 \item{ve_lci}{Lower limit of the vaccine efficacy}
@@ -14,6 +14,8 @@ ni_fleming(ve_lci, alpha = 0.025, power = 0.9, use70 = FALSE)
 \item{power}{Power}
 
 \item{use70}{Assume new vaccine is at least 30\% instead of half of the current vaccine, otherwise half of the VE}
+
+\item{preserve}{Preserve effect- By default 0.5}
 }
 \value{
 a list with the non-inferiority margin, number of events and maximum

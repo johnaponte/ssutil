@@ -1,3 +1,6 @@
+# ssutil 0.12.0
+-  Add preserve effect and change the formula from fleming
+
 # ssutil 0.11.0
 -  Add criteria of 30% in the ni_fleming 
 

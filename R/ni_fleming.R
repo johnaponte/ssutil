@@ -17,17 +17,19 @@
 #' @param alpha Error type 1
 #' @param power Power
 #' @param use70 Assume new vaccine is at least 30% instead of half of the current vaccine, otherwise half of the VE
+#' @param preserve Preserve effect- By default 0.5
 #' @importFrom gsDesign nBinomial1Sample
 #' @export
 #' @return a list with the non-inferiority margin, number of events and maximum
 #' hazard ratio and events in the experimental to declare Non inferiority
 #'
-ni_fleming <- function(ve_lci, alpha = 0.025, power = 0.90, use70 = FALSE){
+ni_fleming <- function(ve_lci, alpha = 0.025, power = 0.90, use70 = FALSE, preserve = 0.5){
   stopifnot("ve_lci Should be a value between 0 and 1"= ve_lci > 0 & ve_lci < 1)
   stopifnot("alpha should be a value between 0 and 1" = alpha > 0 & alpha < 1)
   stopifnot("power should be a value between 0 and 1" = power > 0 & power < 1)
   stopifnot("ve_lci should be atomic" = is.atomic(ve_lci))
   stopifnot("ve_lci should be a single number" = length(ve_lci) == 1)
+  stopifnot("Preserve should be between 0 1n 1" = preserve > 0 & preserve < 1)
 
   hr_uci <- 1-ve_lci
 
@@ -35,7 +37,8 @@ ni_fleming <- function(ve_lci, alpha = 0.025, power = 0.90, use70 = FALSE){
   if (use70) {
     delta = 1/(hr_uci/sqrt(0.70))
   } else {
-    delta = 1/(hr_uci/sqrt(hr_uci))
+    delta = exp(log(hr_uci)*preserve-log(hr_uci))
+    # delta = 1/(hr_uci/sqrt(hr_uci))
   }
 
   # In VE terms for difference between groups

@@ -1,3 +1,8 @@
+# ssutil 0.13.0
+-  Add probhr function to estimate the probability of event in the experimental
+    group based on the probability of event in the control group and the hazard 
+    ratio, under proportionality of the hazard assumption
+
 # ssutil 0.12.0
 -  Add preserve effect and change the formula from fleming
 

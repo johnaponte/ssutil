@@ -15,12 +15,12 @@
 #' @importFrom stats dbinom
 #' @export
 #' @examples
-#' power_best_bin_binomial( p1 = 0.8, dif = 0.2, ngroups = 4, npergroup = 50)
+#' power_best_binomial( p1 = 0.8, dif = 0.2, ngroups = 4, npergroup = 50)
 #' @references Sobel, Milton, and Marilyn J. Huyett. “Selecting the Best One of
 #' Several Binomial Populations.” Bell System Technical Journal 36, no. 2
 #' (1957): 537–76. https://doi.org/10.1002/j.1538-7305.1957.tb02411.x.
 
-power_best_bin_binomial <- function(p1, dif, ngroups, npergroup) {
+power_best_binomial <- function(p1, dif, ngroups, npergroup) {
 
   stopifnot("p1 should be between 0 and 1" = p1 >= 0 & p1 <= 1)
   stopifnot("p1 should be greater than dif" = p1 >= dif)
@@ -78,7 +78,7 @@ power_best_bin_binomial <- function(p1, dif, ngroups, npergroup) {
 #' @param max_n maximum n evaluated
 #' @export
 #'
-ss_best_bin_binomial <- function(power, p1, dif, ngroups, max_n = 1000) {
+ss_best_binomial <- function(power, p1, dif, ngroups, max_n = 1000) {
 
   stopifnot("Power should be between 0 and 1" = power >= 0 & power  <= 1)
   stopifnot("p1 should be between 0 and 1" = p1 >= 0 & p1 <= 1)
@@ -89,7 +89,7 @@ ss_best_bin_binomial <- function(power, p1, dif, ngroups, max_n = 1000) {
   n = 1
   continue = TRUE
   while(continue & n <= max_n){
-    ps <- power_best_bin_binomial(p1,dif,ngroups,n)
+    ps <- power_best_binomial(p1,dif,ngroups,n)
     if (ps >= power) {
       continue = FALSE
     }  else {
@@ -105,10 +105,10 @@ ss_best_bin_binomial <- function(power, p1, dif, ngroups, max_n = 1000) {
 # p1 <- 0.80  # Probability of X(1)
 # d <- 0.20   # Adjustment d*
 # k <- 4     # Number of processes tied with X(1)
-# Pcs_target <- 1  # Target probability for power_best_bin_binomial
+# Pcs_target <- 1  # Target probability for power_best_binomial
 #
 # # Find the best n
-# best_n <- n_best_bin_binomial(Pcs_target, p1, d, k)
+# best_n <- n_best_binomial(Pcs_target, p1, d, k)
 # print(paste("Best n:", best_n))
 
 

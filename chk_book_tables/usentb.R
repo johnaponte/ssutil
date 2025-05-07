@@ -1,4 +1,5 @@
-
+# Close procedure with elimination
+# Procedure Ntb
 # Define the main function with parameters k, d, and P*
 usentb <- function(k, P_star) {
 

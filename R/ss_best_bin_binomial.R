@@ -11,6 +11,8 @@
 #' @param ngroups Number of groups
 #' @param npergroup Number of subjects in each group
 #' @return the probability of correctly classify as best the best group
+#' @importFrom stats pbinom
+#' @importFrom stats dbinom
 #' @export
 #' @examples
 #' power_best_bin_binomial( p1 = 0.8, dif = 0.2, ngroups = 4, npergroup = 50)
@@ -76,7 +78,7 @@ power_best_bin_binomial <- function(p1, dif, ngroups, npergroup) {
 #' @param max_n maximum n evaluated
 #' @export
 #'
-n_best_bin_binomial <- function(power, p1, dif, ngroups, max_n = 1000) {
+ss_best_bin_binomial <- function(power, p1, dif, ngroups, max_n = 1000) {
 
   stopifnot("Power should be between 0 and 1" = power >= 0 & power  <= 1)
   stopifnot("p1 should be between 0 and 1" = p1 >= 0 & p1 <= 1)

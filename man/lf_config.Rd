@@ -31,6 +31,6 @@ potential probabilities for the best group, and identify the probability with
 the lowest power to correctly identify as best the best group.
 }
 \examples{
-lf_config(d=0.2, k=4, n-20, simul=1000)
+lf_config(d=0.2, k=4, n=20, simul=1000)
 
 }

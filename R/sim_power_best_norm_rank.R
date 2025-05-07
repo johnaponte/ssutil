@@ -93,7 +93,7 @@
 #'   nsimul=1000
 #' )
 #' }
-power_best_norm_rank <-
+sim_power_best_norm_rank <-
   function(noutcomes,
            sd,
            dif,
@@ -218,7 +218,7 @@ power_best_norm_rank <-
 # npergroup= 25
 # nsimul=10
 #
-# power_best_norm_rank (
+# sim_power_best_norm_rank (
 #   noutcomes,
 #   sd,
 #   dif,

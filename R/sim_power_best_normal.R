@@ -37,7 +37,7 @@
 #' # Power to select the best group if the difference between the best and
 #' # the the other two groups is 0.2. One outcome and three groups of 30 subjects
 #' #
-#' power_best_normal(
+#' sim_power_best_normal(
 #'   noutcomes = 1,
 #'   sd = 1,
 #'   dif = 0.2,
@@ -49,7 +49,7 @@
 #' # Power to select the best group if the difference between the best and
 #' # the the other two groups is 0.2. three outcomes and three groups of 30 subjects
 #' #
-#' power_best_normal(
+#' sim_power_best_normal(
 #'   noutcomes = 3,
 #'   sd = 1,
 #'   dif = 0.2,
@@ -62,7 +62,7 @@
 #' # the the other two groups is 0.2. three outcome and three groups of 30 subjects
 #' # Each outcome has its own parameters
 #' #
-#' power_best_normal(
+#' sim_power_best_normal(
 #'   noutcomes = 3,
 #'   sd = c(1,0.8,1.5),
 #'   dif = c(0.2,0.15,0.3),
@@ -75,7 +75,7 @@
 #' # the the other two groups is 0.2. three outcomes and three groups, the
 #' # first group with 30 subjects and the rest with 25 subjects
 #' #
-#' power_best_normal(
+#' sim_power_best_normal(
 #'   noutcomes = 3,
 #'   sd = 1,
 #'   dif = 0.2,
@@ -84,7 +84,7 @@
 #'   nsimul=10000
 #' )
 #' }
-power_best_normal <-
+sim_power_best_normal <-
   function(noutcomes,
            sd,
            dif,
@@ -194,17 +194,17 @@ power_best_normal <-
   }
 
 
-  noutcomes = 2
-  mean = 1
-  sd = 1
-  dif = 0.2
-  ngroups= 3
-  npergroup= c(30,25,25)
-  nsimul=100
+  # noutcomes = 2
+  # mean = 1
+  # sd = 1
+  # dif = 0.2
+  # ngroups= 3
+  # npergroup= c(30,25,25)
+  # nsimul=100
 
 # require(plyr)
 # require(ggplot2)
-# power_best_normal(
+# sim_power_best_normal(
 #   noutcomes = 1,
 #   mean = 0,
 #   sd = 1,
@@ -214,7 +214,7 @@ power_best_normal <-
 #   nsimul=1000
 # )
 #
-# power_best_normal(
+# sim_power_best_normal(
 #   noutcomes = 3,
 #   mean = 1,
 #   sd = 1,
@@ -224,7 +224,7 @@ power_best_normal <-
 #   nsimul=1000
 # )
 #
-# power_best_normal(
+# sim_power_best_normal(
 #   noutcomes = 3,
 #   mean = c(1,1.5,2),
 #   sd = c(1,0.8,1.5),

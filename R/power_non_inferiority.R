@@ -1,4 +1,5 @@
-# Simulations for non-inferiority
+
+# Simulations for non-inferiority multiple comparisons normal distribution
 # 20221213 by JJAV
 
 #' Empirical power for non-inferiority

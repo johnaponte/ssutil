@@ -27,7 +27,7 @@ the maximum HR to declare inferiority following Fleming et al
 COVID-19 vaccine trials:
 The use of active controls and non-inferiority studies. Clinical Trials
 18(3), 335-342. https://doi.org/10.1177/1740774520988244
-following the 95-95 rule
+following the 95-95 or 90-70 rule
 }
 \details{
 Please not that is intended to produce Table 1 of the paper but the results

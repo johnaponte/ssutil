@@ -1,13 +1,13 @@
-# Function to simulate trials and estimate empirical power from trials
+# Function to simulate trials and estimate the empirical power from to correctly rank as first the best group
 # by JJAV 20211028
 
 
 
-#' Power to select the best group
+#' Power to select as best the best group using simulations
 #'
-#' This function estimates the empirical power to select the most promising group as
+#' This function estimates the empirical power to select correctly as best group
 #' the best group, when the outcome follows a binomial distribution, assuming that
-#' the probability of the most promising group is at least `dif` higher than the least promising groups.
+#' the probability of the next promising group is at least `dif` lower than the best groups.
 #'
 #' The function allows to evaluate several outcomes at the same time, in which
 #' case evaluates if the most promising group is the best for all outcomes.
@@ -21,7 +21,7 @@
 #' for each group. If specified, the most promising group is always the first group.
 #'
 #' @param noutcomes number of outcomes to evaluate
-#' @param prob the probability  in the most promising group
+#' @param p1 the probability in the most promising group
 #' @param dif difference between the most promising and the rest of the
 #'  groups for each outcome
 #' @param ngroups number of groups to compare
@@ -38,18 +38,18 @@
 #' # Power to select the best group if the difference between the best and
 #' # the the other two groups is 0.2. One outcome and three groups of 30 subjects
 #' #
-#' power_best_binomial(
+#' sim_power_best_binomial(
 #'   noutcomes = 1,
-#'   prob = 0.5,
+#'   p1 = 0.7,
 #'   dif = 0.2,
 #'   ngroups= 3,
 #'   npergroup= 30,
 #'   nsimul=1000
 #'
 #' }
-power_best_binomial <-
+sim_power_best_binomial <-
   function(noutcomes,
-           prob,
+           p1,
            dif,
            ngroups,
            npergroup,
@@ -59,14 +59,14 @@ power_best_binomial <-
     stopifnot("Incorrect length of npergroup!" =
         length(npergroup) == 1 | length(npergroup) == ngroups)
 
-    stopifnot( "Incorrect length of prob!" =
-        length(prob) == 1 | length(prob) == noutcomes)
+    stopifnot( "Incorrect length of p1!" =
+        length(p1) == 1 | length(p1) == noutcomes)
 
     stopifnot("Incorrect length of dif!" =
                 length(dif) == 1 | length(dif) == noutcomes)
 
-    stopifnot("Prob should be greater than 0 and lower than 1!" =
-                all(prob > 0) & all(prob < 1))
+    stopifnot("p1 should be greater than 0 and lower than 1!" =
+                all(p1 > 0) & all(p1 < 1))
 
     stopifnot("dif should be greater than 0!" =
                 all(dif > 0))
@@ -84,14 +84,14 @@ power_best_binomial <-
                 abs((trunc(ngroups) - ngroups)) < 1e-16)
 
 
-    if (length(prob) == 1)
-      prob = rep(prob, noutcomes)
+    if (length(p1) == 1)
+      p1 = rep(p1, noutcomes)
 
     if (length(dif) == 1)
       dif = rep(dif, noutcomes)
 
-    stopifnot("Prob - dif should be greater than 0 and lower than 1"=
-                all(prob - dif < 1) & all(prob-dif > 0))
+    stopifnot("p1 - dif should be greater than 0 and lower than 1"=
+                all(p1 - dif < 1) & all(p1-dif > 0))
 
     stopifnot("noutcomes must be greater than 0"=
                 noutcomes > 0)
@@ -99,9 +99,9 @@ power_best_binomial <-
     if (length(npergroup) == 1)
       npergroup = rep(npergroup, ngroups)
 
-    # Probability matrix
+    # p1ability matrix
     probm <- matrix(
-      c(prob, rep(prob-dif,ngroups-1)),
+      c(p1, rep(p1-dif,ngroups-1)),
       byrow =T,
       ncol = noutcomes)
 
@@ -155,143 +155,144 @@ power_best_binomial <-
 
 
 
-#' Probability with lowest power to detect a difference
+#' Least favorable configuration for a binomial experiment
 #'
-#' Estimates the probability of the best promising groups with the
-#' lowest power to detect a difference between groups.
-#' A simulation is made for a grid of probabilities and a quadratic
-#' function is fitted to the estimated powers by probability. The
-#' function returns the minimum probability from the quadratic function.
-#' function.
-#' It is restricted to 1 outcome.
+#' Given a difference, a number of groups and a number of subjects per groups, use
+#' Monte Carlo simulations to find the least favorable configuration to correctly
+#' select the best group.
 #'
-#' @param dif difference between the best and the least promising groups
-#' @param ngroups number of groups
-#' @param npergroup number of subjects per group
-#' @param nsimul number of simulations
-#' @param prob probabilities on the least promising group to evaluate. By default is a sequence between 0.05 and 0.95 by 0.01
+#' The program estimate a quadratic fit to the empirical power over a grid of
+#' potential probabilities for the best group, and identify the probability with
+#' the lowest power to correctly identify as best the best group.
+#'
+#' @examples
+#' lf_config(d=0.2, k=4, n-20, simul=1000)
+#'
+#' @param d indifference zone
+#' @param k number of groups
+#' @param n number of subjects per group
+#' @param simul number of simulations for each scenario
+#' @param prob grid of probabilities for the best group. By default is a sequence between 0.05 and 0.95 by 0.01
 #' @export
-#' @return an S3 object of class prob_lowest_power
-#' @importFrom plyr ddply
-#' @importFrom plyr .
+#' @return an S3 object of class lf_config
 #' @importFrom dplyr filter
 #' @importFrom dplyr mutate
+#' @importFrom tidyr nest
+#' @importFrom tidyr unnest
 #' @importFrom stats glm
 #' @importFrom stats coef
 #' @importFrom stats predict
-lowest_prop_best_binomial <- function(
-  dif,
-  ngroups,
-  npergroup,
-  nsimul,
-  prob = seq(from=0.05,to=0.95, by = 0.01)
+lf_config<- function(
+  d,
+  k,
+  n,
+  simul,
+  p1 = seq(from=0.05,to=0.95, by = 0.01)
 ){
 
-  stopifnot("dif should be of length 1!" = length(dif)==1)
-  stopifnot("ngroups should be of length 1!"= length(ngroups)==1)
-  stopifnot("npergroup should be of length 1!" = length(npergroup) == 1)
+  stopifnot("d should be of length 1!" = length(d)==1)
+  stopifnot("k should be of length 1!"= length(k)==1)
+  stopifnot("n should be of length 1!" = length(n) == 1)
 
-  # The simulation matrix
-  sim_matrix <-
+  # The simulation chain
+  sim <-
     expand.grid(
-      prob = prob,
-      dif = dif,
-      ngroups = ngroups,
-      npergroup = npergroup,
-      nsimul = nsimul
-    ) %>%
-    filter(prob-dif < 1 & prob-dif > 0)
-
-  # The simulations
-  sim_res <-
-    sim_matrix %>%
-    ddply(
-      .(prob,dif,ngroups,npergroup,nsimul),
-      function(x){
-          power = power_best_binomial(
+      p1 = p1,
+      d = d,
+      k = k,
+      n = n,
+      simul = simul
+    ) |>
+    filter(p1-d < 1 & p1-d > 0) |>
+    mutate(idsim = seq(1, n())) |>
+    nest(.by = idsim) |>
+    mutate(
+      power = map(
+        data,
+        function(x){
+          sim_power_best_binomial(
             noutcomes = 1,
-            prob = x$prob,
-            dif = x$dif,
-            ngroups = x$ngroups,
-            npergroup = x$npergroup,
-            nsimul = x$nsimul
-        )
-      }
-    )
+            p1 = x$p1,
+            dif= x$d,
+            ngroups= x$k,
+            npergroup= x$n,
+            nsimul=x$simul)})) |>
+    unnest(cols = c(data,power))
 
   # Evaluation of the association between the power and the base probability
   # to find which is the minimum value
-  fit <- glm(power~prob + I(prob^2), data = sim_res)
+  fit <- glm(power~p1 + I(p1^2), data = sim)
 
   # Find the minimum as the root of the first derivative of the model
-  minprob = -coef(fit)["prob"]/coef(fit)["I(prob^2)"]/2
+  minprob = -coef(fit)["p1"]/coef(fit)["I(p1^2)"]/2
 
   # Update the simulation results with the prediction of the quadratic model
-  sim_res <- sim_res %>%
-    mutate(pred = predict(fit))
+  sim <- sim |>
+    mutate(pred = predict(fit)) |>
+    mutate(pred = ifelse(pred > 1, NA, pred))
 
   # Return the results
   structure(
     list(
       minprob = minprob,
-      dif = dif,
-      ngroups = ngroups,
-      npergroups = npergroup,
-      simulation = sim_res
+      d = d,
+      k = k,
+      ns = n,
+      simulation = sim
     ),
-    class = c("prob_lowest_power","list")
+    class = c("lf_config","list")
   )
 
 }
 
 #' @export
-format.prob_lowest_power<- function(x, digits = 3, nsmall = 2, ...){
+format.lf_config<- function(x, digits = 3, nsmall = 2, ...){
   str <-
     paste(
       "The probability in the most favorable groups with lowest power to",
-      "detect the best group with a difference of ",x$dif, "among", x$ngroups,
-      "groups of", x$npergroup, "participants in each group is: ",
+      "correctly select the best group with a difference of ",x$d, "among", x$k,
+      "groups of", x$n, "participants in each group is: ",
       format(x$minprob, digits, nsmall),"\n"
     )
   cat(str)
 }
 
 #' @export
-print.prob_lowest_power <- function(x,...){
+print.lf_config<- function(x,...){
   format(x, ...)
   invisible(x)
 }
 
-#' GGplot of a prob_lowest_power object
+#' GGplot least configuration simulation
 #'
-#' @param x an object of prob_lower_power class
+#' @param x an object of lf_config class
 #' @return a ggplot2 object
 #' @export
 #' @import ggplot2
 #' @examples
 #' \dontrun{
-#' require(dplyr)
-#' require(ggplot2)
-#' lpb <- lowest_prop_best_binomial(dif = 0.2, ngroups = 5, npergroup = 25, nsimul = 10000)
-#' ggplot_prob_lowest_power(lpb)
+#' lpb <- lf_config(d = 0.2, k = 5, n = 25, simul = 1000)
+#' ggplot_lf_config(lpb)
 #' }
-ggplot_prob_lowest_power <- function(x){
-  stopifnot("Not an object of class prob_lower_power!"=
-            inherits(x,"prob_lowest_power"))
+ggplot_lf_config <- function(x){
+  stopifnot("Not an object of class lf_config!"=
+            inherits(x,"lf_config"))
   ggplot(x$simulation) +
-    aes(x = prob, y = power*100) + geom_point() +
+    aes(x = p1, y = power*100) + geom_point() +
     geom_line(aes(y=pred*100),color = "blue") +
-    ggtitle("Power to detect the best group",
+    ggtitle("Empirical power to detect the best group",
             subtitle =
-              paste(
-                "Difference: ",
-                x$dif,
+              paste0(
+                "difference: ",
+                x$d,
                 "; Groups: ",
-                x$ngroups,
+                x$k,
                 "; N per group: ",
-                x$npergroup)) +
+                x$n,
+                "; Simulations per scenario:",
+                x$simul)) +
     labs(caption = paste("Estimated lowest power for probability:", format(x$minprob, digits = 2, nsmall = 2))) +
-    scale_x_continuous("Probability on the most promising groups") +
+    scale_x_continuous("Probability of the best group") +
     scale_y_continuous("Power (%)") +
     theme(plot.caption.position = "plot", plot.caption = element_text(hjust = 0))
 
@@ -300,25 +301,27 @@ ggplot_prob_lowest_power <- function(x){
 # # to debug
 # library(tidyverse)
 # library(broom)
+p1 = seq(from=0.05,to=0.95, by = 0.01)
+d = 0.2
+k = 4
+n = 20
+simul = 1000
+
 # noutcomes = 1
-# prob = c(0.41)
+# p1 = c(0.41)
 # dif = c(0.24)
 # ngroups= 5
 # npergroup= c(25)
 # nsimul=10000
 #
 # # to test
-# power_best_binomial(noutcomes,prob,dif,ngroups,npergroup,nsimul)
+# sim_power_best_binomial(noutcomes,p1,dif,ngroups,npergroup,nsimul)
 #
 # # Lowest power
 # require(plyr)
 # require(ggplot2)
-# xx <- lowest_prop_best_binomial(dif = 0.2, ngroups = 5, npergroup = 25, nsimul = 10000)
+# xx <- lf_configuration(dif = 0.2, ngroups = 5, npergroup = 25, nsimul = 10000)
 # xx
 # ggplot_prob_lowest_power(xx)
-#
-#
-#
-#
 #
 #

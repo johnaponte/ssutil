@@ -3,9 +3,9 @@
 
 
 
-#' Power to select the best group
+#' Power to rank as best the best group using simulations
 #'
-#' This function estimates the empirical power to select the most promising group as
+#' This function estimates the empirical power to rank the most promising group as
 #' the best group, when the outcome follows a binomial distribution, assuming that
 #' the probability of the most promising group is at least `dif` higher than the least promising groups.
 #'
@@ -29,8 +29,8 @@
 #'
 #'
 #' @param noutcomes number of outcomes to evaluate
-#' @param prob the probability  in the rest of the groups for each outcome
-#' @param dif difference between the most promising and the rest of the groups for each outcome
+#' @param p1 the probability  in the best group
+#' @param dif difference with the next best group
 #' @param weights weights to rank the outcomes. if 1, same weight is given to all outcomes
 #' @param ngroups number of groups to compare
 #' @param npergroup number of subjects in each group
@@ -46,9 +46,9 @@
 #' # Power to select the best group if the difference between the best and
 #' # the the other two groups is 0.2. One outcome and three groups of 30 subjects
 #' #
-#' power_best_bin_rank(
+#' sim_power_best_bin_rank(
 #'   noutcomes = 1,
-#'   prob = 0.5,
+#'   p1 = 0.7,
 #'   dif = 0.2,
 #'   weights = 1,
 #'   ngroups = 3,
@@ -56,10 +56,10 @@
 #'   nsimul=10000
 #'
 #' }
-power_best_bin_rank <-
+sim_power_best_bin_rank <-
   function(
     noutcomes,
-    prob,
+    p1,
     dif,
     weights,
     ngroups,
@@ -71,13 +71,13 @@ power_best_bin_rank <-
         length(npergroup) == 1 | length(npergroup) == ngroups)
 
     stopifnot( "Incorrect length of prob!" =
-        length(prob) == 1 | length(prob) == noutcomes)
+        length(p1) == 1 | length(p1) == noutcomes)
 
     stopifnot("Incorrect length of dif!" =
                 length(dif) == 1 | length(dif) == noutcomes)
 
     stopifnot("Prob should be greater than 0 and lower than 1!" =
-                all(prob > 0) & all(prob < 1))
+                all(p1 > 0) & all(p1< 1))
 
     stopifnot("dif should be greater than 0!" =
                 all(dif > 0))
@@ -105,14 +105,14 @@ power_best_bin_rank <-
     # Make the matrix of weight to multiply the ranks
     weightsm <- matrix(rep(weightsc,ngroups), ncol = noutcomes, byrow = T)
 
-    if (length(prob) == 1)
-      prob = rep(prob, noutcomes)
+    if (length(p1) == 1)
+      p1 = rep(p1, noutcomes)
 
     if (length(dif) == 1)
       dif = rep(dif, noutcomes)
 
-    stopifnot("Prob - dif should be greater than 0 and lower than 1"=
-                all(prob - dif < 1) & all(prob-dif > 0))
+    stopifnot("p1 - dif should be greater than 0 and lower than 1"=
+                all(p1 - dif < 1) & all(p1-dif > 0))
 
     stopifnot("noutcomes must be greater than 0"=
                 noutcomes > 0)
@@ -122,7 +122,7 @@ power_best_bin_rank <-
 
     # Probability matrix
     probm <- matrix(
-      c(prob, rep(prob-dif,ngroups-1)),
+      c(p1, rep(p1-dif,ngroups-1)),
       byrow =T,
       ncol = noutcomes)
 
@@ -183,7 +183,7 @@ power_best_bin_rank <-
 #' @param ngroups number of groups
 #' @param npergroup number of subjects per group
 #' @param nsimul number of simulations
-#' @param prob probabilities on the least promising group to evaluate. By default is a sequence between 0.05 and 0.95 by 0.01
+#' @param p1 probabilities on the best groups. By default is a sequence between 0.05 and 0.95 by 0.01
 #' @export
 #' @return an S3 object of class prob_lowest_power
 #' @importFrom plyr ddply
@@ -200,25 +200,25 @@ lowest_prop_best_bin_rank <- function(
     ngroups,
     npergroup,
     nsimul,
-    prob
+    p1
 ){
 
   # The simulation matrix
   sim_matrix <-
     expand.grid(
-      prob=  seq(from= 0.01, to= 0.99, length.out = 50) ,
+      p1=  seq(from= 0.01, to= 0.99, length.out = 50) ,
       dif = dif) %>%
-    filter(prob-dif < 1 & prob-dif > 0 )
+    filter(p1-dif < 1 & p1-dif > 0 )
 
   # The simulations
   sim_res <-
     sim_matrix %>%
     ddply(
-      .(prob, dif),
+      .(p1, dif),
       function(x){
-          power_best_bin_rank(
+          sim_power_best_bin_rank(
             noutcomes = noutcomes,
-            prob = x$prob,
+            p1 = x$p1,
             dif = x$dif,
             weights = weights,
             ngroups = ngroups,
@@ -228,13 +228,13 @@ lowest_prop_best_bin_rank <- function(
       }
     )
 
-  # Evaluation of the association between the power and the base probability
+  # Evaluation of the association between the power and the base p1ability
   # to find which is the minimum value
-  fit <- glm(power~prob + I(prob^2), data = sim_res)
+  fit <- glm(power~p1 + I(p1^2), data = sim_res)
 
   # Find the minimum as the root of the first derivative of the model
-  minprob = -coef(fit)["prob"]/coef(fit)["I(prob^2)"]/2
-  minpow = predict(fit, data.frame(prob = minprob))
+  minprob = -coef(fit)["p1"]/coef(fit)["I(p1^2)"]/2
+  minpow = predict(fit, data.frame(p1 = minprob))
 
   # Update the simulation results with the prediction of the quadratic model
   sim_res <- sim_res %>%
@@ -316,7 +316,7 @@ ggplot_prob_lowest_power_bin_rank <- function(x){
 # require(ggplot2)
 #
 # noutcomes = 5
-# prob = c(0.7)
+# p1 = c(0.7)
 # dif = c(0.24)
 # weights = c(0.4,0.3,0.1,0.1,0.1)
 # ngroups= 3
@@ -325,7 +325,7 @@ ggplot_prob_lowest_power_bin_rank <- function(x){
 # nsimul=1000
 #
 # # to test
-# power_best_bin_rank(noutcomes,prob,dif, weights,ngroups,npergroup,nsimul)
+# sim_power_best_bin_rank(noutcomes,p1,dif, weights,ngroups,npergroup,nsimul)
 #
 #
 # # Find the difference proportion at which we have 90% power to
@@ -344,7 +344,7 @@ ggplot_prob_lowest_power_bin_rank <- function(x){
 #   ddply(
 #     .(dif),
 #     function(x){
-#        power_best_bin_rank(
+#        sim_power_best_bin_rank(
 #          noutcomes = 5,
 #          prob = x$prob,
 #          dif = x$dif,

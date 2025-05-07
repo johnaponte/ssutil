@@ -23,6 +23,7 @@ Imports:
     stats,
     stringr,
     ggplot2,
+    tidyr,
     magrittr,
     broom,
     MASS,

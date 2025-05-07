@@ -17,7 +17,7 @@
 #' @param delta change to be detected.
 #' @param sd  common standard deviation of the response variable.
 #' @param power desired power of the test.
-#' @param seed the seed used for the multz procedure
+#' @param seed the seed used for the `multz` procedure
 #'
 #' @return Returns the sample size needed for each group to achieve the desired power.
 #' @examples

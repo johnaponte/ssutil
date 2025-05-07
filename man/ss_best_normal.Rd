@@ -15,7 +15,7 @@ ss_best_normal(groups, delta, sd, power, seed = NULL)
 
 \item{power}{desired power of the test.}
 
-\item{seed}{the seed used for the multz procedure}
+\item{seed}{the seed used for the \code{multz} procedure}
 }
 \value{
 Returns the sample size needed for each group to achieve the desired power.

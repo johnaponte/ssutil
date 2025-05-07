@@ -186,9 +186,10 @@ sim_power_best_bin_rank <-
 #' @param p1 probabilities on the best groups. By default is a sequence between 0.05 and 0.95 by 0.01
 #' @export
 #' @return an S3 object of class prob_lowest_power
-#' @importFrom plyr ddply
+#' @importFrom purrr map
 #' @importFrom dplyr filter
 #' @importFrom dplyr mutate
+#' @importFrom dplyr ungroup
 #' @importFrom stats glm
 #' @importFrom stats coef
 #' @importFrom stats predict
@@ -200,6 +201,7 @@ lowest_prop_best_bin_rank <- function(
     npergroup,
     nsimul,
     p1
+
 ){
 
   # The simulation matrix
@@ -210,22 +212,21 @@ lowest_prop_best_bin_rank <- function(
     filter(p1-dif < 1 & p1-dif > 0 )
 
   # The simulations
-  sim_res <-
-    sim_matrix |>
-    ddply(
-      .(p1, dif),
-      function(x){
-          sim_power_best_bin_rank(
-            noutcomes = noutcomes,
-            p1 = x$p1,
-            dif = x$dif,
-            weights = weights,
-            ngroups = ngroups,
-            npergroup = npergroup,
-            nsimul = nsimul
-          )
-      }
-    )
+  sim_res <- sim_matrix |>
+    mutate(idsim = row_number()) |>
+    nest(data = -idsim) |>
+    ungroup() |>
+    mutate(power = map(data, function(x){
+        sim_power_best_bin_rank(
+        noutcomes = noutcomes,
+        p1 = x$p1,
+        dif = x$dif,
+        weights = weights,
+        ngroups = ngroups,
+        npergroup = npergroup,
+        nsimul = nsimul)}
+    ))|>
+      unnest(c(data, power))
 
   # Evaluation of the association between the power and the base p1ability
   # to find which is the minimum value
@@ -290,7 +291,7 @@ ggplot_prob_lowest_power_bin_rank <- function(x){
   stopifnot("Not an object of class prob_lower_power!"=
               inherits(x,"prob_lowest_power_bin_rank"))
   ggplot(x$simulation) +
-    aes(x = prob, y = power*100) + geom_point() +
+    aes(x = p1, y = power*100) + geom_point() +
     geom_line(aes(y=pred*100),color = "blue") +
     ggtitle("Power to detect the best group based on ranks",
             subtitle =
@@ -314,12 +315,12 @@ ggplot_prob_lowest_power_bin_rank <- function(x){
 # require(broom)
 # require(ggplot2)
 #
-# noutcomes = 5
-# p1 = c(0.7)
-# dif = c(0.24)
-# weights = c(0.4,0.3,0.1,0.1,0.1)
-# ngroups= 3
-# npergroup= c(25)
+#noutcomes = 3
+#p1 = c(0.7)
+#dif = c(0.24)
+#weights = c(0.4,0.3,0.1,0.1,0.1)
+#groups= 3
+#pergroup= c(25)
 #
 # nsimul=1000
 #
@@ -328,9 +329,9 @@ ggplot_prob_lowest_power_bin_rank <- function(x){
 #
 #
 # # Find the difference proportion at which we have 90% power to
-# xx <- lowest_prop_best_bin_rank(noutcomes= noutcomes, dif = 0.01,  weights = 1, ngroups = ngroups, npergroup= npergroup,nsimul = 1000)
-# xx
-# ggplot_prob_lowest_power_bin_rank(xx)
+#xx <- lowest_prop_best_bin_rank(noutcomes= noutcomes, dif = 0.01,  weights = 1, ngroups = ngroups, npergroup= npergroup,nsimul = 1000)
+#xx
+#ggplot_prob_lowest_power_bin_rank(xx)
 #
 # # Find the lowest difference with 90% power
 #

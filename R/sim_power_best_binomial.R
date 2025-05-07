@@ -177,6 +177,7 @@ sim_power_best_binomial <-
 #' @return an S3 object of class lf_config
 #' @importFrom dplyr filter
 #' @importFrom dplyr mutate
+#' @importFrom dplyr row_number
 #' @importFrom tidyr nest
 #' @importFrom tidyr unnest
 #' @importFrom stats glm
@@ -188,7 +189,7 @@ lf_config<- function(
   k,
   n,
   simul,
-  p1 = seq(from=0.05,to=0.95, by = 0.01)
+  prob = seq(from=0.05,to=0.95, by = 0.01)
 ){
 
   stopifnot("d should be of length 1!" = length(d)==1)
@@ -198,7 +199,7 @@ lf_config<- function(
   # The simulation chain
   sim <-
     expand.grid(
-      p1 = p1,
+      p1 = prob,
       d = d,
       k = k,
       n = n,
@@ -266,7 +267,7 @@ print.lf_config<- function(x,...){
 
 #' GGplot least configuration simulation
 #'
-#' @param x an object of lf_config class
+#' @param x an object of `lf_config` class
 #' @return a ggplot2 object
 #' @export
 #' @import ggplot2

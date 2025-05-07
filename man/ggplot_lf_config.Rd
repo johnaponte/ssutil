@@ -7,7 +7,7 @@
 ggplot_lf_config(x)
 }
 \arguments{
-\item{x}{an object of lf_config class}
+\item{x}{an object of \code{lf_config} class}
 }
 \value{
 a ggplot2 object

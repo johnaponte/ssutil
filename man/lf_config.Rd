@@ -4,7 +4,7 @@
 \alias{lf_config}
 \title{Least favorable configuration for a binomial experiment}
 \usage{
-lf_config(d, k, n, simul, p1 = seq(from = 0.05, to = 0.95, by = 0.01))
+lf_config(d, k, n, simul, prob = seq(from = 0.05, to = 0.95, by = 0.01))
 }
 \arguments{
 \item{d}{indifference zone}

@@ -11,6 +11,9 @@ utils::globalVariables(
   c(
     "power",
     "prob",
-    "pred"
+    "pred",
+    "idsim",
+    "data",
+    "p1"
     )
 )

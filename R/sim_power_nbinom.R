@@ -17,7 +17,7 @@
 #' @note this uses the alternative nomenclature for negative binomial where
 #' the size = 1/phi and prob = size/(size + mu) where mu is the mean parameter
 #' which for group 1 is mu1 = ir1\*tm and for group 2 is mu2 = ir1\*rr\*tm.
-#' size is estimated as theta en glm.nb
+#' size is estimated as theta in `glm.nb`
 #' @export
 sim_power_nbinom <- function(n1,n2,ir1,tm,rr,lowrr,dispersion,alpha,nsimul){
   pwr <- vector(length = nsimul)

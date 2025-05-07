@@ -32,7 +32,7 @@ Estimates the empirical power for negative binomial comparisons.
 this uses the alternative nomenclature for negative binomial where
 the size = 1/phi and prob = size/(size + mu) where mu is the mean parameter
 which for group 1 is mu1 = ir1\*tm and for group 2 is mu2 = ir1\*rr\*tm.
-size is estimated as theta en glm.nb
+size is estimated as theta in \code{glm.nb}
 }
 \author{
 {Chris G}

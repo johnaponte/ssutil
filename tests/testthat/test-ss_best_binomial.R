@@ -375,7 +375,12 @@ t2_1 <-
 test_that("ss_best_binomial function works as expected", {
   for (i in 1:nrow(t2_1)) {
     expect_equal(
-      ss_best_binomial(t2_1[i, "groups"], t2_1[i, "delta"], 1, t2_1[i, "power"], seed = 12345),
+      ss_best_normal(
+        group = t2_1[i, "groups"],
+        delta = t2_1[i, "delta"],
+        power = t2_1[i, "power"],
+        sd = 1,
+        seed = 12345),
       t2_1[i, "n"],
       tolerance = 0.1)
   }

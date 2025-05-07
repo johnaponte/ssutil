@@ -20,6 +20,8 @@
 #' @export
 multz <- function(alpha, n, rho, seed = NULL) {
 
+  stopifnot("n should be >= 1"= n >=1)
+
   # Step 1: Create the covariance matrix with unit variances and common correlation
   cov_matrix <- matrix(rho, n, n)   # Create a matrix filled with the correlation rho
   diag(cov_matrix) <- 1             # Set diagonal elements to 1 (unit variances)
@@ -28,15 +30,24 @@ multz <- function(alpha, n, rho, seed = NULL) {
   target_prob <- 1 - alpha
 
   # Step 3: calculate the quantile
-  z_multz <-
-    as.numeric(
-      qmvnorm(
-    p = target_prob,
-    corr = cov_matrix,
-    tail = "lower.tail",
-    seed = seed)[1]
-   )
+  if (n > 1) {
+    z_multz <-
+        qmvnorm(
+          p = target_prob,
+          corr = cov_matrix,
+          tail = "lower.tail",
+          seed = seed)
+
+  }
+  else{
+    z_multz <-
+        qmvnorm(
+          p = target_prob,
+          sigma = 1,
+          tail = "lower.tail",
+          seed = seed)
+  }
   # Step 5: Return the result
-  return(z_multz)
+  return(as.numeric(z_multz[1]))
 }
 

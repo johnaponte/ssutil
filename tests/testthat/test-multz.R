@@ -11,7 +11,7 @@ expect_multz <- function(alpha, n, rho, expected_result, tol){
 
 # Write tests
 test_that("multz function calculates correct z-values", {
-  expect_multz(0.01, 1, 0.5, 2.326, 0.001)
+  expect_multz(0.01, 1, 1, 2.326, 0.001)
   expect_multz(0.1, 3, 0.5, 1.734, 0.001)
   expect_multz(0.2, 7, 0.5, 1.655, 0.001)
   expect_multz(0.1, 7, 0.1, 2.16, 0.01)

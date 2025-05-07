@@ -166,7 +166,7 @@ sim_power_best_binomial <-
 #' the lowest power to correctly identify as best the best group.
 #'
 #' @examples
-#' lf_config(d=0.2, k=4, n-20, simul=1000)
+#' lf_config(d=0.2, k=4, n=20, simul=1000)
 #'
 #' @param d indifference zone
 #' @param k number of groups
@@ -182,6 +182,7 @@ sim_power_best_binomial <-
 #' @importFrom stats glm
 #' @importFrom stats coef
 #' @importFrom stats predict
+#' @importFrom. purrr map
 lf_config<- function(
   d,
   k,
@@ -204,8 +205,8 @@ lf_config<- function(
       simul = simul
     ) |>
     filter(p1-d < 1 & p1-d > 0) |>
-    mutate(idsim = seq(1, n())) |>
-    nest(.by = idsim) |>
+    mutate(idsim = row_number()) |>
+    nest(data= -idsim) |>
     mutate(
       power = map(
         data,
@@ -301,11 +302,11 @@ ggplot_lf_config <- function(x){
 # # to debug
 # library(tidyverse)
 # library(broom)
-p1 = seq(from=0.05,to=0.95, by = 0.01)
-d = 0.2
-k = 4
-n = 20
-simul = 1000
+#p1 = seq(from=0.05,to=0.95, by = 0.01)
+#d = 0.2
+#k = 4
+#n = 20
+#simul = 1000
 
 # noutcomes = 1
 # p1 = c(0.41)

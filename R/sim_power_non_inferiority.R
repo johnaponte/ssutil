@@ -49,7 +49,7 @@
 #' # non-inferiority and 3 of the left 5 must accomplish non inferiority
 #' # sd and ni_limit is the same for the 7 tests. sd is in log10 scale
 #'
-#' power_ni_normal(
+#' sim_power_ni_normal(
 #' nsimul = 1000,
 #' npergroup = 250,
 #' ntest = 7,
@@ -60,7 +60,7 @@
 #' corr= 0,
 #' conf.level = 0.95
 #' )
-power_ni_normal <- function(
+sim_power_ni_normal <- function(
   nsimul,
   npergroup,
   ntest,
@@ -145,7 +145,7 @@ power_ni_normal <- function(
 }
 
 
-# power_ni_normal(
+# sim_power_ni_normal(
 # nsimul = 1000,
 # npergroup = 250,
 # ntest = 7,

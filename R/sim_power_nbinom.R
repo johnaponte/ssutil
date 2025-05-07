@@ -19,7 +19,7 @@
 #' which for group 1 is mu1 = ir1\*tm and for group 2 is mu2 = ir1\*rr\*tm.
 #' size is estimated as theta en glm.nb
 #' @export
-power_nbinom <- function(n1,n2,ir1,tm,rr,lowrr,dispersion,alpha,nsimul){
+sim_power_nbinom <- function(n1,n2,ir1,tm,rr,lowrr,dispersion,alpha,nsimul){
   pwr <- vector(length = nsimul)
   pw2 <- vector(length = nsimul)
   qval <- qnorm(1-alpha/2)
@@ -46,6 +46,6 @@ power_nbinom <- function(n1,n2,ir1,tm,rr,lowrr,dispersion,alpha,nsimul){
   return(c(pwr = unname(btest$estimate), lci = btest$conf.int[1], uci = btest$conf.int[2]), pw2 =mean(pw2))
 }
 
-#power_nbinom(n1=150, n2=150, ir1 = .55, tm = 1.7, rr =0.6, lowrr = 1, dispersion = 2, alpha = 0.025, nsimul = 1000)
+#sim_power_nbinom(n1=150, n2=150, ir1 = .55, tm = 1.7, rr =0.6, lowrr = 1, dispersion = 2, alpha = 0.025, nsimul = 1000)
 
 ## NOTE: Need to check lowrr effects and direction

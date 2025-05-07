@@ -25,7 +25,7 @@
 #' # Lot to lot equivalence for three lots, assuming a standard deviation
 #' # in log10 scale of 0.402 and limits for equivalence log10(2/3) and log10(3/2)
 #'
-#' power_equivalence_normal(
+#' sim_power_equivalence_normal(
 #' ngroups = 3,
 #' npergroup = 172,
 #' sd = 0.403,
@@ -34,7 +34,7 @@
 #' nsimul = 1000,
 #' conf.level = 0.95
 #' )
-power_equivalence_normal <- function(
+sim_power_equivalence_normal <- function(
   ngroups,
   npergroup,
   sd,
@@ -77,7 +77,7 @@ power_equivalence_normal <- function(
 # nsimul = 10000
 # conf.level = 0.95
 #
-# power_equivalence_normal(
+# sim_power_equivalence_normal(
 #   ngroups = 3,
 #   npergroup = 172,
 #   sd = 0.403,

@@ -1,4 +1,10 @@
-groups,power,delta,n
+# Comparison are based on the table 2.1
+
+t2_1 <-
+  read.csv(
+    # table 2.1 from Bechhofer et al
+    textConnection(
+      "groups, power , delta , n
 2,0.75,0.1,91
 2,0.75,0.2,23
 2,0.75,0.3,11
@@ -358,4 +364,19 @@ groups,power,delta,n
 10,0.99,0.7,37
 10,0.99,0.8,29
 10,0.99,0.9,23
-10,0.99,1.0,19
+10,0.99,1.0,19"
+    )
+  )
+
+
+# Note: there is a random component in the estimation of the `multz` and this
+# may lead to a small differences in the calculation of the sample size
+
+test_that("ss_best_binomial function works as expected", {
+  for (i in 1:nrow(t2_1)) {
+    expect_equal(
+      ss_best_binomial(t2_1[i, "groups"], t2_1[i, "delta"], 1, t2_1[i, "power"], seed = 12345),
+      t2_1[i, "n"],
+      tolerance = 0.1)
+  }
+})

@@ -8,7 +8,7 @@
 #' @param n the number of variables in the multivariate normal distribution.
 #' @param rho the common correlation coefficient between the variables.
 #' @param df degrees of freedom for the t distribution
-#' @param tail select both or lower tail fo the distribution
+#' @param tail select both or lower tail fo the distribution. By default is "both.tails"
 #' @param seed an object specifying if and how the random number generator should be initialized. Used by the function `qmvt`
 #' @return The upper equicoordinate point \eqn{z} such that the probability of all
 #' variables being less than or equal to \eqn{z} is \eqn{1 - \alpha}.
@@ -38,7 +38,6 @@ multt <- function(alpha, n, rho, df, tail = c("both.tails", "lower.tail"), seed 
       qmvt(
     p = target_prob,
     corr = cov_matrix,
-#    tail = "lower.tail",
     tail = tail,
     df = df,
     seed = seed)[1]

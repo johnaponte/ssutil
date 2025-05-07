@@ -8,6 +8,7 @@
 #' @param n the number of variables in the multivariate normal distribution.
 #' @param rho the common correlation coefficient between the variables.
 #' @param df degrees of freedom for the t distribution
+#' @param tail select both or lower tail fo the distribution
 #' @param seed an object specifying if and how the random number generator should be initialized. Used by the function `qmvt`
 #' @return The upper equicoordinate point \eqn{z} such that the probability of all
 #' variables being less than or equal to \eqn{z} is \eqn{1 - \alpha}.
@@ -19,27 +20,30 @@
 #' multt(alpha, n, rho, df)
 #' @importFrom mvtnorm qmvt
 #' @export
-multt <- function(alpha, n, rho, df, seed = NULL) {
+multt <- function(alpha, n, rho, df, tail = c("both.tails", "lower.tail"), seed = NULL) {
 
-  # Step 1: Create the covariance matrix with unit variances and common correlation
+  # Use match.arg to validate the tail argument and assign the chosen value
+  tail <- match.arg(tail)
+
+  # Create the covariance matrix with unit variances and common correlation
   cov_matrix <- matrix(rho, n, n)   # Create a matrix filled with the correlation rho
   diag(cov_matrix) <- 1             # Set diagonal elements to 1 (unit variances)
 
-  # Step 2: Define the target quantile as (1 - alpha)
+  # Define the target quantile as (1 - alpha)
   target_prob <- 1 - alpha
 
-  # Step 3: calculate the quantile
+  # calculate the quantile
   z_multt <-
     as.numeric(
       qmvt(
     p = target_prob,
     corr = cov_matrix,
 #    tail = "lower.tail",
-    tail = "both.tails",
+    tail = tail,
     df = df,
     seed = seed)[1]
    )
-  # Step 5: Return the result
+  #  Return the result
   return(z_multt)
 }
 

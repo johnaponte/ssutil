@@ -256,7 +256,7 @@ sim_power_best_normal <-
 #   )
 #
 # sim_res <-
-#   sim_matrix %>%
+#   sim_matrix |>
 #   ddply(
 #     .(dif,npergroup,noutcomes),
 #     function(x){
@@ -283,15 +283,15 @@ sim_power_best_normal <-
 # # can be find from the set of outcomes and sample sizes
 # finddif<- function(poutcomes, pnpergroup, ppower){
 #   # NOTE simres is hardcoded and the filter use a harcoded structure
-#   df <- sim_res %>%
+#   df <- sim_res |>
 #     filter(noutcomes == poutcomes & npergroup==pnpergroup)
 #   f <- splinefun(df$power, df$dif, ties = min, method = "monoH.FC")
 #   f(ppower)
 # }
 #
-# sim_matrix %>%
-#   select(npergroup, noutcomes ) %>%
-#   unique() %>%
+# sim_matrix |>
+#   select(npergroup, noutcomes ) |>
+#   unique() |>
 #   ddply(
 #     .(npergroup,noutcomes),
 #     function(x){

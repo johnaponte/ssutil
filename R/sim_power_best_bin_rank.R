@@ -187,7 +187,6 @@ sim_power_best_bin_rank <-
 #' @export
 #' @return an S3 object of class prob_lowest_power
 #' @importFrom plyr ddply
-#' @importFrom plyr .
 #' @importFrom dplyr filter
 #' @importFrom dplyr mutate
 #' @importFrom stats glm
@@ -207,12 +206,12 @@ lowest_prop_best_bin_rank <- function(
   sim_matrix <-
     expand.grid(
       p1=  seq(from= 0.01, to= 0.99, length.out = 50) ,
-      dif = dif) %>%
+      dif = dif) |>
     filter(p1-dif < 1 & p1-dif > 0 )
 
   # The simulations
   sim_res <-
-    sim_matrix %>%
+    sim_matrix |>
     ddply(
       .(p1, dif),
       function(x){
@@ -237,7 +236,7 @@ lowest_prop_best_bin_rank <- function(
   minpow = predict(fit, data.frame(p1 = minprob))
 
   # Update the simulation results with the prediction of the quadratic model
-  sim_res <- sim_res %>%
+  sim_res <- sim_res |>
     mutate(pred = predict(fit))
 
   # Return the results
@@ -339,8 +338,8 @@ ggplot_prob_lowest_power_bin_rank <- function(x){
 #   tibble(
 #     prob = 0.7,
 #     dif =  seq(0.05,0.2, length.out = 100)
-#   ) %>%
-#   filter(prob-dif > 0 ) %>%
+#   ) |>
+#   filter(prob-dif > 0 ) |>
 #   ddply(
 #     .(dif),
 #     function(x){

@@ -182,7 +182,7 @@ sim_power_best_binomial <-
 #' @importFrom stats glm
 #' @importFrom stats coef
 #' @importFrom stats predict
-#' @importFrom. purrr map
+#' @importFrom purrr map
 lf_config<- function(
   d,
   k,

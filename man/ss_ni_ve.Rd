@@ -2,37 +2,52 @@
 % Please edit documentation in R/ss_ni_ve.R
 \name{ss_ni_ve}
 \alias{ss_ni_ve}
-\title{Non inferiority for vaccine efficacy}
+\title{Sample Size and Non-Inferiority Margin for Vaccine Efficacy Trials}
 \usage{
 ss_ni_ve(ve_lci, alpha = 0.025, power = 0.9, use70 = FALSE, preserve = 0.5)
 }
 \arguments{
-\item{ve_lci}{Lower limit of the vaccine efficacy}
+\item{ve_lci}{Numeric. Lower bound of the current vaccine's efficacy (e.g., 0.95 for 95\% VE).}
 
-\item{alpha}{Error type 1}
+\item{alpha}{Numeric. Type I error rate (default = 0.025).}
 
-\item{power}{Power}
+\item{power}{Numeric. Desired power for the test (default = 0.90).}
 
-\item{use70}{Assume new vaccine is at least 30\% instead of half of the current vaccine, otherwise half of the VE}
+\item{use70}{Logical. If \code{TRUE}, assumes at least 30\% VE for the new vaccine (the 90–70 rule); otherwise, preserves a fixed fraction of the reference VE.}
 
-\item{preserve}{Preserve effect- By default 0.5}
+\item{preserve}{Numeric. Proportion of the current vaccine's efficacy to preserve under \code{use70 = FALSE} (default = 0.5).}
 }
 \value{
-a list with the non-inferiority margin, number of events and maximum
-hazard ratio and events in the experimental to declare Non inferiority
+A named list with:
+\itemize{
+\item Upper limit of the HR used to estimate the sample size: Hazard ratio corresponding to \code{ve_lci}.
+\item Non-inferior margin in HR scale: Non-inferiority margin expressed as a hazard ratio.
+\item Alpha: The type I error used.
+\item Power: The power used.
+\item Total number of events: Total number of events required in the trial.
+\item Max HR to declare NI: Maximum observed hazard ratio that satisfies the non-inferiority criterion.
+\item Max number of events in the experimental group: Maximum number of events in the experimental group still compatible with non-inferiority.
+\item Non-inferior criteria: Description of the applied non-inferiority rule ("At least 30\% VE" or "or preserved effect").
+}
 }
 \description{
-This evaluate the non-inferiority limit, the number of events and
-the maximum HR to declare inferiority following Fleming et al
-COVID-19 vaccine trials:
-The use of active controls and non-inferiority studies. Clinical Trials
-18(3), 335-342. https://doi.org/10.1177/1740774520988244
-following the 95-95 or 90-70 rule
+Computes the non-inferiority margin, number of events, and maximum hazard ratio (HR)
+to declare non-inferiority in vaccine efficacy (VE) trials, based on the approach
+described by Fleming et al. (2021).
 }
 \details{
-Please not that is intended to produce Table 1 of the paper but the results
-are not exactly similar, I think because rounding and the way the
-sample 1 binomial is calculated, how the confidence intervals for the
-proportion are estimated but it is closed enough. Here we use sample1binomial
-from gsDesign and exact confidence intervals
+The method applies either the 95–95 rule or 90–70 rule, depending on whether a minimum
+VE of 30\% is assumed (\code{use70 = TRUE}) or 50\% of the current VE is preserved.
+
+This implementation approximates Table 1 of the paper using exact binomial confidence intervals
+via \code{binom.test} and the \code{nBinomial1Sample} function from \pkg{gsDesign}.
+}
+\examples{
+ss_ni_ve(ve_lci = 0.95)
+
+}
+\references{
+Fleming, T.R., Powers, J.H., & Huang, Y. (2021).
+The use of active controls and non-inferiority studies in evaluating COVID-19 vaccines.
+\emph{Clinical Trials}, 18(3), 335–342. \doi{10.1177/1740774520988244}
 }

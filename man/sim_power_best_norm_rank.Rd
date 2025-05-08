@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim_power_best_norm_rank.R
 \name{sim_power_best_norm_rank}
 \alias{sim_power_best_norm_rank}
-\title{Power to select the best group by ranks}
+\title{Simulate Power to Select Best Group by Ranks (Normal Outcomes)}
 \usage{
 sim_power_best_norm_rank(
   noutcomes,
@@ -15,100 +15,45 @@ sim_power_best_norm_rank(
 )
 }
 \arguments{
-\item{noutcomes}{number of outcomes to evaluate}
+\item{noutcomes}{Integer. Number of outcomes to evaluate.}
 
-\item{sd}{standard deviation for for each outcome}
+\item{sd}{Numeric vector. Standard deviations for each outcome.}
 
-\item{dif}{difference between the most promising and the rest of the groups for each outcome}
+\item{dif}{Numeric vector. Difference in means between the best and other groups.}
 
-\item{weights}{weights to rank the outcomes. if 1, same weight is given to all outcomes}
+\item{weights}{Numeric vector. Weights per outcome (rescaled internally).}
 
-\item{ngroups}{number of groups to compare}
+\item{ngroups}{Integer. Number of groups.}
 
-\item{npergroup}{number of subjects in each group}
+\item{npergroup}{Integer or vector. Number of subjects per group.}
 
-\item{nsimul}{number of simulations}
+\item{nsimul}{Integer. Number of simulations.}
 }
 \value{
-The empirical power expressed as the proportion of the simulations
-where the best group was selected as best for all outcomes.
+A data frame with empirical power and 95\% confidence interval.
 }
 \description{
-This function estimates the empirical power to select the most promising group as
-the best group, when the outcome is normally distributed, assuming that
-the mean of the rest of the groups is at least \code{dif} lower than the most promising group.
-and the best group is selected by summing weighted ranks for each outcome
-#'
-It assume each outcome is normally distributed and they are independent between them.
-The outcomes may have the same mean, sd and same difference between the most promising
-group and the others, or they can be defined differently by outcome.
+Estimates the empirical power to identify the most promising group as best,
+using weighted ranks across outcomes, assuming normally distributed outcomes.
 }
 \details{
-The number of subjects per group can be the same or can be specified
-for each group. If specified, the most promising group is always the first group
+Each outcome is independent and normally distributed. The most promising group
+is assumed to have a mean at least \code{dif} higher than the others. Ranks are
+weighted and summed per group across outcomes.
 
-If weights are included, they will be internally re-scaled to add to the
-number of outcomes
-
-The difference parameter presents how the best group is above the next best
-groups.
+If \code{weights} is specified, it is internally rescaled to sum to \code{noutcomes}.
+The most promising group is always considered to be the first group.
 }
 \examples{
 \dontrun{
-# Power to select the best group if the difference between the best and
-# the the other two groups is 0.2. One outcome and three groups of 30 subjects
-#
-power_best_norm_rank(
-  noutcomes = 1,
-  sd = 1,
-  dif = 0.2,
-  weights = 1,
-  ngroups= 3,
-  npergroup= 30,
-  nsimul=1000
-)
-#
-# Power to select the best group if the difference between the best and
-# the the other two groups is 0.2. three outcomes and three groups of 30 subjects
-#
-power_best_norm_rank(
+sim_power_best_norm_rank(
   noutcomes = 3,
-  sd = 1,
-  dif = 0.2,
-  weights = 1
-  ngroups= 3,
-  npergroup= 30,
-  nsimul=1000
-)
-#
-# Power to select the best group if the difference between the best and
-# the the other two groups is 0.2. three outcome and three groups of 30 subjects
-# Each outcome has its own parameters and bigger weight is given to first oucome
-#
-power_best_norm_rank(
-  noutcomes = 3,
-  mean = c(1,1.5,2),
-  sd = c(1,0.8,1.5),
-  dif = c(0.2,0.15,0.3),
-  weights = c(0.5,0.3,0.2)
-  ngroups= 3,
-  npergroup= 30,
-  nsimul=1000
-)
-#
-# Power to select the best group if the difference between the best and
-# the the other two groups is 0.2. three outcomes and three groups, the
-# first group with 30 subjects and the rest with 25 subjects
-#
-power_best_norm_rank(
-  noutcomes = 3,
-  mean = 1,
-  sd = 1,
-  dif = 0.2,
-  weights = 1,
-  ngroups= 3,
-  npergroup= c(30,25,25),
-  nsimul=1000
+  sd = c(1, 0.8, 1.5),
+  dif = c(0.2, 0.15, 0.3),
+  weights = c(0.5, 0.3, 0.2),
+  ngroups = 3,
+  npergroup = c(30, 25, 25),
+  nsimul = 1000
 )
 }
 }

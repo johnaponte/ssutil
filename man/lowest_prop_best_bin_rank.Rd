@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim_power_best_bin_rank.R
 \name{lowest_prop_best_bin_rank}
 \alias{lowest_prop_best_bin_rank}
-\title{Probability with lowest power to detect a difference using ranks}
+\title{Find Minimum Event Probability to Detect Best Group Using Ranks}
 \usage{
 lowest_prop_best_bin_rank(
   noutcomes,
@@ -11,32 +11,34 @@ lowest_prop_best_bin_rank(
   ngroups,
   npergroup,
   nsimul,
-  p1
+  p1 = seq(0.01, 0.99, length.out = 50)
 )
 }
 \arguments{
-\item{noutcomes}{number of outcomes to evaluate}
+\item{noutcomes}{Integer. Number of outcomes.}
 
-\item{dif}{difference between the best and the least promising groups}
+\item{dif}{Numeric. Difference in probabilities between best and other groups.}
 
-\item{weights}{weights to rank the outcomes. if 1, same weight is given to all outcomes}
+\item{weights}{Numeric vector. Weights for each outcome.}
 
-\item{ngroups}{number of groups}
+\item{ngroups}{Integer. Number of groups.}
 
-\item{npergroup}{number of subjects per group}
+\item{npergroup}{Integer. Sample size per group.}
 
-\item{nsimul}{number of simulations}
+\item{nsimul}{Integer. Number of simulations.}
 
-\item{p1}{probabilities on the best groups. By default is a sequence between 0.05 and 0.95 by 0.01}
+\item{p1}{Optional vector of probabilities for the best group. If missing,
+defaults to a sequence from 0.01 to 0.99.}
 }
 \value{
-an S3 object of class prob_lowest_power
+An S3 object of class \code{prob_lowest_power_bin_rank} with:
+\itemize{
+\item \code{minprob}: probability in best group with lowest power
+\item \code{minpow}: estimated lowest power
+\item \code{simulation}: simulation results with predicted curve
+}
 }
 \description{
-Estimates the probability of the most promising groups with the
-lowest power to select as best the most promising using ranks
-A simulation is made for a grid of probabilities for the next bests and
-a quadratic function is fitted to the estimated powers by probability. The
-function returns the minimum probability from the quadratic function.
-function.
+Estimates the minimum event probability in the best group required to detect
+it as best (via ranks) with maximum power, using simulation and quadratic fitting.
 }

@@ -1,89 +1,75 @@
 # Equivalence simulations
 # 20211125 by JJAV
 
-#' Empirical power for equivalence
+#' Empirical Power for Equivalence (Normal Outcomes)
 #'
-#' Estimate the empirical power to detect equivalence assuming a true
-#' no difference in normally distributed outcomes, using t.test on all pair
-#' comparisons between the different groups. Equivalence is declared if the
-#' confidence interval of the difference are within the lower limit (\code{llimit})
-#' and the upper limit (\code{ulimit}) for all comparisons
+#' Estimates the empirical power to detect equivalence among multiple groups assuming
+#' no true difference in normally distributed outcomes. Pairwise two-sample t-tests are
+#' used, and equivalence is declared if all confidence intervals for differences between
+#' group means lie entirely within the interval defined by \code{llimit} and \code{ulimit}.
 #'
-#' @param ngroups number of groups to compare
-#' @param npergroup number of observations per group
-#' @param sd standard deviation of the distribution
-#' @param llimit lower limit for equivalence
-#' @param ulimit upper limit for equivalence
-#' @param nsimul number of simulations
-#' @param conf.level confidence level of the interval
-#' @return a tibble with the power to declare equivalence and 95% CI
-#' @importFrom stats t.test
+#' This function simulates data under the null hypothesis of no difference between groups
+#' and calculates the proportion of simulations in which all pairwise comparisons fall within
+#' the specified equivalence limits.
+#'
+#'
+#' @examples
+#' \dontrun{
+#' #Equivalence testing for three groups with log-scale outcome
+#' sim_power_equivalence_normal(
+#'   ngroups = 3,
+#'   npergroup = 172,
+#'   sd = 0.403,
+#'   llimit = log10(2/3),
+#'   ulimit = log10(3/2),
+#'   nsimul = 1000,
+#'   conf.level = 0.95
+#' )
+#' }
+#' @param ngroups Integer. Number of groups to compare
+#' @param npergroup Integer. Number of observations per group.
+#' @param sd Numeric. Standard deviation of the outcome distribution (common across groups).
+#' @param llimit Numeric. Lower equivalence limit.
+#' @param ulimit Numeric. Upper equivalence limit.
+#' @param nsimul Integer. Number of simulations to perform.
+#' @param conf.level Numeric. Confidence level used for the t-tests (e.g., 0.95 for 95% CI).
+#'
+#' @return A data frame with the following columns:
+#'
+#' |Column    |Description                            |
+#' |----------|---------------------------------------|
+#' |power	    |Empirical power estimate.              |
+#' |conf.low  |Lower bound of 95% confidence interval |
+#' |conf.high |Upper bound of 95% confidence interval |
+#' |nsim      |Number of simulations performed        |
+#'
+#' @importFrom stats t.test binom.test
 #' @importFrom utils combn
 #' @importFrom broom tidy
 #' @export
-#' @examples
-#' # Lot to lot equivalence for three lots, assuming a standard deviation
-#' # in log10 scale of 0.402 and limits for equivalence log10(2/3) and log10(3/2)
-#'
-#' sim_power_equivalence_normal(
-#' ngroups = 3,
-#' npergroup = 172,
-#' sd = 0.403,
-#' llimit = log10(2/3),
-#' ulimit = log10(3/2),
-#' nsimul = 1000,
-#' conf.level = 0.95
-#' )
 sim_power_equivalence_normal <- function(
-  ngroups,
-  npergroup,
-  sd,
-  llimit,
-  ulimit,
-  nsimul,
-  conf.level = 0.95
-){
-    vres <-
-      vapply(
-        1:nsimul,
-        function(x){
-          mat <-
-            matrix(
-              rnorm(ngroups*npergroup,0,sd),
-              ncol=ngroups)
-          y <-
-            combn(
-              c(1:ngroups),
-              2,
-              FUN = function(z){
-                yt <- t.test(mat[,z[1]],mat[,z[2]], conf.level=conf.level)
-                ifelse(yt$conf.int[1]>llimit & yt$conf[2]< ulimit,TRUE,FALSE)
-               }
-              )
-          all(y)
-        }, 0)
-    out <- tidy(binom.test(sum(vres), length(vres)))[,c(1,5,6)]
-    names(out)[1]<- "power"
-    cbind(out,"nsim" = length(vres))
-    out
-}
+    ngroups,
+    npergroup,
+    sd,
+    llimit,
+    ulimit,
+    nsimul,
+    conf.level = 0.95
+) {
+  stopifnot(ngroups >= 2, npergroup >= 1, nsimul >= 1, sd > 0)
 
-#
-# ngroups = 3
-# npergroup = 177
-# sd = 0.403
-# llimit = log10(2/3)
-# ulimit = log10(3/2)
-# nsimul = 10000
-# conf.level = 0.95
-#
-# sim_power_equivalence_normal(
-#   ngroups = 3,
-#   npergroup = 172,
-#   sd = 0.403,
-#   llimit = log10(2/3),
-#   ulimit = log10(3/2),
-#   nsimul = 1000,
-#   conf.level = 0.95
-# )
-#
+  vres <- vapply(1:nsimul, function(x) {
+    mat <- matrix(rnorm(ngroups * npergroup, 0, sd), ncol = ngroups)
+
+    y <- combn(1:ngroups, 2, FUN = function(z) {
+      yt <- t.test(mat[, z[1]], mat[, z[2]], conf.level = conf.level)
+      yt$conf.int[1] > llimit && yt$conf.int[2] < ulimit
+    })
+
+    all(y)
+  }, logical(1))
+
+  out <- tidy(binom.test(sum(vres), length(vres)))[, c("estimate", "conf.low", "conf.high")]
+  names(out)[1] <- "power"
+  cbind(out, nsim = length(vres))
+}

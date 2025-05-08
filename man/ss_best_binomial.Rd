@@ -2,24 +2,33 @@
 % Please edit documentation in R/ss_best_binomial.R
 \name{ss_best_binomial}
 \alias{ss_best_binomial}
-\title{Sample size for selection of the best group in a binomial test}
+\title{Sample Size to Select the Best Group in a Binomial Test}
 \usage{
 ss_best_binomial(power, p1, dif, ngroups, max_n = 1000)
 }
 \arguments{
-\item{power}{target power}
+\item{power}{Numeric. Desired probability of correctly selecting the best group (in [0, 1]).}
 
-\item{p1}{probability of the best group}
+\item{p1}{Numeric. Probability of success in the best group (in [0, 1]).}
 
-\item{dif}{difference in probability with the next best group}
+\item{dif}{Numeric. Difference in success probability with the next best group (> 0).}
 
-\item{ngroups}{number of groups}
+\item{ngroups}{Integer. Number of groups (must be > 1).}
 
-\item{max_n}{maximum n evaluated}
+\item{max_n}{Integer. Maximum sample size to evaluate (default is 1000).}
+}
+\value{
+An integer representing the minimum sample size per group required to reach the specified power.
 }
 \description{
-Find the minimum sample size per group with a \code{power}
-to correctly classify the best group as best from \code{ngroups} groups if the true
-probability of events in best group is \code{p1} and the difference
-with the next group is \code{difs}
+Computes the minimum sample size per group required to achieve a target probability
+of correctly selecting the best group in a binomial test. The best group is assumed
+to have success probability \code{p1}, and the other groups have \code{p1 - dif}.
+}
+\details{
+The function searches for the smallest \code{npergroup} such that the power from
+\code{\link{power_best_binomial}} is at least the target \code{power}.
+}
+\examples{
+ss_best_binomial(power = 0.9, p1 = 0.8, dif = 0.2, ngroups = 4)
 }

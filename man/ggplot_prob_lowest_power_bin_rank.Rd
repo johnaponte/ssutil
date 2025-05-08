@@ -2,24 +2,17 @@
 % Please edit documentation in R/sim_power_best_bin_rank.R
 \name{ggplot_prob_lowest_power_bin_rank}
 \alias{ggplot_prob_lowest_power_bin_rank}
-\title{GGplot of a prob_lowest_power object}
+\title{Plot Power Curve from a \code{prob_lowest_power_bin_rank} Object}
 \usage{
 ggplot_prob_lowest_power_bin_rank(x)
 }
 \arguments{
-\item{x}{an object of prob_lower_power class}
+\item{x}{An object of class \code{prob_lowest_power_bin_rank}.}
 }
 \value{
-a ggplot2 object
+A ggplot2 object.
 }
 \description{
-GGplot of a prob_lowest_power object
-}
-\examples{
-\dontrun{
-require(dplyr)
-require(ggplot2)
-lpb <- lowest_prop_best_binomial(dif = 0.2, ngroups = 5, npergroup = 25, nsimul = 10000)
-ggplot_prob_lowest_power(lpb)
-}
+Generates a ggplot showing simulated and fitted power curves for selecting
+the best group based on ranks.
 }

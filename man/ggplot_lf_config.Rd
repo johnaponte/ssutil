@@ -2,22 +2,23 @@
 % Please edit documentation in R/sim_power_best_binomial.R
 \name{ggplot_lf_config}
 \alias{ggplot_lf_config}
-\title{GGplot least configuration simulation}
+\title{Plot Least Favorable Configuration}
 \usage{
 ggplot_lf_config(x)
 }
 \arguments{
-\item{x}{an object of \code{lf_config} class}
+\item{x}{An object of class \code{lf_config}.}
 }
 \value{
-a ggplot2 object
+A ggplot object.
 }
 \description{
-GGplot least configuration simulation
+Generates a ggplot showing empirical and predicted power to select the best
+group over a grid of probabilities.
 }
 \examples{
 \dontrun{
-lpb <- lf_config(d = 0.2, k = 5, n = 25, simul = 1000)
-ggplot_lf_config(lpb)
+config <- lf_config(d = 0.2, k = 5, n = 25, simul = 1000)
+ggplot_lf_config(config)
 }
 }

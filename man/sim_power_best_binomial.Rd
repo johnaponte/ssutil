@@ -2,57 +2,46 @@
 % Please edit documentation in R/sim_power_best_binomial.R
 \name{sim_power_best_binomial}
 \alias{sim_power_best_binomial}
-\title{Power to select as best the best group using simulations}
+\title{Simulate Power to Select the Best Group Using Binomial Outcomes}
 \usage{
 sim_power_best_binomial(noutcomes, p1, dif, ngroups, npergroup, nsimul)
 }
 \arguments{
-\item{noutcomes}{number of outcomes to evaluate}
+\item{noutcomes}{Integer. Number of outcomes to evaluate.}
 
-\item{p1}{the probability in the most promising group}
+\item{p1}{Numeric. Probability in the most promising group (scalar or vector).}
 
-\item{dif}{difference between the most promising and the rest of the
-groups for each outcome}
+\item{dif}{Numeric. Difference between the best group and the rest.}
 
-\item{ngroups}{number of groups to compare}
+\item{ngroups}{Integer. Number of groups.}
 
-\item{npergroup}{number of subjects in each group}
+\item{npergroup}{Integer or vector. Number of subjects per group.}
 
-\item{nsimul}{number of simulations}
+\item{nsimul}{Integer. Number of simulations.}
 }
 \value{
-The empirical power expressed as the proportion of the simulations
-where the best group was selected as best for all outcomes.
+A data frame with empirical power and 95\% confidence interval.
 }
 \description{
-This function estimates the empirical power to select correctly as best group
-the best group, when the outcome follows a binomial distribution, assuming that
-the probability of the next promising group is at least \code{dif} lower than the best groups.
+Estimates the empirical power to correctly identify the best group as having
+the highest outcome, under a binomial distribution. Assumes that the most
+promising group has a higher success probability than the others by at least
+\code{dif}, and that outcomes are independent.
 }
 \details{
-The function allows to evaluate several outcomes at the same time, in which
-case evaluates if the most promising group is the best for all outcomes.
-
-It assume each outcome follows a binomial distribution and they are independent between them.
-The outcomes may have the same probability and same difference between the most promising
-group and the others, or they can be defined differently by outcome. In either case,
-the most promising has to be the best for all outcomes.
-
-The number of subjects per group can be the same or can be specified
-for each group. If specified, the most promising group is always the first group.
+Multiple outcomes can be evaluated simultaneously. The power is estimated as
+the proportion of simulations where the most promising group is selected best
+in all outcomes.
 }
 \examples{
 \dontrun{
-# Power to select the best group if the difference between the best and
-# the the other two groups is 0.2. One outcome and three groups of 30 subjects
-#
 sim_power_best_binomial(
   noutcomes = 1,
   p1 = 0.7,
   dif = 0.2,
-  ngroups= 3,
-  npergroup= 30,
-  nsimul=1000
-
+  ngroups = 3,
+  npergroup = 30,
+  nsimul = 1000
+)
 }
 }

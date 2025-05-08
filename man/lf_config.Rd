@@ -2,35 +2,29 @@
 % Please edit documentation in R/sim_power_best_binomial.R
 \name{lf_config}
 \alias{lf_config}
-\title{Least favorable configuration for a binomial experiment}
+\title{Least Favorable Configuration in a Binomial Experiment}
 \usage{
-lf_config(d, k, n, simul, prob = seq(from = 0.05, to = 0.95, by = 0.01))
+lf_config(d, k, n, simul, prob = seq(0.05, 0.95, by = 0.01))
 }
 \arguments{
-\item{d}{indifference zone}
+\item{d}{Numeric. Difference between best and other groups.}
 
-\item{k}{number of groups}
+\item{k}{Integer. Number of groups.}
 
-\item{n}{number of subjects per group}
+\item{n}{Integer. Sample size per group.}
 
-\item{simul}{number of simulations for each scenario}
+\item{simul}{Integer. Number of simulations.}
 
-\item{prob}{grid of probabilities for the best group. By default is a sequence between 0.05 and 0.95 by 0.01}
+\item{prob}{Numeric vector. Grid of probabilities to evaluate.}
 }
 \value{
-an S3 object of class lf_config
+An S3 object of class \code{lf_config} with simulation results and fitted curve.
 }
 \description{
-Given a difference, a number of groups and a number of subjects per groups, use
-Monte Carlo simulations to find the least favorable configuration to correctly
-select the best group.
-}
-\details{
-The program estimate a quadratic fit to the empirical power over a grid of
-potential probabilities for the best group, and identify the probability with
-the lowest power to correctly identify as best the best group.
+Identifies the event probability in the best group that results in the
+lowest power to correctly detect it as best, using simulation and quadratic
+model fitting.
 }
 \examples{
-lf_config(d=0.2, k=4, n=20, simul=1000)
-
+lf_config(d = 0.2, k = 4, n = 20, simul = 1000)
 }

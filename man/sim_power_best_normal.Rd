@@ -2,94 +2,55 @@
 % Please edit documentation in R/sim_power_best_normal.R
 \name{sim_power_best_normal}
 \alias{sim_power_best_normal}
-\title{Power to select the best group}
+\title{Simulate Power to Select Best Group (Normal Outcomes)}
 \usage{
 sim_power_best_normal(noutcomes, sd, dif, ngroups, npergroup, nsimul)
 }
 \arguments{
-\item{noutcomes}{number of outcomes to evaluate}
+\item{noutcomes}{Integer. Number of outcomes to evaluate.}
 
-\item{sd}{standard deviation for for each outcome}
+\item{sd}{Numeric vector. Standard deviations for each outcome. Can be a single value.}
 
-\item{dif}{difference between the most promising and the rest of the groups for each outcome}
+\item{dif}{Numeric vector. Difference in means between the best and the other groups.}
 
-\item{ngroups}{number of groups to compare}
+\item{ngroups}{Number of groups to compare.}
 
-\item{npergroup}{number of subjects in each group}
+\item{npergroup}{Number of subjects per group. Can be scalar or vector of length \code{ngroups}.}
 
-\item{nsimul}{number of simulations}
+\item{nsimul}{Integer. Number of simulations to perform.}
 }
 \value{
-The empirical power expressed as the proportion of the simulations
-where the best group was selected as best for all outcomes.
+A data frame with\tabular{ll}{
+   Column \tab Description \cr
+   power \tab Empirical power estimate \cr
+   conf.low \tab Lower bound of 95\% confidence interval \cr
+   conf.high \tab Upper bound of 95\% confidence interval \cr
+   nsim \tab Number of simulations performed. \cr
+}
 }
 \description{
-This function estimates the empirical power to select the most promising group as
-the best group, when the outcome is normally distributed, assuming that
-the mean of the rest of the groups  \code{dif} lower than the most promising group.
+Estimates the empirical power to identify the most promising group as the best,
+when outcomes are normally distributed and independent.
 }
 \details{
-The function allows to evaluate several outcomes at the same time, in which
-case evaluates if the most promising group is the best for all outcomes.
+The best group (group 1)
+is assumed to have mean 0, and the rest of the groups have mean \code{-dif}.
 
-It assume each outcome is normally distributed and they are independent between them.
-The outcomes may have the same mean, sd and same difference between the most promising
-group and the others, or they can be defined differently by outcome. In either case,
-the most promising has to be the best for all outcomes.
+Multiple outcomes can be evaluated simultaneously. The power is estimated as the
+proportion of simulations where the most promising group is the best in all outcomes.
 
-The number of subjects per group can be the same or can be specified
-for each group. If specified, the most promising group is always the first group.
+The number of subjects per group can be the same or specified per group. In either case,
+the first group is assumed to be the most promising.
 }
 \examples{
 \dontrun{
-# Power to select the best group if the difference between the best and
-# the the other two groups is 0.2. One outcome and three groups of 30 subjects
-#
-sim_power_best_normal(
-  noutcomes = 1,
-  sd = 1,
-  dif = 0.2,
-  ngroups= 3,
-  npergroup= 30,
-  nsimul=10000
-)
-#
-# Power to select the best group if the difference between the best and
-# the the other two groups is 0.2. three outcomes and three groups of 30 subjects
-#
-sim_power_best_normal(
-  noutcomes = 3,
-  sd = 1,
-  dif = 0.2,
-  ngroups= 3,
-  npergroup= 30,
-  nsimul=10000
-)
-#
-# Power to select the best group if the difference between the best and
-# the the other two groups is 0.2. three outcome and three groups of 30 subjects
-# Each outcome has its own parameters
-#
-sim_power_best_normal(
-  noutcomes = 3,
-  sd = c(1,0.8,1.5),
-  dif = c(0.2,0.15,0.3),
-  ngroups= 3,
-  npergroup= 30,
-  nsimul=10000
-)
-#
-# Power to select the best group if the difference between the best and
-# the the other two groups is 0.2. three outcomes and three groups, the
-# first group with 30 subjects and the rest with 25 subjects
-#
-sim_power_best_normal(
-  noutcomes = 3,
-  sd = 1,
-  dif = 0.2,
-  ngroups= 3,
-  npergroup= c(30,25,25),
-  nsimul=10000
-)
+  sim_power_best_normal(
+   noutcomes = 2,
+   sd = c(1, 1.2),
+   dif = c(0.2, 0.25),
+   ngroups = 3,
+   npergroup = c(30, 25, 25),
+   nsimul = 1000
+  )
 }
 }

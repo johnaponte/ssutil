@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim_power_best_bin_rank.R
 \name{sim_power_best_bin_rank}
 \alias{sim_power_best_bin_rank}
-\title{Power to rank as best the best group using simulations}
+\title{Simulate Power to Rank the Best Group Using Binomial Outcomes}
 \usage{
 sim_power_best_bin_rank(
   noutcomes,
@@ -15,61 +15,34 @@ sim_power_best_bin_rank(
 )
 }
 \arguments{
-\item{noutcomes}{number of outcomes to evaluate}
+\item{noutcomes}{Integer. Number of outcomes to evaluate.}
 
-\item{p1}{the probability  in the best group}
+\item{p1}{Numeric. Event probability in the best group (scalar or vector of length \code{noutcomes}).}
 
-\item{dif}{difference with the next best group}
+\item{dif}{Numeric. Difference between the best group and the rest (scalar or vector of length \code{noutcomes}).}
 
-\item{weights}{weights to rank the outcomes. if 1, same weight is given to all outcomes}
+\item{weights}{Numeric vector. Weights for each outcome. If scalar, applied equally.}
 
-\item{ngroups}{number of groups to compare}
+\item{ngroups}{Integer. Number of groups.}
 
-\item{npergroup}{number of subjects in each group}
+\item{npergroup}{Integer or vector. Sample size per group.}
 
-\item{nsimul}{number of simulations}
+\item{nsimul}{Integer. Number of simulations.}
 }
 \value{
-The empirical power expressed as the proportion of the simulations
-where the best group was selected as best for all outcomes.
+A data frame with estimated empirical power and 95\% confidence interval.
 }
 \description{
-This function estimates the empirical power to rank the most promising group as
-the best group, when the outcome follows a binomial distribution, assuming that
-the probability of the most promising group is at least \code{dif} higher than the least promising groups.
+Estimates the empirical power to rank the most promising group as the best,
+based on binomial outcomes, via simulation.
 }
 \details{
-The function allows to evaluate several outcomes at the same time, in which
-case evaluates if the most promising group is the best with higher rank
+Each outcome is assumed to follow an independent binomial distribution. The
+best group is defined as having a probability at least \code{dif} higher than the
+other groups. The function sums weighted ranks across multiple outcomes to
+determine the top group.
 
-It assume each outcome follows a binomial distribution and they are independent between them.
-The outcomes may have the same probability and same difference between the most promising
-group and the others, or they can be defined differently by outcome. Differently
-from power_best_binomial, in which the
-the most promising has to be the best for all outcomes,
-this simulation consider the sum of the ranks for each test and return
-the power to the first group to be selected as the best
-
-The outcomes can be weighted to give more importance to some outcomes than
-others. The weights are scaled to sum the total number of outcomes. A weight
-of 1 will give the same weight to all outcomes.
-
-The number of subjects per group can be the same or can be specified
-for each group. If specified, the most promising group is always the first group.
-}
-\examples{
-\dontrun{
-# Power to select the best group if the difference between the best and
-# the the other two groups is 0.2. One outcome and three groups of 30 subjects
-#
-sim_power_best_bin_rank(
-  noutcomes = 1,
-  p1 = 0.7,
-  dif = 0.2,
-  weights = 1,
-  ngroups = 3,
-  npergroup= 30,
-  nsimul=10000
-
-}
+If multiple outcomes are defined, weights can be applied to prioritize some
+outcomes over others. Weights are automatically scaled to sum to the number
+of outcomes. The group with the lowest total rank is considered the best.
 }

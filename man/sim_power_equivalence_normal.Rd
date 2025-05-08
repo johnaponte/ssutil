@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim_power_equivalence_normal.R
 \name{sim_power_equivalence_normal}
 \alias{sim_power_equivalence_normal}
-\title{Empirical power for equivalence}
+\title{Empirical Power for Equivalence (Normal Outcomes)}
 \usage{
 sim_power_equivalence_normal(
   ngroups,
@@ -15,41 +15,51 @@ sim_power_equivalence_normal(
 )
 }
 \arguments{
-\item{ngroups}{number of groups to compare}
+\item{ngroups}{Integer. Number of groups to compare}
 
-\item{npergroup}{number of observations per group}
+\item{npergroup}{Integer. Number of observations per group.}
 
-\item{sd}{standard deviation of the distribution}
+\item{sd}{Numeric. Standard deviation of the outcome distribution (common across groups).}
 
-\item{llimit}{lower limit for equivalence}
+\item{llimit}{Numeric. Lower equivalence limit.}
 
-\item{ulimit}{upper limit for equivalence}
+\item{ulimit}{Numeric. Upper equivalence limit.}
 
-\item{nsimul}{number of simulations}
+\item{nsimul}{Integer. Number of simulations to perform.}
 
-\item{conf.level}{confidence level of the interval}
+\item{conf.level}{Numeric. Confidence level used for the t-tests (e.g., 0.95 for 95\% CI).}
 }
 \value{
-a tibble with the power to declare equivalence and 95\% CI
+A data frame with the following columns:\tabular{ll}{
+   Column \tab Description \cr
+   power \tab Empirical power estimate. \cr
+   conf.low \tab Lower bound of 95\% confidence interval \cr
+   conf.high \tab Upper bound of 95\% confidence interval \cr
+   nsim \tab Number of simulations performed \cr
+}
 }
 \description{
-Estimate the empirical power to detect equivalence assuming a true
-no difference in normally distributed outcomes, using t.test on all pair
-comparisons between the different groups. Equivalence is declared if the
-confidence interval of the difference are within the lower limit (\code{llimit})
-and the upper limit (\code{ulimit}) for all comparisons
+Estimates the empirical power to detect equivalence among multiple groups assuming
+no true difference in normally distributed outcomes. Pairwise two-sample t-tests are
+used, and equivalence is declared if all confidence intervals for differences between
+group means lie entirely within the interval defined by \code{llimit} and \code{ulimit}.
+}
+\details{
+This function simulates data under the null hypothesis of no difference between groups
+and calculates the proportion of simulations in which all pairwise comparisons fall within
+the specified equivalence limits.
 }
 \examples{
-# Lot to lot equivalence for three lots, assuming a standard deviation
-# in log10 scale of 0.402 and limits for equivalence log10(2/3) and log10(3/2)
-
+\dontrun{
+#Equivalence testing for three groups with log-scale outcome
 sim_power_equivalence_normal(
-ngroups = 3,
-npergroup = 172,
-sd = 0.403,
-llimit = log10(2/3),
-ulimit = log10(3/2),
-nsimul = 1000,
-conf.level = 0.95
+  ngroups = 3,
+  npergroup = 172,
+  sd = 0.403,
+  llimit = log10(2/3),
+  ulimit = log10(3/2),
+  nsimul = 1000,
+  conf.level = 0.95
 )
+}
 }

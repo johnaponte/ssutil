@@ -2,40 +2,45 @@
 % Please edit documentation in R/ss_best_normal.R
 \name{ss_best_normal}
 \alias{ss_best_normal}
-\title{Sample Size for Selecting the Best Treatment in a Single-Factor Normal Response Using the Indifference-Zone Approach}
+\title{Sample Size for Selecting the Best Treatment in a Normal Response (Indifference-Zone)}
 \usage{
 ss_best_normal(groups, delta, sd, power, seed = NULL)
 }
 \arguments{
-\item{groups}{number of groups in the test.}
+\item{groups}{Integer. Number of groups (treatments) being compared.}
 
-\item{delta}{change to be detected.}
+\item{delta}{Numeric. Minimum difference in means between the best group and the second-best that is considered meaningful.}
 
-\item{sd}{common standard deviation of the response variable.}
+\item{sd}{Numeric. Common standard deviation of the response variable.}
 
-\item{power}{desired power of the test.}
+\item{power}{Numeric. Desired probability of correctly selecting the best group (must be between 0 and 1).}
 
-\item{seed}{the seed used for the \code{multz} procedure}
+\item{seed}{Optional. Integer seed to use in the internal call to \code{multz()}.}
 }
 \value{
-Returns the sample size needed for each group to achieve the desired power.
+Integer. Sample size required per group to achieve the specified power.
 }
 \description{
-Estimate the minimum common sample size per group required to guarantee the
-probability (power) of correctly selecting the best group
-(i.e., the group with the highest mean) using the indifference-zone approach.
+Calculates the minimum common sample size per group needed to achieve a specified
+probability (power) of correctly selecting the best group using the
+indifference-zone approach. This method assumes normally distributed responses with
+a known and common standard deviation.
 }
 \details{
-The procedure assumes a normal distribution of responses, with a common known
-variance. 'delta' is the smallest difference considered worth detecting between
-the best group and the next least favorable group.
-
-Reference: Bechhofer, R.E., Santner, T.J., & Goldsman, D.M. (1995).
-Design and Analysis of Experiments for Statistical Selection,
-Screening, and Multiple Comparisons.
-Wiley Series in Probability and Statistics. (Procedure Nb)
+The indifference-zone approach guarantees that the probability of correct selection
+is at least \code{power}, assuming the best group's mean exceeds the others by at
+least \code{delta}. The calculation is based on Bechhofer's Procedure Nb.
+}
+\note{
+The function uses the quantile function \code{multz()}, which computes critical values
+for the selection procedure. This implementation assumes equal variances and independent samples.
 }
 \examples{
 ss_best_normal(groups = 3, delta = 0.5, sd = 1, power = 0.8)
 
+}
+\references{
+Bechhofer, R.E., Santner, T.J., & Goldsman, D.M. (1995).
+\emph{Design and Analysis of Experiments for Statistical Selection, Screening, and Multiple Comparisons.}
+Wiley Series in Probability and Statistics. ISBN: 0-471-57427-9.
 }

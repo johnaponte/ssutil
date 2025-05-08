@@ -2,227 +2,117 @@
 # by JJAV 20211028
 
 
-
-#' Power to select the best group by ranks
+#' Simulate Power to Select Best Group by Ranks (Normal Outcomes)
 #'
-#' This function estimates the empirical power to select the most promising group as
-#' the best group, when the outcome is normally distributed, assuming that
-#' the mean of the rest of the groups is at least `dif` lower than the most promising group.
-#' and the best group is selected by summing weighted ranks for each outcome
-#'#'
-#' It assume each outcome is normally distributed and they are independent between them.
-#' The outcomes may have the same mean, sd and same difference between the most promising
-#' group and the others, or they can be defined differently by outcome.
+#' Estimates the empirical power to identify the most promising group as best,
+#' using weighted ranks across outcomes, assuming normally distributed outcomes.
 #'
-#' The number of subjects per group can be the same or can be specified
-#' for each group. If specified, the most promising group is always the first group
+#' Each outcome is independent and normally distributed. The most promising group
+#' is assumed to have a mean at least `dif` higher than the others. Ranks are
+#' weighted and summed per group across outcomes.
 #'
-#' If weights are included, they will be internally re-scaled to add to the
-#' number of outcomes
+#' If `weights` is specified, it is internally rescaled to sum to `noutcomes`.
+#' The most promising group is always considered to be the first group.
 #'
-#' The difference parameter presents how the best group is above the next best
-#' groups.
-#' @param noutcomes number of outcomes to evaluate
-#' @param sd standard deviation for for each outcome
-#' @param dif difference between the most promising and the rest of the groups for each outcome
-#' @param weights weights to rank the outcomes. if 1, same weight is given to all outcomes
-#' @param ngroups number of groups to compare
-#' @param npergroup number of subjects in each group
-#' @param nsimul number of simulations
-#' @importFrom stats rnorm
-#' @importFrom stats binom.test
+#' @param noutcomes Integer. Number of outcomes to evaluate.
+#' @param sd Numeric vector. Standard deviations for each outcome.
+#' @param dif Numeric vector. Difference in means between the best and other groups.
+#' @param weights Numeric vector. Weights per outcome (rescaled internally).
+#' @param ngroups Integer. Number of groups.
+#' @param npergroup Integer or vector. Number of subjects per group.
+#' @param nsimul Integer. Number of simulations.
+#'
+#' @return A data frame with empirical power and 95% confidence interval.
+#'
+#' @importFrom stats rnorm binom.test
 #' @importFrom broom tidy
 #' @export
-#' @returns The empirical power expressed as the proportion of the simulations
-#' where the best group was selected as best for all outcomes.
+#'
 #' @examples
 #' \dontrun{
-#' # Power to select the best group if the difference between the best and
-#' # the the other two groups is 0.2. One outcome and three groups of 30 subjects
-#' #
-#' power_best_norm_rank(
-#'   noutcomes = 1,
-#'   sd = 1,
-#'   dif = 0.2,
-#'   weights = 1,
-#'   ngroups= 3,
-#'   npergroup= 30,
-#'   nsimul=1000
-#' )
-#' #
-#' # Power to select the best group if the difference between the best and
-#' # the the other two groups is 0.2. three outcomes and three groups of 30 subjects
-#' #
-#' power_best_norm_rank(
+#' sim_power_best_norm_rank(
 #'   noutcomes = 3,
-#'   sd = 1,
-#'   dif = 0.2,
-#'   weights = 1
-#'   ngroups= 3,
-#'   npergroup= 30,
-#'   nsimul=1000
-#' )
-#' #
-#' # Power to select the best group if the difference between the best and
-#' # the the other two groups is 0.2. three outcome and three groups of 30 subjects
-#' # Each outcome has its own parameters and bigger weight is given to first oucome
-#' #
-#' power_best_norm_rank(
-#'   noutcomes = 3,
-#'   mean = c(1,1.5,2),
-#'   sd = c(1,0.8,1.5),
-#'   dif = c(0.2,0.15,0.3),
-#'   weights = c(0.5,0.3,0.2)
-#'   ngroups= 3,
-#'   npergroup= 30,
-#'   nsimul=1000
-#' )
-#' #
-#' # Power to select the best group if the difference between the best and
-#' # the the other two groups is 0.2. three outcomes and three groups, the
-#' # first group with 30 subjects and the rest with 25 subjects
-#' #
-#' power_best_norm_rank(
-#'   noutcomes = 3,
-#'   mean = 1,
-#'   sd = 1,
-#'   dif = 0.2,
-#'   weights = 1,
-#'   ngroups= 3,
-#'   npergroup= c(30,25,25),
-#'   nsimul=1000
+#'   sd = c(1, 0.8, 1.5),
+#'   dif = c(0.2, 0.15, 0.3),
+#'   weights = c(0.5, 0.3, 0.2),
+#'   ngroups = 3,
+#'   npergroup = c(30, 25, 25),
+#'   nsimul = 1000
 #' )
 #' }
-sim_power_best_norm_rank <-
-  function(noutcomes,
-           sd,
-           dif,
-           weights,
-           ngroups,
-           npergroup,
-           nsimul) {
+sim_power_best_norm_rank <- function(
+    noutcomes,
+    sd,
+    dif,
+    weights,
+    ngroups,
+    npergroup,
+    nsimul
+) {
+  # Validations
+  stopifnot(length(npergroup) == 1 | length(npergroup) == ngroups)
+  stopifnot(length(sd) == 1 | length(sd) == noutcomes)
+  stopifnot(length(dif) == 1 | length(dif) == noutcomes)
+  stopifnot(length(weights) == 1 | length(weights) == noutcomes)
+  stopifnot('Dif should be positive' = all(dif > 0))
 
-    # Checks and data management
-    stopifnot(length(npergroup) == 1 | length(npergroup) == ngroups)
-    stopifnot(length(sd) == 1 | length(sd) == noutcomes)
-    stopifnot(length(dif) == 1 | length(dif) == noutcomes)
-    stopifnot(length(weights) == 1 | length(weights) == noutcomes)
-    if (length(sd) == 1){
-      sd = rep(sd, noutcomes)
-    }
-    if (length(dif) == 1) {
-      dif = rep(dif, noutcomes)
-    }
-    if (length(weights) == 1) {
-      weights = rep(weights, noutcomes)
-    }
+  # Expand scalars
+  if (length(sd) == 1) sd <- rep(sd, noutcomes)
+  if (length(dif) == 1) dif <- rep(dif, noutcomes)
+  if (length(weights) == 1) weights <- rep(weights, noutcomes)
 
-    # Weights are scaled to be the number of outcomes
-    weightsc = weights/sum(weights)*noutcomes
-    # Make the matrix of weight to multiply the ranks
-    weightsm <- matrix(rep(weightsc,ngroups), ncol = noutcomes, byrow = T)
+  # Rescale weights
+  weightsc <- weights / sum(weights) * noutcomes
+  weightsm <- matrix(rep(weightsc, ngroups), ncol = noutcomes, byrow = TRUE)
 
-    # Maximum number of participants per group
-    # Extra observations are removed later
-    maxnpergroup <- max(npergroup)
+  # Handle group sizes
+  if (length(npergroup) == 1) npergroup <- rep(npergroup, ngroups)
+  maxn <- max(npergroup)
 
-    # Vector of the means. 0 for best group, -dif for the rest
-    meanvec <- vector()
-    for (i in 1:noutcomes) {
-      for (j in 1:ngroups) {
-        if (j == 1)
-          meanvec <-c(meanvec, rep(0, maxnpergroup))
-        else
-          meanvec <- c(meanvec, rep(-dif[i], maxnpergroup))
-      }
-    }
-    ## To confirm the correct disposition of values
-    # amv<-array(
-    #    meanvec,
-    #    dim=c(maxnpergroup,ngroups, noutcomes),
-    #    dimnames = list(
-    #      paste0("Subj ",1:maxnpergroup),
-    #      paste0("Grp ",1:ngroups),
-    #      paste0("Outcome",1:noutcomes)))
-    #  amv
+  # Construct mean and SD vectors for simulation
+  meanvec <- unlist(lapply(1:noutcomes, function(i) {
+    c(rep(0, maxn), rep(-dif[i], maxn * (ngroups - 1)))
+  }))
 
-    # Vector of the standard deviations
-    sdvec <- vector()
-    for (i in 1:noutcomes) {
-      for (j in 1:ngroups) {
-        sdvec <- c(sdvec, rep(sd[i], maxnpergroup))
+  sdvec <- unlist(lapply(1:noutcomes, function(i) {
+    rep(sd[i], maxn * ngroups)
+  }))
+
+  # Run simulations
+  simrest <- vapply(1:nsimul, function(xx) {
+    simulone <- array(
+      rnorm(maxn * ngroups * noutcomes, mean = meanvec, sd = sdvec),
+      dim = c(maxn, ngroups, noutcomes)
+    )
+
+    # Handle unequal group sizes
+    if (any(npergroup < maxn)) {
+      for (i in seq_along(npergroup)) {
+        if (npergroup[i] < maxn) {
+          simulone[(npergroup[i] + 1):maxn, i, ] <- NA
+        }
       }
     }
 
-    # # To confirm the correct disposition of values
-    # asd<-array(sdvec,dim=c(maxnpergroup,ngroups,noutcomes))
-    # asd
+    # Rank by outcome
+    ranks <-
+      sapply(
+        1:noutcomes,
+        function(outn) {
+            means <- colMeans(simulone[, , outn], na.rm = TRUE)
+            rank(means, ties.method = "random")
+        }
+      )
 
-    # Simulations of trials
-    simrest <-
-      vapply(c(1:nsimul),
-             function(xx) {
-               # Simulate one trial, the result is a multidimensional array with
-               # dimensions maxnpergroups, ngroups, noutcomes
-               simulone <-
-                 array(
-                   rnorm(maxnpergroup * ngroups * noutcomes,
-                         meanvec,
-                         sdvec),
-                   dim = c(maxnpergroup, ngroups, noutcomes)
-                 )
+    # Weighted sum of ranks
+    wranks <- ranks * weightsm
+    sumranks <- rowSums(wranks)
+    rankgroup <- rank(sumranks, ties.method = "random")
 
-               # Groups maybe of different size
-               # Change to NA if more obs than needed for the group
-               if (length(npergroup) > 1) {
-                 for (i in 1:length(npergroup)) {
-                   if (npergroup[i] < maxnpergroup) {
-                     simulone[c((npergroup[i]+1):maxnpergroup), i,] <- NA
-                   }
-                 }
-               }
+    as.integer(rankgroup[1] == ngroups)
+  }, 0.0)
 
-               # Return the ranks of each group by outcome based on the mean
-              ranks <-
-                 apply(matrix(c(1:noutcomes)),1,
-                        # a loop for each outcome
-                        function(outn) {
-                          # the mean of each group but allows different length per group
-                          meansone <-
-                            apply(simulone[, , outn], 2, mean,na.rm = TRUE)
-                          rank(meansone, ties.method = "random")
-                        })
-               # Weight the ranks
-               wranks <- ranks * weightsm
-               # Sum the ranks by group
-               sumranks<- apply(wranks,1,sum)
-               # Rank the groups based on the sum of ranks by outcome
-               rankgroup <- rank(sumranks, ties.method = "random")
-               # Return 1 if the max rank is in group 1
-               ifelse(rankgroup[1] == ngroups, 1, 0)
-          }, 0.0)
-    # Calculate the power and 95% confidence interval
-    out <- tidy(binom.test(sum(simrest), length(simrest)))[,c(1,5,6)]
-    names(out)[1]<- "power"
-    cbind(out,"nsim" = length(simrest))
-  }
-
-# To debug the function
-# library(tidyverse)
-# library(broom)
-# noutcomes = 5
-# sd = 1
-# dif = 0.2
-# weights = c(0.3, 0.3, 0.1, 0.1, 0.1)
-# ngroups= 3
-# npergroup= 25
-# nsimul=10
-#
-# sim_power_best_norm_rank (
-#   noutcomes,
-#   sd,
-#   dif,
-#   weights,
-#   ngroups,
-#   npergroup,
-#   nsimul)
+  out <- tidy(binom.test(sum(simrest), length(simrest)))[, c(1, 5, 6)]
+  names(out)[1] <- "power"
+  cbind(out, nsim = length(simrest))
+}

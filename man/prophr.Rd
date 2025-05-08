@@ -2,27 +2,28 @@
 % Please edit documentation in R/prophr.R
 \name{prophr}
 \alias{prophr}
-\title{Calculate the proportion of events given a hazard ratio}
+\title{Calculate Event Probability in the Experimental Group Given a Hazard Ratio}
 \usage{
 prophr(p0, hr)
 }
 \arguments{
-\item{p0}{Probability of an event in the control group}
+\item{p0}{Numeric scalar. Probability of an event in the control group (between 0 and 1).}
 
-\item{hr}{Hazard ratio}
+\item{hr}{Numeric scalar. Hazard ratio (must be > 0).}
 }
 \value{
-The probability of event in the experimental group
+Numeric. The probability of an event in the experimental group.
 }
 \description{
-This calculate the proportion of events in the experimental group
-based on the proportion of event in the control group and the hazard ratio,
-assuming proportionality of the hazard assumption.
+Computes the event probability in the experimental group based on the event
+probability in the control group and a specified hazard ratio, assuming
+proportional hazards.
 }
 \details{
-This is useful when evaluating sample size in PASS(TM) as it does not make the
-correction of the other group automatically.
+This is useful for sample size calculations, for example in PASS (TM), which does
+not automatically adjust the event rate for the experimental group.
 }
 \examples{
-prophr(0.05,0.6)
+prophr(0.05, 0.6)
+
 }

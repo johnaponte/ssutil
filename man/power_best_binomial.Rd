@@ -2,33 +2,36 @@
 % Please edit documentation in R/ss_best_binomial.R
 \name{power_best_binomial}
 \alias{power_best_binomial}
-\title{Power to correctly classify as best the best group in a binomial test}
+\title{Power to Correctly Select the Best Group in a Binomial Test}
 \usage{
 power_best_binomial(p1, dif, ngroups, npergroup)
 }
 \arguments{
-\item{p1}{probability in the best group}
+\item{p1}{Numeric. Probability of success in the best group (must be in [0, 1]).}
 
-\item{dif}{Difference between the best group and the next}
+\item{dif}{Numeric. Difference in success probability between the best group and the next best (must be > 0).}
 
-\item{ngroups}{Number of groups}
+\item{ngroups}{Integer. Number of groups (must be greater than 1).}
 
-\item{npergroup}{Number of subjects in each group}
+\item{npergroup}{Integer. Number of subjects per group (must be positive).}
 }
 \value{
-the probability of correctly classify as best the best group
+A numeric value representing the probability of correctly identifying the best group.
 }
 \description{
-Estimate the exact probability of correctly classify as best the best group when
-the outcome follows a binomial distribution, assuming that \code{p1} is the
-probability of events in the best group, and the probability in the next
-group is \code{dif} lower
+Computes the exact probability of correctly identifying the best group
+when the outcome follows a binomial distribution. It assumes that \code{p1}
+is the probability of success in the best group, and that the success
+probability in all other groups is lower by a fixed difference \code{dif}.
+}
+\details{
+The formula is based on the exact method described by Sobel and Huyett (1957).
 }
 \examples{
-power_best_binomial( p1 = 0.8, dif = 0.2, ngroups = 4, npergroup = 50)
+power_best_binomial(p1 = 0.8, dif = 0.2, ngroups = 4, npergroup = 50)
+
 }
 \references{
-Sobel, Milton, and Marilyn J. Huyett. “Selecting the Best One of
-Several Binomial Populations.” Bell System Technical Journal 36, no. 2
-(1957): 537–76. https://doi.org/10.1002/j.1538-7305.1957.tb02411.x.
+Sobel, M., & Huyett, M. J. (1957). Selecting the Best One of Several Binomial Populations.
+\emph{Bell System Technical Journal}, 36(2), 537–576. \doi{10.1002/j.1538-7305.1957.tb02411.x}
 }

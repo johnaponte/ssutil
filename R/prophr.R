@@ -1,18 +1,32 @@
-#' Calculate the proportion of events given a hazard ratio
+#' Calculate Event Probability in the Experimental Group Given a Hazard Ratio
 #'
-#' This calculate the proportion of events in the experimental group
-#' based on the proportion of event in the control group and the hazard ratio,
-#' assuming proportionality of the hazard assumption.
+#' Computes the event probability in the experimental group based on the event
+#' probability in the control group and a specified hazard ratio, assuming
+#' proportional hazards.
 #'
-#' This is useful when evaluating sample size in PASS(TM) as it does not make the
-#' correction of the other group automatically.
+#' This is useful for sample size calculations, for example in PASS (TM), which does
+#' not automatically adjust the event rate for the experimental group.
 #'
-#' @param p0 Probability of an event in the control group
-#' @param hr Hazard ratio
-#' @return The probability of event in the experimental group
-#' @export
+#' @param p0 Numeric scalar. Probability of an event in the control group (between 0 and 1).
+#' @param hr Numeric scalar. Hazard ratio (must be > 0).
+#'
+#' @return Numeric. The probability of an event in the experimental group.
+#'
 #' @examples
-#' prophr(0.05,0.6)
-prophr <- function(p0, hr){
-  1-(1-p0)^hr
+#' prophr(0.05, 0.6)
+#'
+#' @export
+prophr <- function(p0, hr) {
+  if (!is.numeric(p0) )
+    stop("p0 must be numeric.")
+  if (!is.numeric(hr) )
+    stop("hr must be numeric value.")
+  if (length(p0) != length(hr))
+    stop("p0 and hr must be of the same length")
+  if (p0 < 0 || p0 > 1)
+    stop("p0 must be between 0 and 1.")
+  if (hr <= 0)
+    stop("hr must be greater than 0.")
+
+  1 - (1 - p0)^hr
 }

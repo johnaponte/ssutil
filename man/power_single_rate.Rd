@@ -2,24 +2,26 @@
 % Please edit documentation in R/power_single_rate.R
 \name{power_single_rate}
 \alias{power_single_rate}
-\title{Rate of events to observe at least one event}
+\title{Detectable Event Rate with Specified Power and Sample Size}
 \usage{
 power_single_rate(subjects, power)
 }
 \arguments{
-\item{subjects}{sample size}
+\item{subjects}{Integer or vector of integers. Sample size(s).}
 
-\item{power}{power}
+\item{power}{Numeric or vector of numerics. Desired power(s), between 0 and 1.}
 }
 \value{
-and s3 object of class power_single_rate with the proportion that can be
-detected with the specified power and sample size
+An object of class \code{power_single_rate}, which is a matrix with
+columns \code{n} (sample size), \code{power} (requested power), and
+\code{proportion} (minimum detectable event rate).
 }
 \description{
-Estimate which is the true proportion required to observe
-at least one event given a sample size and a power
+Estimates the minimum true proportion of events needed to detect at least one
+event, given a sample size and desired statistical power.
 }
 \examples{
-power_single_rate(30,0.9)
-power_single_rate(c(30,50,100), c(0.9))
+power_single_rate(30, 0.9)
+power_single_rate(c(30, 50, 100), 0.9)
+
 }

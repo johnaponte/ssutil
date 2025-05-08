@@ -1,125 +1,103 @@
 # Sample size for safety
-# 20211101 by JJAVE
-require(stringr)
+# 20211101 by JJAV
 
-#' Rate of events to observe at least one event
+#' Detectable Event Rate with Specified Power and Sample Size
 #'
-#' Estimate which is the true proportion required to observe
-#' at least one event given a sample size and a power
+#' Estimates the minimum true proportion of events needed to detect at least one
+#' event, given a sample size and desired statistical power.
 #'
-#' @param subjects sample size
-#' @param power power
-#' @return and s3 object of class power_single_rate with the proportion that can be
-#' detected with the specified power and sample size
-#' @export
-#' @importFrom stringr str_pad
-#' @importFrom stats binom.test
-#' @importFrom stats dbinom
-#' @importFrom stats uniroot
+#' @param subjects Integer or vector of integers. Sample size(s).
+#' @param power Numeric or vector of numerics. Desired power(s), between 0 and 1.
+#'
+#' @return An object of class \code{power_single_rate}, which is a matrix with
+#' columns \code{n} (sample size), \code{power} (requested power), and
+#' \code{proportion} (minimum detectable event rate).
+#'
 #' @examples
-#' power_single_rate(30,0.9)
-#' power_single_rate(c(30,50,100), c(0.9))
-power_single_rate<- function(subjects, power){
-  # Check parameters
+#' power_single_rate(30, 0.9)
+#' power_single_rate(c(30, 50, 100), 0.9)
+#'
+#' @importFrom stats dbinom uniroot
+#' @importFrom stringr str_pad
+#' @export
+power_single_rate <- function(subjects, power) {
   res <- numeric()
+
   for (ni in subjects) {
     for (powerj in power) {
-      stopifnot(as.integer(ni)==ni)
-      stopifnot(0 < powerj & powerj < 1)
-      ss <-uniroot(function(x){powerj-(1-dbinom(0,ni,x))}, interval=c(0,1))$root
-      res = c(res, ni, powerj,ss)
+      stopifnot(as.integer(ni) == ni)
+      stopifnot(0 < powerj, powerj < 1)
+      ss <- uniroot(function(x) powerj - (1 - dbinom(0, ni, x)),
+                    interval = c(0, 1))$root
+      res <- c(res, ni, powerj, ss)
     }
   }
-  rem <- matrix(res, ncol=3, byrow = T)
-  colnames(rem)<- c("n","power","proportion")
-  class(rem)<- c(class(rem),"power_single_rate")
+
+  rem <- matrix(res, ncol = 3, byrow = TRUE)
+  colnames(rem) <- c("n", "power", "proportion")
+  class(rem) <- c("power_single_rate", class(rem))
   rem
 }
 
-
-
 #' @export
-format.power_single_rate <- function(x, digits=3, ...){
-  stopifnot(inherits(x,"power_single_rate"))
-  scale <- -floor(log10(x[,3]))
-  val = x[,3]*(10^scale)
-  valf <- format(val, digits=digits, ...)
+format.power_single_rate <- function(x, digits = 3, ...) {
+  stopifnot(inherits(x, "power_single_rate"))
+
+  scale <- -floor(log10(x[, 3]))
+  val <- x[, 3] * (10^scale)
+  valf <- format(val, digits = digits, ...)
+
   if (nrow(x) == 1) {
-    res_str <-
-    paste(
-      "An study with ",
-    x[1,1],
-      " participants would have ",
-    x[1,2]*100,
-    "% power to detect at least one",
-    " event if the true proportion of",
-    " events is at least ",
-    valf,
-    " per ",
-    10^scale,
-    " participants.",
-    sep = "")
+    res_str <- paste(
+      "A study with ",
+      x[1, 1], " participants would have ",
+      x[1, 2] * 100, "% power to detect at least one event\n",
+      "if the true event rate is at least ",
+      valf, " per ", 10^scale, " participants.",
+      sep = ""
+    )
   } else {
-      res_str <-
-        paste("According to the number of participants, ",
-          "the table shows the power to detect at\n ",
-          "least event given a true proportion of events or higher\n\n",
-          sep = " ")
-      subjects <- x[,1]
-      powert <- paste0(x[,2]*100,"%")
-      restext <-  paste(valf, "per",10^scale,"participants")
-      width1 = max(8, max(nchar(subjects)))
-      width2 = max(5, max(nchar(powert)))
-      width3 = max(10, max(nchar(restext)))
-      res_str <-
-        paste(res_str,
-          "|",
-          str_pad("Subjects", width1),
-          "|",
-          str_pad("Power", width2),
-          "|",
-          str_pad("Proportion", width3),
-          "|\n", sep = "")
+    res_str <- paste(
+      "According to the number of participants, the table shows the power\n",
+      "to detect at least one event, given a true event rate equal to or higher than:\n\n",
+      sep = ""
+    )
 
-      res_str <-
-        paste(res_str,
-              "|",
-          paste0(rep("-",width1), collapse=""),
-          "|",
-          paste0(rep("-",width2), collapse=""),
-          "|",
-          paste0(rep("-",width3), collapse=""),
-          "|\n",sep="")
+    subjects <- x[, 1]
+    powert <- paste0(x[, 2] * 100, "%")
+    restext <- paste(valf, "per", 10^scale, "participants")
 
+    width1 <- max(8, max(nchar(subjects)))
+    width2 <- max(5, max(nchar(powert)))
+    width3 <- max(10, max(nchar(restext)))
 
-      for (i in c(1:nrow(x))){
-        res_str <-
-          paste(res_str,
-                "|",
-          str_pad(subjects[i],width1),
-          "|",
-          str_pad(powert[i], width2),
-          "|",
-          str_pad(restext[i],width3),
-          "|\n", sep="")
-      }
+    res_str <- paste0(
+      res_str,
+      "| ", str_pad("Subjects", width1),
+      " | ", str_pad("Power", width2),
+      " | ", str_pad("Proportion", width3), " |\n",
+      "| ", str_pad("", width1, pad = "-"),
+      " | ", str_pad("", width2, pad = "-"),
+      " | ", str_pad("", width3, pad = "-"), " |\n"
+    )
+
+    for (i in seq_len(nrow(x))) {
+      res_str <- paste0(
+        res_str,
+        "| ", str_pad(subjects[i], width1),
+        " | ", str_pad(powert[i], width2),
+        " | ", str_pad(restext[i], width3), " |\n"
+      )
+    }
   }
- res_str
+
+  res_str
 }
 
 
 #' @export
-print.power_single_rate<- function(x,...){
-  stopifnot(inherits(x,"power_single_rate"))
-  cat(format(x,...))
+print.power_single_rate <- function(x, ...) {
+  stopifnot(inherits(x, "power_single_rate"))
+  cat(format(x, ...))
   invisible(x)
 }
-
-#
-# # Examples
-# xx<- power_single_rate(30,0.9)
-# xx
-#
-# yy<- power_single_rate(c(30,50,100), c(0.8))
-# yy
-

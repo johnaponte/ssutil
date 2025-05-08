@@ -2,38 +2,63 @@
 % Please edit documentation in R/sim_power_nbinom.R
 \name{sim_power_nbinom}
 \alias{sim_power_nbinom}
-\title{Empirical power for negative binomial}
+\title{Empirical Power for Negative Binomial Comparison}
 \usage{
 sim_power_nbinom(n1, n2, ir1, tm, rr, lowrr, dispersion, alpha, nsimul)
 }
 \arguments{
-\item{n1}{Number of participants in group 1}
+\item{n1}{Integer. Number of participants in group 1.}
 
-\item{n2}{Number of participants in group 2}
+\item{n2}{Integer. Number of participants in group 2.}
 
-\item{ir1}{Incidence rate in group 1}
+\item{ir1}{Numeric. Incidence rate in group 1.}
 
-\item{tm}{Average exposure time}
+\item{tm}{Numeric. Average exposure time per subject (assumed equal across subjects).}
 
-\item{rr}{Relative risk between group 2 and group 1 (ir2/ir1)}
+\item{rr}{Numeric. True relative risk between groups (group 2 rate = rr × group 1 rate).}
 
-\item{lowrr}{Lower limit of the Relative ratio target of the comparison}
+\item{lowrr}{Numeric. Lower bound of the relative risk under the null hypothesis.}
 
-\item{dispersion}{Dispersion parameter}
+\item{dispersion}{Numeric. Dispersion parameter (\eqn{\phi}) for the negative binomial distribution.}
 
-\item{alpha}{= Type 1 error (two tails)}
+\item{alpha}{Numeric. Type I error rate (two-sided).}
 
-\item{nsimul}{Number of simulations}
+\item{nsimul}{Integer. Number of simulation iterations.}
+}
+\value{
+A named numeric vector with:
+\itemize{
+\item pwr: Empirical power (proportion of simulations where lowrr is rejected).
+}
+
+. * lci: Lower 95\\% confidence limit for power.
+
+. * uci: Upper 95\\% confidence limit for power.
+
+. * pw2: Proportion of simulations with p-value < alpha/2 (for reference).
 }
 \description{
-Estimates the empirical power for negative binomial comparisons.
+Estimates empirical power to detect a rate ratio below a specified threshold
+using a negative binomial model. Simulates count data with overdispersion,
+fits a model with \code{glm.nb}, and evaluates the power to reject the null
+hypothesis under the alternative.
 }
 \note{
-this uses the alternative nomenclature for negative binomial where
-the size = 1/phi and prob = size/(size + mu) where mu is the mean parameter
-which for group 1 is mu1 = ir1\*tm and for group 2 is mu2 = ir1\*rr\*tm.
-size is estimated as theta in \code{glm.nb}
+Uses the alternative parameterization of the negative binomial: \code{mu} is the mean,
+and \code{size = 1/dispersion}. In \code{glm.nb}, dispersion is estimated as \code{theta}.
+}
+\examples{
+\dontrun{
+sim_power_nbinom(
+  n1 = 150, n2 = 150,
+  ir1 = 0.55, tm = 1.7,
+  rr = 0.6, lowrr = 1,
+  dispersion = 2,
+  alpha = 0.025,
+  nsimul = 1000
+)
+}
 }
 \author{
-{Chris G}
+Chris Gast
 }

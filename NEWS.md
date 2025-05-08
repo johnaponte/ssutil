@@ -1,5 +1,5 @@
 # ssutil 0.14.0
-- Refactoring of the entire package.
+- Re-factoring of the entire package.
 - Functions that calculate power based on simulation now start with the prefix
   `sim_`.
 - `ni_fleming` has been renamed to `ni_ve`.

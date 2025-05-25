@@ -1,12 +1,19 @@
 Package: ssutil
 Title: Utilities for Sample Size calculation
 Version: 0.14
-Authors@R: person(
-            given = "John J.",
-            family = "Aponte",
-            role = c("aut", "cre"),
-            email = "john.j.aponte@gmail.com",
-            comment = c(ORCID = "0000-0002-3014-3673"))
+Authors@R: c(
+              person(
+              given = "John J.",
+              family = "Aponte",
+              role = c("aut", "cre"),
+              email = "john.j.aponte@gmail.com",
+              comment = c(ORCID = "0000-0002-3014-3673")),
+              person(
+              given ="Chris", 
+              family = "Gast", 
+              email = "cgast@path.org", 
+              role = "ctb")
+            )
 Description: Utilities for the sample size estimation and
              simulations of clinical trials.
 License: AGPL (>= 3)

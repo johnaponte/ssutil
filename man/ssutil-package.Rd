@@ -12,5 +12,10 @@ simulations of clinical trials.
 \author{
 \strong{Maintainer}: John J. Aponte \email{john.j.aponte@gmail.com} (\href{https://orcid.org/0000-0002-3014-3673}{ORCID})
 
+Other contributors:
+\itemize{
+  \item Chris Gast \email{cgast@path.org} [contributor]
+}
+
 }
 \keyword{internal}

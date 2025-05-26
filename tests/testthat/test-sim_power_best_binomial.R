@@ -5,11 +5,11 @@ test_that("sim_power_best_binomial returns expected output", {
     dif = 0.2,
     ngroups = 3,
     npergroup = 30,
-    nsimul = 100
+    nsim = 100
   )
 
-  expect_s3_class(res, "data.frame")
-  expect_true(all(c("power", "conf.low", "conf.high", "nsim") %in% names(res)))
+  expect_s3_class(res, "empirical_power_result")
+  expect_true(all(c("power", "conf.low", "conf.high", "nsim","conf.level") %in% names(res)))
   expect_equal(res$nsim, 100)
   expect_true(res$power >= 0 && res$power <= 1)
 })
@@ -32,28 +32,28 @@ test_that("sim_power_best_binomial input validation works", {
 })
 
 
-test_that("lf_config returns correct structure and values", {
-  res <- lf_config(
-    d = 0.2,
-    k = 3,
-    n = 30,
-    simul = 100,
+test_that("lf_config_binomial returns correct structure and values", {
+  res <- lf_config_binomial(
+    dif = 0.2,
+    ngroups = 3,
+    npergroup = 30,
+    nsim = 100,
     prob = seq(0.3, 0.7, length.out = 5)
   )
 
-  expect_s3_class(res, "lf_config")
+  expect_s3_class(res, "lf_config_binomial")
   expect_type(res$minprob, "double")
   expect_s3_class(res$simulation, "data.frame")
   expect_true("pred" %in% names(res$simulation))
 })
 
 
-test_that("format and print methods for lf_config work", {
-  res <- lf_config(
-    d = 0.2,
-    k = 3,
-    n = 30,
-    simul = 100,
+test_that("format and print methods for lf_config_binomial work", {
+  res <- lf_config_binomial(
+    dif = 0.2,
+    ngroups = 3,
+    npergroup = 30,
+    nsim = 100,
     prob = seq(0.3, 0.7, length.out = 5)
   )
 
@@ -64,15 +64,15 @@ test_that("format and print methods for lf_config work", {
 })
 
 
-test_that("ggplot_lf_config returns a ggplot object", {
-  res <- lf_config(
-    d = 0.2,
-    k = 3,
-    n = 30,
-    simul = 100,
-    prob = seq(0.3, 0.7, length.out = 5)
-  )
+test_that("ggplot_lf_config_binomial returns a ggplot object", {
+  res <- lf_config_binomial(
+    dif = 0.2,
+    ngroups = 3,
+    npergroup = 30,
+    nsim = 100,
+    prob = seq(0.3, 0.7, length.out = 5))
 
-  plot <- ggplot_lf_config(res)
+  plot <- ggplot_lf_config_binomial(res)
   expect_s3_class(plot, "ggplot")
 })
+

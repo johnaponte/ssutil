@@ -4,7 +4,15 @@
 \alias{sim_power_best_binomial}
 \title{Simulate Power to Select the Best Group Using Binomial Outcomes}
 \usage{
-sim_power_best_binomial(noutcomes, p1, dif, ngroups, npergroup, nsimul)
+sim_power_best_binomial(
+  noutcomes,
+  p1,
+  dif,
+  ngroups,
+  npergroup,
+  nsim,
+  conf.level = 0.95
+)
 }
 \arguments{
 \item{noutcomes}{Integer. Number of outcomes to evaluate.}
@@ -17,7 +25,9 @@ sim_power_best_binomial(noutcomes, p1, dif, ngroups, npergroup, nsimul)
 
 \item{npergroup}{Integer or vector. Number of subjects per group.}
 
-\item{nsimul}{Integer. Number of simulations.}
+\item{nsim}{Integer. Number of simulations.}
+
+\item{conf.level}{Numeric. Level for the confidence interval}
 }
 \value{
 A data frame with empirical power and 95\% confidence interval.
@@ -41,7 +51,7 @@ sim_power_best_binomial(
   dif = 0.2,
   ngroups = 3,
   npergroup = 30,
-  nsimul = 1000
+  nsim = 1000
 )
 }
 }

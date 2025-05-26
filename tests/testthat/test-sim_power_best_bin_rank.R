@@ -6,11 +6,11 @@ test_that("sim_power_best_bin_rank returns expected structure and values", {
     weights = 1,
     ngroups = 3,
     npergroup = 30,
-    nsimul = 100
+    nsim = 100
   )
 
-  expect_s3_class(res, "data.frame")
-  expect_true(all(c("power", "conf.low", "conf.high", "nsim") %in% colnames(res)))
+  expect_s3_class(res, "empirical_power_result")
+  expect_true(all(c("power", "conf.low", "conf.high", "nsim") %in% names(res)))
   expect_equal(res$nsim, 100)
   expect_true(res$power >= 0 && res$power <= 1)
 })
@@ -34,48 +34,48 @@ test_that("sim_power_best_bin_rank handles input validation correctly", {
 })
 
 
-test_that("lowest_prop_best_bin_rank returns correct structure", {
-  res <- lowest_prop_best_bin_rank(
+test_that("least favourable binomial rannk returns correct structure", {
+  res <- lf_config_bin_rank(
     noutcomes = 1,
     dif = 0.2,
     weights = 1,
     ngroups = 3,
     npergroup = 30,
-    nsimul = 100,
+    nsim = 100,
     p1 = seq(0.3, 0.7, length.out = 5)
   )
 
-  expect_s3_class(res, "prob_lowest_power_bin_rank")
+  expect_s3_class(res, "lf_config_bin_rank")
   expect_true(is.numeric(res$minprob))
   expect_true(is.numeric(res$minpow))
   expect_s3_class(res$simulation, "data.frame")
 })
 
 
-test_that("plot function works for prob_lowest_power_bin_rank", {
-  res <- lowest_prop_best_bin_rank(
+test_that("plot function works for lf_config_bin_rank", {
+  res <- lf_config_bin_rank(
     noutcomes = 1,
     dif = 0.2,
     weights = 1,
     ngroups = 3,
     npergroup = 30,
-    nsimul = 100,
+    nsim = 100,
     p1 = seq(0.3, 0.7, length.out = 5)
   )
 
-  plot <- ggplot_prob_lowest_power_bin_rank(res)
+  plot <- ggplot_lf_config_bin_rank(res)
   expect_s3_class(plot, "ggplot")
 })
 
 
-test_that("format and print methods for prob_lowest_power_bin_rank", {
-  res <- lowest_prop_best_bin_rank(
+test_that("format and print methods for lf_config_bin_rank", {
+  res <- lf_config_bin_rank(
     noutcomes = 1,
     dif = 0.2,
     weights = 1,
     ngroups = 3,
     npergroup = 30,
-    nsimul = 100,
+    nsim = 100,
     p1 = seq(0.3, 0.7, length.out = 5)
   )
 
@@ -84,3 +84,4 @@ test_that("format and print methods for prob_lowest_power_bin_rank", {
 
   expect_invisible(print(res))
 })
+

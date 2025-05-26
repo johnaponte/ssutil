@@ -22,9 +22,22 @@
 #' @param weights Numeric vector. Weights for each outcome. If scalar, applied equally.
 #' @param ngroups Integer. Number of groups.
 #' @param npergroup Integer or vector. Sample size per group.
-#' @param nsimul Integer. Number of simulations.
+#' @param nsim Integer. Number of simulations.
+#' @param conf.level Numeric. Confidence level for the returned confidence interval
 #'
-#' @return A data frame with estimated empirical power and 95% confidence interval.
+#' @examples
+#' \dontrun{
+#'   sim_power_best_bin_rank(
+#'   noutcomes = 2,
+#'   p1 = 0.80,
+#'   dif = 0.15,
+#'   weights = 1,
+#'   ngroups = 3,
+#'   npergroup = 30,
+#'   nsim = 1000,
+#'   conf.level = 0.95)
+#' }
+#' @return an S3 object of class \link{empirical_power_result}
 #'
 #' @importFrom stats rbinom binom.test
 #' @importFrom broom tidy
@@ -36,7 +49,8 @@ sim_power_best_bin_rank <- function(
     weights,
     ngroups,
     npergroup,
-    nsimul
+    nsim,
+    conf.level = 0.95
 ) {
 
   stopifnot("Incorrect length of npergroup!" =
@@ -73,6 +87,9 @@ sim_power_best_bin_rank <- function(
               all(p1 - dif > 0 & p1 - dif < 1))
 
   stopifnot("noutcomes must be > 0" = noutcomes > 0)
+  
+  stopifnot("Invalid confidence interval"= conf.level> 0 & conf.level < 1)
+  
 
   if (length(npergroup) == 1) npergroup <- rep(npergroup, ngroups)
 
@@ -81,7 +98,7 @@ sim_power_best_bin_rank <- function(
   sizem <- matrix(rep(npergroup, noutcomes), byrow = FALSE, ncol = noutcomes)
   sizevec <- as.vector(sizem)
 
-  simrest <- vapply(1:nsimul, function(xx) {
+  simrest <- vapply(1:nsim, function(xx) {
     simulone <- array(
       rbinom(ngroups * noutcomes, sizevec, probvec) / sizevec,
       dim = c(ngroups, noutcomes)
@@ -93,23 +110,31 @@ sim_power_best_bin_rank <- function(
     ifelse(rankgroup[1] == ngroups, 1, 0)
   }, 0.0)
 
-  out <- tidy(binom.test(sum(simrest), length(simrest)))[, c(1, 5, 6)]
-  names(out)[1] <- "power"
-  cbind(out, nsim = length(simrest))
+  
+  out<-binom.test(sum(simrest), length(simrest), conf.level = conf.level)
+
+  empirical_power_result(
+    power = unname(out$estimate),
+    conf.low = unname(out$conf.int[1]),
+    conf.high = unname(out$conf.int[2]),
+    conf.level = conf.level,
+    nsim = nsim
+  )
 }
 
 
-#' Find Minimum Event Probability to Detect Best Group Using Ranks
+#' Least Favorable Configuration in a Binomial Rank Experiment
 #'
-#' Estimates the minimum event probability in the best group required to detect
-#' it as best (via ranks) with maximum power, using simulation and quadratic fitting.
+#' Identifies the event probability in the best group that results in the
+#' lowest power to correctly ranked it as best in binomial experiment, 
+#' using simulation and quadratic model fitting.
 #'
 #' @param noutcomes Integer. Number of outcomes.
 #' @param dif Numeric. Difference in probabilities between best and other groups.
 #' @param weights Numeric vector. Weights for each outcome.
 #' @param ngroups Integer. Number of groups.
 #' @param npergroup Integer. Sample size per group.
-#' @param nsimul Integer. Number of simulations.
+#' @param nsim Integer. Number of simulations.
 #' @param p1 Optional vector of probabilities for the best group. If missing,
 #' defaults to a sequence from 0.01 to 0.99.
 #'
@@ -121,17 +146,17 @@ sim_power_best_bin_rank <- function(
 #' }
 #'
 #' @importFrom purrr map
-#' @importFrom dplyr filter mutate ungroup
+#' @importFrom dplyr filter mutate ungroup select
 #' @importFrom tidyr nest unnest
 #' @importFrom stats glm coef predict
 #' @export
-lowest_prop_best_bin_rank <- function(
+lf_config_bin_rank <- function(
     noutcomes,
     dif,
     weights,
     ngroups,
     npergroup,
-    nsimul,
+    nsim,
     p1 = seq(0.01, 0.99, length.out = 50)
 ) {
   sim_matrix <- expand.grid(p1 = p1, dif = dif) |>
@@ -148,8 +173,8 @@ lowest_prop_best_bin_rank <- function(
       weights = weights,
       ngroups = ngroups,
       npergroup = npergroup,
-      nsimul = nsimul
-    ))) |>
+      nsim = nsim
+    )%>%tidy())) |>
     unnest(c(data, power))
 
   fit <- glm(power ~ p1 + I(p1^2), data = sim_res)
@@ -166,24 +191,31 @@ lowest_prop_best_bin_rank <- function(
       npergroup = npergroup,
       simulation = sim_res
     ),
-    class = c("prob_lowest_power_bin_rank", "list")
+    class = c("lf_config_bin_rank", "list")
   )
 }
 
 
 #' @export
-format.prob_lowest_power_bin_rank <- function(x, digits = 3, nsmall = 2, ...) {
-  paste(
-    "The event probability in the most promising group with the lowest power to",
-    "be ranked as best (difference =", x$dif, ", groups =", x$ngroups,
-    ", n per group =", x$npergroup, ") is:\n",
-    format(x$minprob, digits = digits, nsmall = nsmall),
-    "\n"
+format.lf_config_bin_rank <- function(x, digits = 3, nsmall = 2, ...) {
+  paste0(
+    "\n",
+    "Least favorable configuration\n",
+    "------------------------------\n",
+    "Scenario Parameters\n",
+    "  - Groups: ", x$ngroups, "\n",
+    "  - Sample size per group: ", x$npergroup, "\n",
+    "  - Difference in event probability (vs best): ", x$dif, "\n",
+    "  - Number of simulations per scenario: ", x$nsim, "\n\n",
+    " Result\n",
+    "  Event probability in the best group resulting in the lowest power: ",
+    format(x$minprob, digits = digits, nsmall = nsmall), "\n"
   )
 }
 
+
 #' @export
-print.prob_lowest_power_bin_rank <- function(x, ...) {
+print.lf_config_bin_rank <- function(x, ...) {
   cat(format(x, ...))
   invisible(x)
 }
@@ -197,12 +229,16 @@ print.prob_lowest_power_bin_rank <- function(x, ...) {
 #' @param x An object of class \code{prob_lowest_power_bin_rank}.
 #'
 #' @return A ggplot2 object.
-#'
+#' @examples
+#' \dontrun{
+#' config <- lf_config_bin_rank(dif = 0.2, ngroups = 5, npergroup = 25, nsim = 1000)
+#' ggplot_lf_config_bin_rank(config)
+#' }
 #' @import ggplot2
 #' @export
-ggplot_prob_lowest_power_bin_rank <- function(x) {
+ggplot_lf_config_bin_rank <- function(x) {
   stopifnot("Not an object of class prob_lowest_power_bin_rank!" =
-              inherits(x, "prob_lowest_power_bin_rank"))
+              inherits(x, "lf_config_bin_rank"))
   ggplot(x$simulation) +
     aes(x = p1, y = power * 100) +
     geom_point() +

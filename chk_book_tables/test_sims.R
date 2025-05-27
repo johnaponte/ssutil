@@ -40,16 +40,10 @@ sim <- expand.grid(
       npergroup =.$npergroup))) |>
 unnest(c(data, powersim, powerexact))
 
-min_power_best_binomial <- function(dif, ngroups, npergroup){
-  fx <- function(x){power_best_binomial(x,dif, ngroups, npergroup)}
-  res <- optimize(fx, interval = c(0,1))
-  names(res)<- c("p1", "Minimun power")
-  res
-}
-
-min_power_best_binomial(0.1, 3, 40)
 
 ggplot(sim) +
   aes(x = p1, y = power) + 
   geom_point() +
   geom_line(aes(y=powerexact))
+
+wcs_power_best_binomial(0.1, 3, 40)

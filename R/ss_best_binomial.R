@@ -92,3 +92,4 @@ ss_best_binomial <- function(power, p1, dif, ngroups, max_n = 1000) {
 
   stop(max_n, ": max_n limit reached without achieving desired power.")
 }
+

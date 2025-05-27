@@ -1,3 +1,10 @@
+# ssutil 0.15.0
+- Remove lf_config functions as they are not useful
+- Modify `sim_best_binomial()` function to select the best using ranks rather
+  than the custom approach of which == max().
+- Make uniform the parameters names
+- Provide standardized output for the simulations
+
 # ssutil 0.14.0
 - Re-factoring of the entire package.
 - Functions that calculate power based on simulation now start with the prefix

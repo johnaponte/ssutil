@@ -57,6 +57,10 @@ power to select the true best group across all outcomes.
 defines the best group based on overall ranking across multiple outcomes rather
 than requiring top performance on every outcome.
 
+`wcs_power_best_binomial()` search for the probability in the best group that
+leads to the lowest power give a pre-specified indifferent-zone threshold 
+(`dif`), the number of groups (`ngroups`), and the sample size per group 
+(`npergroup`)
 
 ## Examples with a single outcome
 
@@ -92,6 +96,14 @@ sim_power_best_binomial(
   npergroup = 30,
   nsim = 1000
 )
+```
+
+
+4. What is the lowest power in a study where the indifference-zone is setup to 
+10%, there are 3 groups and 50 participants per group?
+
+```{r}
+wcs_power_best_binomial(dif = 0.1, ngroups = 3, npergroup = 50)
 ```
 
 

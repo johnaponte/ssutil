@@ -93,3 +93,38 @@ ss_best_binomial <- function(power, p1, dif, ngroups, max_n = 1000) {
   stop(max_n, ": max_n limit reached without achieving desired power.")
 }
 
+
+#' Worst‐Case Scenario Power for the Best Binomial Group
+#'
+#' Searches for the probability in the best‐performing group that yields the lowest statistical power,
+#' given an indifference zone specification, a number of groups, and a number of subjects per group.
+#'
+#' @param dif Numeric. Indifference zone specification (difference threshold).
+#' @param ngroups Integer. Number of groups to compare.
+#' @param npergroup Integer. Number of subjects per group.
+#' @return A named list with components:
+#' \describe{
+#'   \item{p1}{Numeric. Probability in the best group that yields the minimum power.}
+#'   \item{minimum_power}{Numeric. The minimum power achieved at \code{p1}.}
+#' }
+#' @details
+#' Defines an internal function \code{fx} that wraps \code{\link{power_best_binomial}}
+#' with the supplied parameters, then uses \code{\link[stats]{optimize}} over the interval \[0,1\]
+#' to find the probability \code{p1} that minimizes the resulting power.
+#'
+#' @seealso
+#' \code{\link{power_best_binomial}}, \code{\link[stats]{optimize}}
+#'
+#' @examples
+#' wcs_power_best_binomial(dif = 0.1, ngroups = 3, npergroup = 50)
+#'
+#' @export
+wcs_power_best_binomial <- function(dif, ngroups, npergroup) {
+  fx <- function(x) {
+    power_best_binomial(x, dif, ngroups, npergroup)
+  }
+  
+  res <- stats::optimize(fx, interval = c(0, 1))
+  names(res) <- c("p1", "minimum_power")
+  res
+}

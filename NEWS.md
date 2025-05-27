@@ -1,5 +1,6 @@
 # ssutil 0.15.0
-- Remove lf_config functions as they are not useful
+- Remove lf_config functions as they are not useful. Replace by the worst
+  case scenario function.
 - Modify `sim_best_binomial()` function to select the best using ranks rather
   than the custom approach of which == max().
 - Make uniform the parameters names

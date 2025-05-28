@@ -18,7 +18,8 @@
 #' @param dif Numeric. Difference between the best group and the rest.
 #' @param ngroups Integer. Number of groups.
 #' @param npergroup Integer or vector. Number of subjects per group.
-#' @param nsimul Integer. Number of simulations.
+#' @param nsim Integer. Number of simulations.
+#' @param conf.level Numeric. Level for the confidence interval
 #'
 #' @return A data frame with empirical power and 95% confidence interval.
 #'
@@ -33,21 +34,41 @@
 #'   dif = 0.2,
 #'   ngroups = 3,
 #'   npergroup = 30,
-#'   nsimul = 1000
+#'   nsim = 1000
 #' )
 #' }
-sim_power_best_binomial <- function(noutcomes, p1, dif, ngroups, npergroup, nsimul) {
-  stopifnot(length(noutcomes) == 1, length(ngroups) == 1)
-  stopifnot(abs(trunc(noutcomes) - noutcomes) < 1e-16)
-  stopifnot(abs(trunc(ngroups) - ngroups) < 1e-16)
-  stopifnot(length(p1) == 1 | length(p1) == noutcomes)
-  stopifnot(length(dif) == 1 | length(dif) == noutcomes)
-  stopifnot(all(p1 > 0 & p1 < 1))
-  stopifnot(length(npergroup) == 1 | length(npergroup) == ngroups)
-
+sim_power_best_binomial <- function(noutcomes, p1, dif, ngroups, npergroup, nsim, conf.level = 0.95) {
+  stopifnot("Incorrect length of npergroup!" =
+              length(npergroup) == 1 | length(npergroup) == ngroups)
+  
+  stopifnot("Incorrect length of p1!" =
+              length(p1) == 1 | length(p1) == noutcomes)
+  
+  stopifnot("Incorrect length of dif!" =
+              length(dif) == 1 | length(dif) == noutcomes)
+  
+  stopifnot("p1 should be between 0 and 1!" =
+              all(p1 > 0) & all(p1 < 1))
+  
+  stopifnot("dif should be greater than 0!" = all(dif > 0))
+  
+  stopifnot("noutcomes and ngroups must be scalars!" =
+              length(noutcomes) == 1 & length(ngroups) == 1)
+  
+  stopifnot("noutcomes and ngroups must be integers!" =
+              all(abs(trunc(c(noutcomes, ngroups)) - c(noutcomes, ngroups)) < 1e-16))
+  
   if (length(p1) == 1) p1 <- rep(p1, noutcomes)
   if (length(dif) == 1) dif <- rep(dif, noutcomes)
-  stopifnot(all(p1 - dif > 0 & p1 - dif < 1))
+  
+  stopifnot("p1 - dif must be between 0 and 1!" =
+              all(p1 - dif > 0 & p1 - dif < 1))
+  
+  stopifnot("noutcomes must be > 0" = noutcomes > 0)
+  
+  stopifnot("Invalid confidence interval"= conf.level> 0 & conf.level < 1)
+  
+  
   if (length(npergroup) == 1) npergroup <- rep(npergroup, ngroups)
 
   probm <- matrix(c(p1, rep(p1 - dif, ngroups - 1)), byrow = TRUE, ncol = noutcomes)
@@ -55,132 +76,29 @@ sim_power_best_binomial <- function(noutcomes, p1, dif, ngroups, npergroup, nsim
   sizem <- matrix(rep(npergroup, noutcomes), byrow = FALSE, ncol = noutcomes)
   sizevec <- as.vector(sizem)
 
-  simrest <- vapply(1:nsimul, function(xx) {
+  simrest <- vapply(1:nsim, function(xx) {
     simulone <- array(
       rbinom(ngroups * noutcomes, sizevec, probvec) / sizevec,
       dim = c(ngroups, noutcomes)
     )
-    best_group <- apply(simulone, 2, function(x) which(x == max(x)))
-    if (is.list(best_group)) {
-      best_group <- vapply(best_group, function(x) ifelse(length(x) == 1, x, sample(x, 1)), 0)
-    }
-    ifelse(all(best_group == 1), 1, 0)
+    ranks <- apply(simulone, 2, rank, ties.method = "random")
+    # Success if the first group have the highest rank
+    ifelse(all(ranks[1,]== ngroups), 1, 0)
+    #best_group <- apply(simulone, 2, function(x) which(x == max(x)))
+    #if (is.list(best_group)) {
+    #  best_group <- vapply(best_group, function(x) ifelse(length(x) == 1, x, sample(x, 1)), 0)
+    #}
+    #ifelse(all(best_group == 1), 1, 0)
   }, 0.0)
 
-  out <- tidy(binom.test(sum(simrest), length(simrest)))[, c(1, 5, 6)]
-  names(out)[1] <- "power"
-  cbind(out, nsim = length(simrest))
-}
-
-
-#' Least Favorable Configuration in a Binomial Experiment
-#'
-#' Identifies the event probability in the best group that results in the
-#' lowest power to correctly detect it as best, using simulation and quadratic
-#' model fitting.
-#'
-#' @param d Numeric. Difference between best and other groups.
-#' @param k Integer. Number of groups.
-#' @param n Integer. Sample size per group.
-#' @param simul Integer. Number of simulations.
-#' @param prob Numeric vector. Grid of probabilities to evaluate.
-#'
-#' @return An S3 object of class \code{lf_config} with simulation results and fitted curve.
-#'
-#' @importFrom dplyr filter mutate row_number
-#' @importFrom tidyr nest unnest
-#' @importFrom purrr map
-#' @importFrom stats glm coef predict
-#' @export
-#' @examples
-#' lf_config(d = 0.2, k = 4, n = 20, simul = 1000)
-lf_config <- function(d, k, n, simul, prob = seq(0.05, 0.95, by = 0.01)) {
-  stopifnot(length(d) == 1, length(k) == 1, length(n) == 1)
-
-  sim <- expand.grid(p1 = prob, d = d, k = k, n = n, simul = simul) |>
-    filter(p1 - d > 0 & p1 - d < 1) |>
-    mutate(idsim = row_number()) |>
-    nest(data = -idsim) |>
-    mutate(power = map(data, ~sim_power_best_binomial(
-      noutcomes = 1,
-      p1 = .$p1,
-      dif = .$d,
-      ngroups = .$k,
-      npergroup = .$n,
-      nsimul = .$simul
-    ))) |>
-    unnest(c(data, power))
-
-  fit <- glm(power ~ p1 + I(p1^2), data = sim)
-  minprob <- -coef(fit)["p1"] / (2 * coef(fit)["I(p1^2)"])
-
-  sim <- sim |>
-    mutate(pred = predict(fit)) |>
-    mutate(pred = ifelse(pred > 1, NA, pred))
-
-  structure(
-    list(
-      minprob = minprob,
-      d = d,
-      k = k,
-      ns = n,
-      simulation = sim
-    ),
-    class = c("lf_config", "list")
+  out<-binom.test(sum(simrest), length(simrest), conf.level = conf.level)
+  
+  empirical_power_result(
+    power = unname(out$estimate),
+    conf.low = unname(out$conf.int[1]),
+    conf.high = unname(out$conf.int[2]),
+    conf.level = conf.level,
+    nsim = nsim
   )
 }
 
-
-#' @export
-format.lf_config <- function(x, digits = 3, nsmall = 2, ...) {
-   paste(
-    "The probability in the most favorable group with lowest power to correctly",
-    "select it as best (difference =", x$d, ", groups =", x$k, ", n =", x$ns, ") is:",
-    format(x$minprob, digits = digits, nsmall = nsmall), "\n")
-}
-
-#' @export
-print.lf_config <- function(x, ...) {
-  cat(format(x,...))
-  invisible(x)
-}
-
-
-#' Plot Least Favorable Configuration
-#'
-#' Generates a ggplot showing empirical and predicted power to select the best
-#' group over a grid of probabilities.
-#'
-#' @param x An object of class \code{lf_config}.
-#'
-#' @return A ggplot object.
-#'
-#' @import ggplot2
-#' @export
-#' @examples
-#' \dontrun{
-#' config <- lf_config(d = 0.2, k = 5, n = 25, simul = 1000)
-#' ggplot_lf_config(config)
-#' }
-ggplot_lf_config <- function(x) {
-  stopifnot("Not an object of class lf_config!" = inherits(x, "lf_config"))
-  ggplot(x$simulation) +
-    aes(x = p1, y = power * 100) +
-    geom_point() +
-    geom_line(aes(y = pred * 100), color = "blue") +
-    ggtitle(
-      "Empirical Power to Detect the Best Group",
-      subtitle = paste0(
-        "Difference: ", x$d,
-        "; Groups: ", x$k,
-        "; N per group: ", x$ns,
-        "; Simulations: ", unique(x$simulation$simul)
-      )
-    ) +
-    labs(caption = paste("Estimated lowest power for probability:",
-                         format(x$minprob, digits = 2, nsmall = 2))) +
-    scale_x_continuous("Probability in the Best Group") +
-    scale_y_continuous("Power (%)") +
-    theme(plot.caption.position = "plot",
-          plot.caption = element_text(hjust = 0))
-}

@@ -11,7 +11,8 @@ sim_power_best_bin_rank(
   weights,
   ngroups,
   npergroup,
-  nsimul
+  nsim,
+  conf.level = 0.95
 )
 }
 \arguments{
@@ -27,10 +28,12 @@ sim_power_best_bin_rank(
 
 \item{npergroup}{Integer or vector. Sample size per group.}
 
-\item{nsimul}{Integer. Number of simulations.}
+\item{nsim}{Integer. Number of simulations.}
+
+\item{conf.level}{Numeric. Confidence level for the returned confidence interval}
 }
 \value{
-A data frame with estimated empirical power and 95\% confidence interval.
+an S3 object of class \link{empirical_power_result}
 }
 \description{
 Estimates the empirical power to rank the most promising group as the best,
@@ -45,4 +48,17 @@ determine the top group.
 If multiple outcomes are defined, weights can be applied to prioritize some
 outcomes over others. Weights are automatically scaled to sum to the number
 of outcomes. The group with the lowest total rank is considered the best.
+}
+\examples{
+\dontrun{
+  sim_power_best_bin_rank(
+  noutcomes = 2,
+  p1 = 0.80,
+  dif = 0.15,
+  weights = 1,
+  ngroups = 3,
+  npergroup = 30,
+  nsim = 1000,
+  conf.level = 0.95)
+}
 }

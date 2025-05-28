@@ -10,6 +10,7 @@ NULL
 utils::globalVariables(
   c(
     "power",
+    "powersim",
     "prob",
     "pred",
     "idsim",

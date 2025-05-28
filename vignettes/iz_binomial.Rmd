@@ -1,6 +1,7 @@
 ---
 title: "Selecting the best group using the Indifferent-Zone approach for binomial outcomes"
 output:
+  # word_document: default
   rmarkdown::html_vignette: default
 vignette: >
   %\VignetteIndexEntry{Indiferent Zone approach for binomial outcomes}

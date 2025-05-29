@@ -23,7 +23,7 @@
 #'   llimit = log10(2/3),
 #'   ulimit = log10(3/2),
 #'   nsimul = 1000,
-#'   conf.level = 0.95
+#'   t_level = 0.95
 #' )
 #' }
 #' @param ngroups Integer. Number of groups to compare
@@ -32,7 +32,8 @@
 #' @param llimit Numeric. Lower equivalence limit.
 #' @param ulimit Numeric. Upper equivalence limit.
 #' @param nsimul Integer. Number of simulations to perform.
-#' @param conf.level Numeric. Confidence level used for the t-tests (e.g., 0.95 for 95% CI).
+#' @param t_level Numeric. Confidence level used for the t-tests (e.g., 0.95 for 95% CI).
+#' @param conf.level Numeric. Confidence level for the empirical power estimate
 #'
 #' @return A data frame with the following columns:
 #'
@@ -54,7 +55,7 @@ sim_power_equivalence_normal <- function(
     llimit,
     ulimit,
     nsimul,
-    conf.level = 0.95
+    t_level = 0.95
 ) {
   stopifnot(ngroups >= 2, npergroup >= 1, nsimul >= 1, sd > 0)
 
@@ -62,7 +63,7 @@ sim_power_equivalence_normal <- function(
     mat <- matrix(rnorm(ngroups * npergroup, 0, sd), ncol = ngroups)
 
     y <- combn(1:ngroups, 2, FUN = function(z) {
-      yt <- t.test(mat[, z[1]], mat[, z[2]], conf.level = conf.level)
+      yt <- t.test(mat[, z[1]], mat[, z[2]], conf.level = t_level)
       yt$conf.int[1] > llimit && yt$conf.int[2] < ulimit
     })
 

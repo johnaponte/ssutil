@@ -19,7 +19,7 @@
 #' @param ngroups Integer. Number of groups.
 #' @param npergroup Integer or vector. Number of subjects per group.
 #' @param nsim Integer. Number of simulations.
-#' @param conf.level Numeric. Level for the confidence interval
+#' @param conf.level Numeric. Confidence level for the empirical power estimate
 #'
 #' @return A data frame with empirical power and 95% confidence interval.
 #'

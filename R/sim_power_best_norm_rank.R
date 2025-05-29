@@ -21,8 +21,8 @@
 #' @param ngroups Integer. Number of groups.
 #' @param npergroup Integer or vector. Number of subjects per group.
 #' @param nsim Integer. Number of simulations.
-#' @param conf.level Numeric. Confidence level for the returned confidence interval
-#'
+#' @param conf.level Numeric. Confidence level for the empirical power estimate
+#' 
 #' @return an S3 object of class \link{empirical_power_result}
 #'
 #' @importFrom stats rnorm binom.test

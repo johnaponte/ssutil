@@ -22,7 +22,8 @@
 #' @param ngroups Number of groups to compare.
 #' @param npergroup  Number of subjects per group. Can be scalar or vector of length \code{ngroups}.
 #' @param nsim Integer. Number of simulations to perform.
-#' @param conf.level Numeric. Confidence level for the returned confidence interval
+#' @param conf.level Numeric. Confidence level for the empirical power estimate
+
 #' @examples
 #' \dontrun{
 #'   sim_power_best_normal(

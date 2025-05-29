@@ -23,7 +23,7 @@
 #' @param ngroups Integer. Number of groups.
 #' @param npergroup Integer or vector. Sample size per group.
 #' @param nsim Integer. Number of simulations.
-#' @param conf.level Numeric. Confidence level for the returned confidence interval
+#' @param conf.level Numeric. Confidence level for the empirical power estimate
 #'
 #' @examples
 #' \dontrun{

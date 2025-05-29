@@ -11,21 +11,21 @@
 #' is assumed to have a mean at least `dif` higher than the others. Ranks are
 #' weighted and summed per group across outcomes.
 #'
-#' If `weights` is specified, it is internally rescaled to sum to `noutcomes`.
+#' If `weights` is specified, it is internally scaled to sum to 1.
 #' The most promising group is always considered to be the first group.
 #'
 #' @param noutcomes Integer. Number of outcomes to evaluate.
 #' @param sd Numeric vector. Standard deviations for each outcome.
 #' @param dif Numeric vector. Difference in means between the best and other groups.
-#' @param weights Numeric vector. Weights per outcome (rescaled internally).
+#' @param weights Numeric vector. Weights per outcome.
 #' @param ngroups Integer. Number of groups.
 #' @param npergroup Integer or vector. Number of subjects per group.
-#' @param nsimul Integer. Number of simulations.
+#' @param nsim Integer. Number of simulations.
+#' @param conf.level Numeric. Confidence level for the returned confidence interval
 #'
-#' @return A data frame with empirical power and 95% confidence interval.
+#' @return an S3 object of class \link{empirical_power_result}
 #'
 #' @importFrom stats rnorm binom.test
-#' @importFrom broom tidy
 #' @export
 #'
 #' @examples
@@ -37,7 +37,7 @@
 #'   weights = c(0.5, 0.3, 0.2),
 #'   ngroups = 3,
 #'   npergroup = c(30, 25, 25),
-#'   nsimul = 1000
+#'   nsim = 1000
 #' )
 #' }
 sim_power_best_norm_rank <- function(
@@ -47,14 +47,32 @@ sim_power_best_norm_rank <- function(
     weights,
     ngroups,
     npergroup,
-    nsimul
+    nsim,
+    conf.level = 0.95
 ) {
   # Validations
-  stopifnot(length(npergroup) == 1 | length(npergroup) == ngroups)
-  stopifnot(length(sd) == 1 | length(sd) == noutcomes)
-  stopifnot(length(dif) == 1 | length(dif) == noutcomes)
-  stopifnot(length(weights) == 1 | length(weights) == noutcomes)
-  stopifnot('Dif should be positive' = all(dif > 0))
+  stopifnot("Incorrect length of npergroup!" =
+              length(npergroup) == 1 | length(npergroup) == ngroups)
+
+  stopifnot("Incorrect length of dif!" =
+              length(dif) == 1 | length(dif) == noutcomes)
+  
+  stopifnot("dif should be greater than 0!" = all(dif > 0))
+  
+  stopifnot("noutcomes and ngroups must be scalars!" =
+              length(noutcomes) == 1 & length(ngroups) == 1)
+  
+  stopifnot("noutcomes and ngroups must be integers!" =
+              all(abs(trunc(c(noutcomes, ngroups)) - c(noutcomes, ngroups)) < 1e-16))
+  
+  stopifnot("Incorrect length of sd" = length(sd) == 1 | length(sd) == noutcomes)
+  
+  stopifnot("Incorrect length of weights" = length(weights) == 1 | length(weights) == noutcomes)
+  
+  stopifnot("ngroups must be at least 2" = ngroups >= 2)
+  
+  stopifnot("All npergroup values must be >= 1" = all(npergroup >= 1))
+  
 
   # Expand scalars
   if (length(sd) == 1) sd <- rep(sd, noutcomes)
@@ -62,7 +80,7 @@ sim_power_best_norm_rank <- function(
   if (length(weights) == 1) weights <- rep(weights, noutcomes)
 
   # Rescale weights
-  weightsc <- weights / sum(weights) * noutcomes
+  weightsc <- weights / sum(weights)
   weightsm <- matrix(rep(weightsc, ngroups), ncol = noutcomes, byrow = TRUE)
 
   # Handle group sizes
@@ -79,7 +97,7 @@ sim_power_best_norm_rank <- function(
   }))
 
   # Run simulations
-  simrest <- vapply(1:nsimul, function(xx) {
+  simrest <- vapply(1:nsim, function(xx) {
     simulone <- array(
       rnorm(maxn * ngroups * noutcomes, mean = meanvec, sd = sdvec),
       dim = c(maxn, ngroups, noutcomes)
@@ -112,7 +130,13 @@ sim_power_best_norm_rank <- function(
     as.integer(rankgroup[1] == ngroups)
   }, 0.0)
 
-  out <- tidy(binom.test(sum(simrest), length(simrest)))[, c(1, 5, 6)]
-  names(out)[1] <- "power"
-  cbind(out, nsim = length(simrest))
+  out<-binom.test(sum(simrest), length(simrest), conf.level = conf.level)
+  
+  empirical_power_result(
+    power = unname(out$estimate),
+    conf.low = unname(out$conf.int[1]),
+    conf.high = unname(out$conf.int[2]),
+    conf.level = conf.level,
+    nsim = nsim
+  )
 }

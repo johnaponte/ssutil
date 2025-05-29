@@ -4,7 +4,15 @@
 \alias{sim_power_best_normal}
 \title{Simulate Power to Select Best Group (Normal Outcomes)}
 \usage{
-sim_power_best_normal(noutcomes, sd, dif, ngroups, npergroup, nsimul)
+sim_power_best_normal(
+  noutcomes,
+  sd,
+  dif,
+  ngroups,
+  npergroup,
+  nsim,
+  conf.level = 0.95
+)
 }
 \arguments{
 \item{noutcomes}{Integer. Number of outcomes to evaluate.}
@@ -17,16 +25,12 @@ sim_power_best_normal(noutcomes, sd, dif, ngroups, npergroup, nsimul)
 
 \item{npergroup}{Number of subjects per group. Can be scalar or vector of length \code{ngroups}.}
 
-\item{nsimul}{Integer. Number of simulations to perform.}
+\item{nsim}{Integer. Number of simulations to perform.}
+
+\item{conf.level}{Numeric. Confidence level for the returned confidence interval}
 }
 \value{
-A data frame with\tabular{ll}{
-   Column \tab Description \cr
-   power \tab Empirical power estimate \cr
-   conf.low \tab Lower bound of 95\% confidence interval \cr
-   conf.high \tab Upper bound of 95\% confidence interval \cr
-   nsim \tab Number of simulations performed. \cr
-}
+an S3 object of class \link{empirical_power_result}
 }
 \description{
 Estimates the empirical power to identify the most promising group as the best,
@@ -50,7 +54,7 @@ the first group is assumed to be the most promising.
    dif = c(0.2, 0.25),
    ngroups = 3,
    npergroup = c(30, 25, 25),
-   nsimul = 1000
+   nsim = 1000
   )
 }
 }

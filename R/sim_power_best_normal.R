@@ -21,7 +21,8 @@
 #' @param dif Numeric vector. Difference in means between the best and the other groups.
 #' @param ngroups Number of groups to compare.
 #' @param npergroup  Number of subjects per group. Can be scalar or vector of length \code{ngroups}.
-#' @param nsimul Integer. Number of simulations to perform.
+#' @param nsim Integer. Number of simulations to perform.
+#' @param conf.level Numeric. Confidence level for the returned confidence interval
 #' @examples
 #' \dontrun{
 #'   sim_power_best_normal(
@@ -30,17 +31,10 @@
 #'    dif = c(0.2, 0.25),
 #'    ngroups = 3,
 #'    npergroup = c(30, 25, 25),
-#'    nsimul = 1000
+#'    nsim = 1000
 #'   )
 #' }
-#' @return A data frame with
-
-#'|Column    |Description                           |
-#'|----------|--------------------------------------|
-#'|power	   |Empirical power estimate              |
-#'|conf.low  |Lower bound of 95% confidence interval|
-#'|conf.high |Upper bound of 95% confidence interval|
-#'|nsim      |Number of simulations performed.      |
+#'@return an S3 object of class \link{empirical_power_result}
 #'
 #' @importFrom stats rnorm binom.test
 #' @importFrom broom tidy
@@ -51,16 +45,31 @@ sim_power_best_normal <- function(
     dif,
     ngroups,
     npergroup,
-    nsimul
+    nsim,
+    conf.level = 0.95
 ) {
   # Validations
+  stopifnot("Incorrect length of npergroup!" =
+              length(npergroup) == 1 | length(npergroup) == ngroups)
+ 
+  
+  stopifnot("Incorrect length of dif!" =
+              length(dif) == 1 | length(dif) == noutcomes)
+  
+  stopifnot("dif should be greater than 0!" = all(dif > 0))
+  
+  stopifnot("noutcomes and ngroups must be scalars!" =
+              length(noutcomes) == 1 & length(ngroups) == 1)
+  
+  stopifnot("noutcomes and ngroups must be integers!" =
+              all(abs(trunc(c(noutcomes, ngroups)) - c(noutcomes, ngroups)) < 1e-16))
+  
+  stopifnot("Incorrect lenght of sd" = length(sd)== 1 | length(sd) == noutcomes)
+  
   stopifnot("ngroups must be at least 2" = ngroups >= 2)
-  stopifnot("All npergroup values must be >= 1" = all(npergroup >= 1))
-  stopifnot('Dif should be positive' = all(dif > 0))
-  stopifnot(length(npergroup) == 1 | length(npergroup) == ngroups)
-  stopifnot(length(sd) == 1 | length(sd) == noutcomes)
-  stopifnot(length(dif) == 1 | length(dif) == noutcomes)
 
+  stopifnot("All npergroup values must be >= 1" = all(npergroup >= 1))
+  
   if (length(sd) == 1) sd <- rep(sd, noutcomes)
   if (length(dif) == 1) dif <- rep(dif, noutcomes)
   if (length(npergroup) == 1) npergroup <- rep(npergroup, ngroups)
@@ -75,7 +84,7 @@ sim_power_best_normal <- function(
     rep(sd[i], maxn * ngroups)
   }))
 
-  simrest <- vapply(1:nsimul, function(xx) {
+  simrest <- vapply(1:nsim, function(xx) {
     simulone <- array(
       rnorm(maxn * ngroups * noutcomes, mean = meanvec, sd = sdvec),
       dim = c(maxn, ngroups, noutcomes)
@@ -98,10 +107,16 @@ sim_power_best_normal <- function(
 
     as.integer(all(is_first_the_best))
   }, 0.0)
-
-  out <- tidy(binom.test(sum(simrest), length(simrest)))[, c(1, 5, 6)]
-  names(out)[1] <- "power"
-  cbind(out, nsim = length(simrest))
+  
+  out<-binom.test(sum(simrest), length(simrest), conf.level = conf.level)
+  
+  empirical_power_result(
+    power = unname(out$estimate),
+    conf.low = unname(out$conf.int[1]),
+    conf.high = unname(out$conf.int[2]),
+    conf.level = conf.level,
+    nsim = nsim
+  )
 }
 
 

@@ -7,10 +7,10 @@ test_that("sim_power_best_norm_rank returns expected output", {
     weights = 1,
     ngroups = 3,
     npergroup = 30,
-    nsimul = 50  #low for test
+    nsim = 50  #low for test
   )
 
-  expect_s3_class(res, "data.frame")
+  expect_s3_class(res, "empirical_power_result")
   expect_true(all(c("power", "conf.low", "conf.high", "nsim") %in% names(res)))
   expect_equal(res$nsim, 50)
   expect_true(res$power >= 0 && res$power <= 1)
@@ -25,10 +25,10 @@ test_that("sim_power_best_norm_rank handles unequal group sizes", {
     weights = 1,
     ngroups = 3,
     npergroup = c(30, 25, 20),
-    nsimul = 20
+    nsim = 20
   )
 
-  expect_s3_class(res, "data.frame")
+  expect_s3_class(res, "empirical_power_result")
   expect_equal(res$nsim, 20)
 })
 
@@ -41,10 +41,10 @@ test_that("sim_power_best_norm_rank handles vector inputs correctly", {
     weights = c(0.5, 0.3, 0.2),
     ngroups = 3,
     npergroup = 30,
-    nsimul = 30
+    nsim = 30
   )
 
-  expect_s3_class(res, "data.frame")
+  expect_s3_class(res, "empirical_power_result")
   expect_true(res$power >= 0 && res$power <= 1)
 })
 
@@ -57,7 +57,7 @@ test_that("sim_power_best_norm_rank fails on mismatched input lengths", {
     weights = c(1, 1, 1),  # too long
     ngroups = 3,
     npergroup = 30,
-    nsimul = 10
+    nsim = 10
   ), "length.*weights")
 })
 

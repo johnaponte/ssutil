@@ -11,7 +11,8 @@ sim_power_best_norm_rank(
   weights,
   ngroups,
   npergroup,
-  nsimul
+  nsim,
+  conf.level = 0.95
 )
 }
 \arguments{
@@ -21,16 +22,18 @@ sim_power_best_norm_rank(
 
 \item{dif}{Numeric vector. Difference in means between the best and other groups.}
 
-\item{weights}{Numeric vector. Weights per outcome (rescaled internally).}
+\item{weights}{Numeric vector. Weights per outcome.}
 
 \item{ngroups}{Integer. Number of groups.}
 
 \item{npergroup}{Integer or vector. Number of subjects per group.}
 
-\item{nsimul}{Integer. Number of simulations.}
+\item{nsim}{Integer. Number of simulations.}
+
+\item{conf.level}{Numeric. Confidence level for the returned confidence interval}
 }
 \value{
-A data frame with empirical power and 95\% confidence interval.
+an S3 object of class \link{empirical_power_result}
 }
 \description{
 Estimates the empirical power to identify the most promising group as best,
@@ -41,7 +44,7 @@ Each outcome is independent and normally distributed. The most promising group
 is assumed to have a mean at least \code{dif} higher than the others. Ranks are
 weighted and summed per group across outcomes.
 
-If \code{weights} is specified, it is internally rescaled to sum to \code{noutcomes}.
+If \code{weights} is specified, it is internally rescaled to sum to 1.
 The most promising group is always considered to be the first group.
 }
 \examples{
@@ -53,7 +56,7 @@ sim_power_best_norm_rank(
   weights = c(0.5, 0.3, 0.2),
   ngroups = 3,
   npergroup = c(30, 25, 25),
-  nsimul = 1000
+  nsim = 1000
 )
 }
 }

@@ -9,7 +9,6 @@ expect_multz <- function(alpha, n, rho, expected_result, tol){
   expect_equal(output, expected_result, tolerance = tol)
 }
 
-# Write tests
 test_that("multz function calculates correct z-values", {
   expect_multz(0.01, 1, 1, 2.326, 0.001)
   expect_multz(0.1, 3, 0.5, 1.734, 0.001)
@@ -20,6 +19,21 @@ test_that("multz function calculates correct z-values", {
   expect_multz(0.01, 24, 0.3, 3.32, 0.01)
   expect_multz(0.1, 7, 0.7, 1.90, 0.01)
   expect_multz(0.01, 24, 0.7, 3.13, 0.01)
-
 })
 
+
+multz_eq_multp <- function(alpha, n, rho, tol){
+  expect_equal(multp(multz(alpha, n, rho),n, rho), alpha, tolerance =tol)
+}
+
+test_that("multz and multp agrees",{
+  multz_eq_multp(0.01, 1, 1,  0.01)
+  multz_eq_multp(0.1, 3, 0.5, 0.01)
+  multz_eq_multp(0.2, 7, 0.5, 0.01)
+  multz_eq_multp(0.1, 7, 0.1, 0.01)
+  multz_eq_multp(0.01, 24, 0.1, 0.01)
+  multz_eq_multp(0.1, 7, 0.3, 0.01)
+  multz_eq_multp(0.01, 24, 0.3, 0.01)
+  multz_eq_multp(0.1, 7, 0.7, 0.01)
+  multz_eq_multp(0.01, 24, 0.7, 0.01)
+})

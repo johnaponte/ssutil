@@ -4,7 +4,7 @@ output:
   # word_document: default
   rmarkdown::html_vignette: default
 vignette: >
-  %\VignetteIndexEntry{Indiferent Zone approach for binomial outcomes}
+  %\VignetteIndexEntry{Indifferent-Zone approach for binomial outcomes}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -58,8 +58,8 @@ power to select the true best group across all outcomes.
 defines the best group based on overall ranking across multiple outcomes rather
 than requiring top performance on every outcome.
 
-`wcs_power_best_binomial()` search for the probability in the best group that
-leads to the lowest power give a pre-specified indifferent-zone threshold 
+`wcs_power_best_binomial()` searches for the probability in the best group that
+leads to the lowest power given a pre-specified indifferent-zone threshold 
 (`dif`), the number of groups (`ngroups`), and the sample size per group 
 (`npergroup`)
 
@@ -118,14 +118,13 @@ based on overall ranking across outcomes. For example, a group might rank first
 for the first two outcomes but second for the third, yet still achieve the best
 overall rank among all groups.
 
-This ranking approach supports weighting of outcomes, allowing you to assign
-greater importance to some outcomes over others. For instance, if performance
-on the first two outcomes is twice as important as the third, you could specify
-weights of `c(0.4, 0.4, 0.2)`. Weights are scaled to sum to the number of
-outcomes.
+This ranking approach supports weighting of outcomes, allowing greater importance
+to be assigned to some outcomes over others. For instance, if performance
+on the first two outcomes is twice as important as the third, weights such as
+`c(0.4, 0.4, 0.2)` can be specified. Weights are scaled internally to sum 1.
 
-The functions are flexible and allow to specify, for each outcome, the event
-probabilities, indifferent-zone thresholds, and group sample sizes
+The functions are flexible and allow specification of, for each outcome, the event
+probabilities, indifferent-zone thresholds, and group sample sizes.
 
 1. What is the probability that the best group is correctly identified as
    having the highest seroconversion rate across five antigens in a trial with

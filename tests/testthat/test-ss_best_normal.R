@@ -373,29 +373,36 @@ t2_1 <-
 
 test_that("ss_best_normal function reproduce Bechhofer table 2.1", {
   for (i in seq(1, nrow(t2_1), 10)) {
-    expect_equal(ss_best_normal(t2_1[i, "groups"], t2_1[i, "delta"], 1, t2_1[i, "power"], seed = 12345),
-                 t2_1[i, "n"],
-                 tolerance = 1)
+    expect_equal(
+      ss_best_normal(
+          ngroups=t2_1[i, "groups"], 
+          dif =t2_1[i, "delta"], 
+          1, power = t2_1[i, "power"],
+          seed = 12345
+      ),
+      expected = t2_1[i, "n"],
+      tolerance = 1
+    )
   }
 })
 
 test_that("ss_best_normal rejects invalid group values", {
   expect_error(ss_best_normal(
-    groups = 1,
-    delta = 0.5,
+    ngroups = 1,
+    dif = 0.5,
     sd = 1,
     power = 0.8
   ),
-  regexp = "groups must be >=2")
+  regexp = "ngroups must be >=2")
   expect_error(ss_best_normal(
-    groups = 0,
-    delta = 0.5,
+    ngroups = 0,
+    dif = 0.5,
     sd = 1,
     power = 0.8
   ))
   expect_error(ss_best_normal(
-    groups = -1,
-    delta = 0.5,
+    ngroups = -1,
+    dif = 0.5,
     sd = 1,
     power = 0.8
   ))
@@ -403,14 +410,14 @@ test_that("ss_best_normal rejects invalid group values", {
 
 test_that("ss_best_normal rejects invalid delta", {
   expect_error(ss_best_normal(
-    groups = 3,
-    delta = 0,
+    ngroups = 3,
+    dif = 0,
     sd = 1,
     power = 0.8
-  ), regexp = "delta must be > 0")
+  ), regexp = "dif must be > 0")
   expect_error(ss_best_normal(
-    groups = 3,
-    delta = -0.1,
+    ngroups = 3,
+    dif = -0.1,
     sd = 1,
     power = 0.8
   ))
@@ -418,15 +425,15 @@ test_that("ss_best_normal rejects invalid delta", {
 
 test_that("ss_best_normal rejects invalid standard deviation", {
   expect_error(ss_best_normal(
-    groups = 3,
-    delta = 0.5,
+    ngroups = 3,
+    dif = 0.5,
     sd = 0,
     power = 0.8
   ),
   regexp = "sd must be > 0")
   expect_error(ss_best_normal(
-    groups = 3,
-    delta = 0.5,
+    ngroups = 3,
+    dif = 0.5,
     sd = -1,
     power = 0.8
   ))
@@ -434,26 +441,26 @@ test_that("ss_best_normal rejects invalid standard deviation", {
 
 test_that("ss_best_normal rejects invalid power values", {
   expect_error(ss_best_normal(
-    groups = 3,
-    delta = 0.5,
+    ngroups = 3,
+    dif = 0.5,
     sd = 1,
     power = 0
   ), regexp = "power must be > 0 and < 1")
   expect_error(ss_best_normal(
-    groups = 3,
-    delta = 0.5,
+    ngroups = 3,
+    dif = 0.5,
     sd = 1,
     power = 1
   ), regexp = "power must be > 0 and < 1")
   expect_error(ss_best_normal(
-    groups = 3,
-    delta = 0.5,
+    ngroups = 3,
+    dif = 0.5,
     sd = 1,
     power = -0.1
   ))
   expect_error(ss_best_normal(
-    groups = 3,
-    delta = 0.5,
+    ngroups = 3,
+    dif = 0.5,
     sd = 1,
     power = 1.1
   ))
@@ -461,18 +468,43 @@ test_that("ss_best_normal rejects invalid power values", {
 
 test_that("ss_best_normal rejects invalid seed", {
   expect_error(ss_best_normal(
-    groups = 3,
-    delta = 0.5,
+    ngroups = 3,
+    dif = 0.5,
     sd = 1,
     power = 0.8,
     seed = -10
   ),
   regexp = "seed must be > 0")
   expect_error(ss_best_normal(
-    groups = 3,
-    delta = 0.5,
+    ngroup = 3,
+    dif = 0.5,
     sd = 1,
     power = 0.8,
     seed = 0
   ))
+})
+
+test_that("ss_best_normal and power_best_normal agrees",{
+ for(poweri in c(0.5,0.7,0.8,0.9)) {
+   for (difi in c(1,0.5,0.25)) {
+     for(ngroupsi in c(3,5,8)) {
+       for(sdi in c(2,1,0.5)){
+        # cat(poweri,difi,ngroupsi,sdi,"\n")
+         expect_equal(
+            power_best_normal( 
+                npergroup = ss_best_normal(
+                power = poweri,
+                dif = difi,
+                sd = sdi,
+                ngroups = ngroupsi
+                ),
+            dif = difi,
+            sd = sdi,
+            ngroups = ngroupsi
+            ),
+            poweri, tolerance = 0.001)
+       }
+     }
+   }
+ }         
 })

@@ -13,8 +13,8 @@
 #' determine the top group.
 #'
 #' If multiple outcomes are defined, weights can be applied to prioritize some
-#' outcomes over others. Weights are automatically scaled to sum to the number
-#' of outcomes. The group with the lowest total rank is considered the best.
+#' outcomes over others. Weights are automatically scaled to sum 1. The group 
+#' with the lowest total rank is considered the best.
 #'
 #' @param noutcomes Integer. Number of outcomes to evaluate.
 #' @param p1 Numeric. Event probability in the best group (scalar or vector of length `noutcomes`).
@@ -40,7 +40,6 @@
 #' @return an S3 object of class \link{empirical_power_result}
 #'
 #' @importFrom stats rbinom binom.test
-#' @importFrom broom tidy
 #' @export
 sim_power_best_bin_rank <- function(
     noutcomes,
@@ -77,7 +76,7 @@ sim_power_best_bin_rank <- function(
               length(weights) == 1 | length(weights) == noutcomes)
 
   if (length(weights) == 1) weights <- rep(weights, noutcomes)
-  weights <- weights / sum(weights) * noutcomes
+  weights <- weights / sum(weights) 
   weightsm <- matrix(rep(weights, ngroups), ncol = noutcomes, byrow = TRUE)
 
   if (length(p1) == 1) p1 <- rep(p1, noutcomes)

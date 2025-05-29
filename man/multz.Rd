@@ -4,12 +4,12 @@
 \alias{multz}
 \title{Calculate the Upper Equicoordinate Point of a Multivariate Normal Distribution}
 \usage{
-multz(alpha, n, rho, seed = NULL)
+multz(alpha, k, rho, seed = NULL)
 }
 \arguments{
 \item{alpha}{Numeric. Significance level (e.g., 0.05 for a 95\% confidence level).}
 
-\item{n}{Integer. Number of variables in the multivariate normal distribution.
+\item{k}{Integer. Number of variables in the multivariate normal distribution.
 Must be >= 1.}
 
 \item{rho}{Numeric. Common correlation coefficient between variables (typically
@@ -31,8 +31,8 @@ That is, it returns the value \eqn{z} such that the joint probability
 }
 \examples{
 alpha <- 0.1  # Significance level (10\%)
-n <- 3        # Number of variables
+k <- 3        # Number of variables
 rho <- 0.5    # Common correlation coefficient
-multz(alpha, n, rho)
+multz(alpha, k, rho)
 
 }

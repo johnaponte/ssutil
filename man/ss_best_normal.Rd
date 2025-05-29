@@ -4,16 +4,16 @@
 \alias{ss_best_normal}
 \title{Sample Size for Selecting the Best Treatment in a Normal Response (Indifference-Zone)}
 \usage{
-ss_best_normal(groups, delta, sd, power, seed = NULL)
+ss_best_normal(power, dif, sd, ngroups, seed = NULL)
 }
 \arguments{
-\item{groups}{Integer. Number of groups (treatments) being compared.}
+\item{power}{Numeric. Desired probability of correctly selecting the best group.}
 
-\item{delta}{Numeric. Minimum difference in means between the best group and the second-best that is considered meaningful.}
+\item{dif}{Numeric. Indifferent-zone. Minimum difference that is considered meaningful.}
 
 \item{sd}{Numeric. Common standard deviation of the response variable.}
 
-\item{power}{Numeric. Desired probability of correctly selecting the best group (must be between 0 and 1).}
+\item{ngroups}{Integer. Number of groups (treatments) being compared.}
 
 \item{seed}{Optional. Integer seed to use in the internal call to \code{multz()}.}
 }
@@ -29,14 +29,14 @@ a known and common standard deviation.
 \details{
 The indifference-zone approach guarantees that the probability of correct selection
 is at least \code{power}, assuming the best group's mean exceeds the others by at
-least \code{delta}. The calculation is based on Bechhofer's Procedure Nb.
+least \code{dif}. The calculation is based on Bechhofer's Procedure Nb.
 }
 \note{
 The function uses the quantile function \code{multz()}, which computes critical values
 for the selection procedure. This implementation assumes equal variances and independent samples.
 }
 \examples{
-ss_best_normal(groups = 3, delta = 0.5, sd = 1, power = 0.8)
+ss_best_normal( power = 0.8, dif = 0.5, sd = 1, ngroups = 3)
 
 }
 \references{

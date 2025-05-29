@@ -109,15 +109,10 @@ sim_power_best_normal <- function(
     as.integer(all(is_first_the_best))
   }, 0.0)
   
-  out<-binom.test(sum(simrest), length(simrest), conf.level = conf.level)
-  
   empirical_power_result(
-    power = unname(out$estimate),
-    conf.low = unname(out$conf.int[1]),
-    conf.high = unname(out$conf.int[2]),
-    conf.level = conf.level,
-    nsim = nsim
-  )
+    x =sum(simrest), 
+    n= length(simrest), 
+    conf.level = conf.level)
 }
 
 

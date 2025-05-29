@@ -2,12 +2,12 @@
 #'
 #' Constructs an S3 object of class \code{empirical_power_result}, storing the estimated power,
 #' its confidence interval, and the number of simulations used to compute it.
+#' 
+#' It is a wrap to \code{\link[stats]{binom.test}}
 #'
-#' @param power A numeric value representing the estimated empirical power.
-#' @param conf.low Lower bound of the confidence interval.
-#' @param conf.high Upper bound of the confidence interval.
-#' @param conf.level  Confidence level for the confidence interval.
-#' @param nsim Integer. The number of simulations performed to estimate the power.
+#' @param x Number of succcesses
+#' @param n Number of trials.
+#' @param conf.level Confidence level for the returned confidence interval power.
 #'
 #' @return An object of class \code{empirical_power_result}, a list with components:
 #' \itemize{
@@ -20,29 +20,26 @@
 #'
 #' @examples
 #' result <- empirical_power_result(
-#'   power = 0.85,
-#'   conf.low = 0.80,
-#'   conf.high = 0.90,
-#'   nsim = 1000,
+#'   x = 10
+#'   n = 100
 #'   conf.level = 0.95
 #' )
 #' print(result)
 #' @export
+#' @importFrom stats binom.test 
 empirical_power_result <- function(
-    power,
-    conf.low,
-    conf.high,
-    nsim,
+    x,
+    n,
     conf.level = 0.95
 ) {
-  
+  out = binom.test(x,n,conf.level=conf.level)
   structure(
     list(
-      power = power,
-      conf.low = conf.low,
-      conf.high = conf.high,
-      nsim = nsim,
-      conf.level = conf.level
+      power = unname(out$estimate),
+      conf.low = unname(out$conf.int[1]),
+      conf.high = unname(out$conf.int[2]),
+      conf.level = conf.level,
+      nsim = n
     ),
     class = "empirical_power_result"
   )

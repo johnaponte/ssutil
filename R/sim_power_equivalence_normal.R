@@ -35,18 +35,10 @@
 #' @param t_level Numeric. Confidence level used for the t-tests (e.g., 0.95 for 95% CI).
 #' @param conf.level Numeric. Confidence level for the empirical power estimate
 #'
-#' @return A data frame with the following columns:
+#' @return an S3 object of class \link{empirical_power_result}
 #'
-#' |Column    |Description                            |
-#' |----------|---------------------------------------|
-#' |power	    |Empirical power estimate.              |
-#' |conf.low  |Lower bound of 95% confidence interval |
-#' |conf.high |Upper bound of 95% confidence interval |
-#' |nsim      |Number of simulations performed        |
-#'
-#' @importFrom stats t.test binom.test
+#' @importFrom stats t.test
 #' @importFrom utils combn
-#' @importFrom broom tidy
 #' @export
 sim_power_equivalence_normal <- function(
     ngroups,
@@ -70,7 +62,8 @@ sim_power_equivalence_normal <- function(
     all(y)
   }, logical(1))
 
-  out <- tidy(binom.test(sum(vres), length(vres)))[, c("estimate", "conf.low", "conf.high")]
-  names(out)[1] <- "power"
-  cbind(out, nsim = length(vres))
+  empirical_power_result(
+    x=sum(vres), 
+    n= length(vres), 
+    conf.level = conf.level)
 }

@@ -130,13 +130,8 @@ sim_power_best_norm_rank <- function(
     as.integer(rankgroup[1] == ngroups)
   }, 0.0)
 
-  out<-binom.test(sum(simrest), length(simrest), conf.level = conf.level)
-  
   empirical_power_result(
-    power = unname(out$estimate),
-    conf.low = unname(out$conf.int[1]),
-    conf.high = unname(out$conf.int[2]),
-    conf.level = conf.level,
-    nsim = nsim
-  )
+    x =sum(simrest), 
+    n= length(simrest), 
+    conf.level = conf.level)
 }

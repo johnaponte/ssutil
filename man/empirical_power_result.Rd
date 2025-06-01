@@ -4,18 +4,14 @@
 \alias{empirical_power_result}
 \title{Create an Empirical Power Result object}
 \usage{
-empirical_power_result(power, conf.low, conf.high, nsim, conf.level = 0.95)
+empirical_power_result(x, n, conf.level = 0.95)
 }
 \arguments{
-\item{power}{A numeric value representing the estimated empirical power.}
+\item{x}{Number of succcesses}
 
-\item{conf.low}{Lower bound of the confidence interval.}
+\item{n}{Number of trials.}
 
-\item{conf.high}{Upper bound of the confidence interval.}
-
-\item{nsim}{Integer. The number of simulations performed to estimate the power.}
-
-\item{conf.level}{Confidence level for the confidence interval.}
+\item{conf.level}{Confidence level for the returned confidence interval power.}
 }
 \value{
 An object of class \code{empirical_power_result}, a list with components:
@@ -31,12 +27,13 @@ An object of class \code{empirical_power_result}, a list with components:
 Constructs an S3 object of class \code{empirical_power_result}, storing the estimated power,
 its confidence interval, and the number of simulations used to compute it.
 }
+\details{
+It is a wrap to \code{\link[stats]{binom.test}}
+}
 \examples{
 result <- empirical_power_result(
-  power = 0.85,
-  conf.low = 0.80,
-  conf.high = 0.90,
-  nsim = 1000,
+  x = 10
+  n = 100
   conf.level = 0.95
 )
 print(result)

@@ -10,7 +10,8 @@ sim_power_equivalence_normal(
   sd,
   llimit,
   ulimit,
-  nsimul,
+  nsim,
+  t_level = 0.95,
   conf.level = 0.95
 )
 }
@@ -25,18 +26,14 @@ sim_power_equivalence_normal(
 
 \item{ulimit}{Numeric. Upper equivalence limit.}
 
-\item{nsimul}{Integer. Number of simulations to perform.}
+\item{nsim}{Integer. Number of simulations to perform.}
 
-\item{conf.level}{Numeric. Confidence level used for the t-tests (e.g., 0.95 for 95\% CI).}
+\item{t_level}{Numeric. Confidence level used for the t-tests (e.g., 0.95 for 95\% CI).}
+
+\item{conf.level}{Numeric. Confidence level for the empirical power estimate}
 }
 \value{
-A data frame with the following columns:\tabular{ll}{
-   Column \tab Description \cr
-   power \tab Empirical power estimate. \cr
-   conf.low \tab Lower bound of 95\% confidence interval \cr
-   conf.high \tab Upper bound of 95\% confidence interval \cr
-   nsim \tab Number of simulations performed \cr
-}
+an S3 object of class \link{empirical_power_result}
 }
 \description{
 Estimates the empirical power to detect equivalence among multiple groups assuming
@@ -58,8 +55,8 @@ sim_power_equivalence_normal(
   sd = 0.403,
   llimit = log10(2/3),
   ulimit = log10(3/2),
-  nsimul = 1000,
-  conf.level = 0.95
+  nsim = 1000,
+  t_level = 0.95
 )
 }
 }

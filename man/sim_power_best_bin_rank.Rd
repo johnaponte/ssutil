@@ -30,7 +30,7 @@ sim_power_best_bin_rank(
 
 \item{nsim}{Integer. Number of simulations.}
 
-\item{conf.level}{Numeric. Confidence level for the returned confidence interval}
+\item{conf.level}{Numeric. Confidence level for the empirical power estimate}
 }
 \value{
 an S3 object of class \link{empirical_power_result}
@@ -46,8 +46,8 @@ other groups. The function sums weighted ranks across multiple outcomes to
 determine the top group.
 
 If multiple outcomes are defined, weights can be applied to prioritize some
-outcomes over others. Weights are automatically scaled to sum to the number
-of outcomes. The group with the lowest total rank is considered the best.
+outcomes over others. Weights are automatically scaled to sum 1. The group
+with the lowest total rank is considered the best.
 }
 \examples{
 \dontrun{

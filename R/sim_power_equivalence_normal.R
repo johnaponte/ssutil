@@ -22,7 +22,7 @@
 #'   sd = 0.403,
 #'   llimit = log10(2/3),
 #'   ulimit = log10(3/2),
-#'   nsimul = 1000,
+#'   nsim = 1000,
 #'   t_level = 0.95
 #' )
 #' }
@@ -31,7 +31,7 @@
 #' @param sd Numeric. Standard deviation of the outcome distribution (common across groups).
 #' @param llimit Numeric. Lower equivalence limit.
 #' @param ulimit Numeric. Upper equivalence limit.
-#' @param nsimul Integer. Number of simulations to perform.
+#' @param nsim Integer. Number of simulations to perform.
 #' @param t_level Numeric. Confidence level used for the t-tests (e.g., 0.95 for 95% CI).
 #' @param conf.level Numeric. Confidence level for the empirical power estimate
 #'
@@ -46,21 +46,36 @@ sim_power_equivalence_normal <- function(
     sd,
     llimit,
     ulimit,
-    nsimul,
-    t_level = 0.95
+    nsim,
+    t_level = 0.95,
+    conf.level = 0.95
 ) {
-  stopifnot(ngroups >= 2, npergroup >= 1, nsimul >= 1, sd > 0)
+  stopifnot(ngroups >= 2, npergroup >= 1, nsim >= 1, sd > 0)
 
-  vres <- vapply(1:nsimul, function(x) {
+  vres <- vapply(1:nsim, function(x) {
     mat <- matrix(rnorm(ngroups * npergroup, 0, sd), ncol = ngroups)
 
     y <- combn(1:ngroups, 2, FUN = function(z) {
       yt <- t.test(mat[, z[1]], mat[, z[2]], conf.level = t_level)
-      yt$conf.int[1] > llimit && yt$conf.int[2] < ulimit
+      yt$conf.int[1] >= llimit && yt$conf.int[2] < ulimit
     })
-
+    
+    x <- combn(1:ngroups, 2, FUN = function(z) {
+      xt1 <- t.test(mat[,z[1]], mat[,z[2]], alternative = "greater", mu = llimit)
+      xt2 <- t.test(mat[,z[1]], mat[,z[2]], alternative = "less", mu = ulimit)
+      xt1$p.value < 0.025 && xt2$p.value < 0.025
+    })  
+    if(! all(y==x)){
+      print(y)
+      print(x)
+      save(mat, file="borrar.rda")
+      cat("---\n")
+      stop()
+    }
+    
     all(y)
   }, logical(1))
+
 
   empirical_power_result(
     x=sum(vres), 

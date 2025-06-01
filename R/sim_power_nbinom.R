@@ -1,7 +1,7 @@
 #' Empirical Power for Negative Binomial Comparison
 #'
 #' Estimates empirical power to detect a relative risk either above or below a specified boundary,
-#' depending on the direction of the alternative hypothesis. Simulates count data with overdispersion,
+#' depending on the direction of the alternative hypothesis. Simulates count data with over dispersion,
 #' fits a model with \code{glm.nb}, and evaluates the power to reject the null
 #' hypothesis using a negative binomial model.
 #'
@@ -17,13 +17,13 @@
 #' @param conf.level Numeric. Confidence level for the empirical power estimate
 #' @examples
 #' \dontrun{
-sim_power_nbinom(
-  n1 = 150, n2 = 150,
-  ir1 = 0.55, tm = 1.7,
-  rr = 0.6, boundary = 1,
-  dispersion = 2,
-  alpha = 0.05,
-  nsim = 1000
+#' sim_power_nbinom(
+#'  n1 = 150, n2 = 150,
+#'  ir1 = 0.55, tm = 1.7,
+#'  rr = 0.6, boundary = 1,
+#'  dispersion = 2,
+#'  alpha = 0.05,
+#'  nsim = 1000
 #' )
 #' }
 #' @return an S3 object of class \link{empirical_power_result}
@@ -58,6 +58,7 @@ sim_power_nbinom <- function(n1,
     ir1 > 0,
     tm > 0,
     rr > 0,
+    boundary > 0,
     nsim > 0,
     dispersion > 0,
     alpha > 0,

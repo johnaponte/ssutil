@@ -1,0 +1,59 @@
+---
+title: "Simulations for Negative Binomial outcomes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Negative Binomial outcomes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+
+```{r setup}
+library(ssutil)
+```
+
+## Introduction
+
+The `sim_power_nbinom` function is used to estimate the empirical power of a 
+negative binomial regression model. This method is useful when outcomes consist 
+of over dispersed count data, and the objective is to test whether the relative 
+risk (RR) between two groups differs significantly from a null boundary.
+
+Data are simulated under a negative binomial distribution, a model is fit 
+using `glm.nb`, and it is determined whether the null hypothesis is rejected 
+based on confidence interval limits relative to a specified boundary. The 
+procedure accounts for whether the true RR is below or above 1, applying the 
+appropriate directional test logic.
+
+
+## Exammpe
+
+What is the empirical power using negative binomial regression to detect efficacy of
+vaccine with a 95% lower vaccine efficacy boundary above 30% assuming the true vaccine efficacy is 60%?
+if the sample size is 500 per group average follow-up of 1 year, the event rate is 0.25 
+episode per person-year in the control group, and the dispersion parameter is 2?
+
+```{r example-sim-power-vaccine, message=FALSE}
+library(ssutil)
+set.seed(123)
+result <- sim_power_nbinom(
+  n1 = 500, n2 = 500,
+  ir1 = 0.2, tm = 1,
+  rr = 0.4, boundary = 0.7,
+  dispersion = 2,
+  alpha = 0.05,
+  nsim = 1000
+)
+
+result
+```
+
+

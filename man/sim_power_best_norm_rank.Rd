@@ -30,7 +30,7 @@ sim_power_best_norm_rank(
 
 \item{nsim}{Integer. Number of simulations.}
 
-\item{conf.level}{Numeric. Confidence level for the returned confidence interval}
+\item{conf.level}{Numeric. Confidence level for the empirical power estimate}
 }
 \value{
 an S3 object of class \link{empirical_power_result}
@@ -44,7 +44,7 @@ Each outcome is independent and normally distributed. The most promising group
 is assumed to have a mean at least \code{dif} higher than the others. Ranks are
 weighted and summed per group across outcomes.
 
-If \code{weights} is specified, it is internally rescaled to sum to 1.
+If \code{weights} is specified, it is internally scaled to sum to 1.
 The most promising group is always considered to be the first group.
 }
 \examples{

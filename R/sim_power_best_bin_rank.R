@@ -23,7 +23,7 @@
 #' @param ngroups Integer. Number of groups.
 #' @param npergroup Integer or vector. Sample size per group.
 #' @param nsim Integer. Number of simulations.
-#' @param conf.level Numeric. Confidence level for the returned confidence interval
+#' @param conf.level Numeric. Confidence level for the empirical power estimate
 #'
 #' @examples
 #' \dontrun{
@@ -39,7 +39,7 @@
 #' }
 #' @return an S3 object of class \link{empirical_power_result}
 #'
-#' @importFrom stats rbinom binom.test
+#' @importFrom stats rbinom
 #' @export
 sim_power_best_bin_rank <- function(
     noutcomes,
@@ -109,15 +109,9 @@ sim_power_best_bin_rank <- function(
     ifelse(rankgroup[1] == ngroups, 1, 0)
   }, 0.0)
 
-  
-  out<-binom.test(sum(simrest), length(simrest), conf.level = conf.level)
-
   empirical_power_result(
-    power = unname(out$estimate),
-    conf.low = unname(out$conf.int[1]),
-    conf.high = unname(out$conf.int[2]),
-    conf.level = conf.level,
-    nsim = nsim
-  )
+    x =sum(simrest), 
+    n= length(simrest), 
+    conf.level = conf.level)
 }
 

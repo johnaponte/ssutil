@@ -21,8 +21,8 @@
 #' @param ngroups Integer. Number of groups.
 #' @param npergroup Integer or vector. Number of subjects per group.
 #' @param nsim Integer. Number of simulations.
-#' @param conf.level Numeric. Confidence level for the returned confidence interval
-#'
+#' @param conf.level Numeric. Confidence level for the empirical power estimate
+#' 
 #' @return an S3 object of class \link{empirical_power_result}
 #'
 #' @importFrom stats rnorm binom.test
@@ -130,13 +130,8 @@ sim_power_best_norm_rank <- function(
     as.integer(rankgroup[1] == ngroups)
   }, 0.0)
 
-  out<-binom.test(sum(simrest), length(simrest), conf.level = conf.level)
-  
   empirical_power_result(
-    power = unname(out$estimate),
-    conf.low = unname(out$conf.int[1]),
-    conf.high = unname(out$conf.int[2]),
-    conf.level = conf.level,
-    nsim = nsim
-  )
+    x =sum(simrest), 
+    n= length(simrest), 
+    conf.level = conf.level)
 }

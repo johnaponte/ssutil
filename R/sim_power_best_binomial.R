@@ -19,12 +19,11 @@
 #' @param ngroups Integer. Number of groups.
 #' @param npergroup Integer or vector. Number of subjects per group.
 #' @param nsim Integer. Number of simulations.
-#' @param conf.level Numeric. Level for the confidence interval
+#' @param conf.level Numeric. Confidence level for the empirical power estimate
 #'
-#' @return A data frame with empirical power and 95% confidence interval.
+#' @return an S3 object of class \link{empirical_power_result}
 #'
-#' @importFrom stats rbinom binom.test
-#' @importFrom broom tidy
+#' @importFrom stats rbinom 
 #' @export
 #' @examples
 #' \dontrun{
@@ -84,21 +83,11 @@ sim_power_best_binomial <- function(noutcomes, p1, dif, ngroups, npergroup, nsim
     ranks <- apply(simulone, 2, rank, ties.method = "random")
     # Success if the first group have the highest rank
     ifelse(all(ranks[1,]== ngroups), 1, 0)
-    #best_group <- apply(simulone, 2, function(x) which(x == max(x)))
-    #if (is.list(best_group)) {
-    #  best_group <- vapply(best_group, function(x) ifelse(length(x) == 1, x, sample(x, 1)), 0)
-    #}
-    #ifelse(all(best_group == 1), 1, 0)
   }, 0.0)
 
-  out<-binom.test(sum(simrest), length(simrest), conf.level = conf.level)
-  
   empirical_power_result(
-    power = unname(out$estimate),
-    conf.low = unname(out$conf.int[1]),
-    conf.high = unname(out$conf.int[2]),
-    conf.level = conf.level,
-    nsim = nsim
-  )
+    x =sum(simrest), 
+    n= length(simrest), 
+    conf.level = conf.level)
 }
 

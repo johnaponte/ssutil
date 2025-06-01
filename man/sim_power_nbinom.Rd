@@ -4,7 +4,18 @@
 \alias{sim_power_nbinom}
 \title{Empirical Power for Negative Binomial Comparison}
 \usage{
-sim_power_nbinom(n1, n2, ir1, tm, rr, lowrr, dispersion, alpha, nsimul)
+sim_power_nbinom(
+  n1,
+  n2,
+  ir1,
+  tm,
+  rr,
+  lowrr,
+  dispersion,
+  alpha,
+  nsim,
+  conf.level = 0.95
+)
 }
 \arguments{
 \item{n1}{Integer. Number of participants in group 1.}
@@ -23,19 +34,12 @@ sim_power_nbinom(n1, n2, ir1, tm, rr, lowrr, dispersion, alpha, nsimul)
 
 \item{alpha}{Numeric. Type I error rate (two-sided).}
 
-\item{nsimul}{Integer. Number of simulation iterations.}
+\item{nsim}{Integer. Number of simulation iterations.}
+
+\item{conf.level}{Numeric. Confidence level for the empirical power estimate}
 }
 \value{
-A named numeric vector with:
-\itemize{
-\item pwr: Empirical power (proportion of simulations where lowrr is rejected).
-}
-
-. * lci: Lower 95\\% confidence limit for power.
-
-. * uci: Upper 95\\% confidence limit for power.
-
-. * pw2: Proportion of simulations with p-value < alpha/2 (for reference).
+an S3 object of class \link{empirical_power_result}
 }
 \description{
 Estimates empirical power to detect a rate ratio below a specified threshold
@@ -55,7 +59,7 @@ sim_power_nbinom(
   rr = 0.6, lowrr = 1,
   dispersion = 2,
   alpha = 0.025,
-  nsimul = 1000
+  nsim = 1000
 )
 }
 }

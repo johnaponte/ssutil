@@ -27,10 +27,10 @@ sim_power_best_binomial(
 
 \item{nsim}{Integer. Number of simulations.}
 
-\item{conf.level}{Numeric. Level for the confidence interval}
+\item{conf.level}{Numeric. Confidence level for the empirical power estimate}
 }
 \value{
-A data frame with empirical power and 95\% confidence interval.
+an S3 object of class \link{empirical_power_result}
 }
 \description{
 Estimates the empirical power to correctly identify the best group as having

@@ -27,7 +27,7 @@ sim_power_best_normal(
 
 \item{nsim}{Integer. Number of simulations to perform.}
 
-\item{conf.level}{Numeric. Confidence level for the returned confidence interval}
+\item{conf.level}{Numeric. Confidence level for the empirical power estimate}
 }
 \value{
 an S3 object of class \link{empirical_power_result}

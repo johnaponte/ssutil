@@ -5,7 +5,7 @@
 #' 
 #' It is a wrap to \code{\link[stats]{binom.test}}
 #'
-#' @param x Number of succcesses
+#' @param x Number of successes
 #' @param n Number of trials.
 #' @param conf.level Confidence level for the returned confidence interval power.
 #'
@@ -20,8 +20,8 @@
 #'
 #' @examples
 #' result <- empirical_power_result(
-#'   x = 10
-#'   n = 100
+#'   x = 10,
+#'   n = 100,
 #'   conf.level = 0.95
 #' )
 #' print(result)

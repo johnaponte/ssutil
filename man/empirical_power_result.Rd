@@ -7,7 +7,7 @@
 empirical_power_result(x, n, conf.level = 0.95)
 }
 \arguments{
-\item{x}{Number of succcesses}
+\item{x}{Number of successes}
 
 \item{n}{Number of trials.}
 
@@ -32,8 +32,8 @@ It is a wrap to \code{\link[stats]{binom.test}}
 }
 \examples{
 result <- empirical_power_result(
-  x = 10
-  n = 100
+  x = 10,
+  n = 100,
   conf.level = 0.95
 )
 print(result)

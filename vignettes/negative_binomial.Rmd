@@ -34,7 +34,7 @@ procedure accounts for whether the true RR is below or above 1, applying the
 appropriate directional test logic.
 
 
-## Exammpe
+## Example
 
 What is the empirical power using negative binomial regression to detect efficacy of
 vaccine with a 95% lower vaccine efficacy boundary above 30% assuming the true vaccine efficacy is 60%?

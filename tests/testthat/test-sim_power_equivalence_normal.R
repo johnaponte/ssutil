@@ -5,12 +5,12 @@ test_that("Function returns expected structure and types", {
     sd = 0.5,
     llimit = log10(2/3),
     ulimit = log10(3/2),
-    nsimul = 100,
-    conf.level = 0.95
+    nsim = 100,
+    t_level = 0.95
   )
 
-  expect_s3_class(result, "data.frame")
-  expect_named(result, c("power", "conf.low", "conf.high", "nsim"))
+  expect_s3_class(result, "empirical_power_result")
+  expect_named(result, c("power", "conf.low", "conf.high","conf.level","nsim"))
   expect_true(is.numeric(result$power))
   expect_true(is.numeric(result$conf.low))
   expect_true(is.numeric(result$conf.high))
@@ -24,8 +24,8 @@ test_that("Function detects equivalence when variability is low", {
     sd = 0.1,
     llimit = -0.2,
     ulimit = 0.2,
-    nsimul = 100,
-    conf.level = 0.95
+    nsim = 100,
+    t_level = 0.95
   )
 
   expect_gt(result$power, 0.9)
@@ -38,7 +38,8 @@ test_that("Errors are raised for invalid inputs", {
     sd = 0.4,
     llimit = -0.1,
     ulimit = 0.1,
-    nsimul = 10
+    nsim = 10,
+    t_level = 0.95
   ), regexp = "ngroups")
 
   expect_error(sim_power_equivalence_normal(
@@ -47,6 +48,8 @@ test_that("Errors are raised for invalid inputs", {
     sd = 0.4,
     llimit = -0.1,
     ulimit = 0.1,
-    nsimul = 10
+    nsim = 10,
+    t_level = 0.95
   ), regexp = "npergroup")
 })
+

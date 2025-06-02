@@ -5,7 +5,7 @@
 \title{Empirical Power for Non-Inferiority (Normal Outcomes)}
 \usage{
 sim_power_ni_normal(
-  nsimul,
+  nsim,
   npergroup,
   ntest,
   ni_limit,
@@ -13,11 +13,12 @@ sim_power_ni_normal(
   test_opt,
   sd,
   corr = 0,
+  t_level = 0.95,
   conf.level = 0.95
 )
 }
 \arguments{
-\item{nsimul}{Integer. Number of simulations to perform.}
+\item{nsim}{Integer. Number of simulations to perform.}
 
 \item{npergroup}{Integer. Number of observations per group.}
 
@@ -33,19 +34,15 @@ sim_power_ni_normal(
 
 \item{corr}{Numeric. Correlation between the tests. Scalar (common correlation), or vector of length \code{ntest*(ntest-1)/2}.}
 
-\item{conf.level}{Numeric. Confidence level(s) for each test. Scalar or vector of length \code{ntest}.}
+\item{t_level}{Numeric. Confidence level used for the t-tests (e.g., 0.95 for 95\% CI).scalar or vector of length \code{ntest}.}
+
+\item{conf.level}{Numeric. Confidence level for the empirical power estimate}
 }
 \value{
-A tibble with:\tabular{ll}{
-   Column \tab Description \cr
-   power \tab Empirical power estimate \cr
-   conf.low \tab Lower bound of 95\% confidence interval \cr
-   conf.high \tab Upper bound of 95\% confidence interval \cr
-   nsim \tab Number of simulations performed \cr
-}
+a S3 object of class \link{empirical_power_result}
 }
 \description{
-Estimates empirical power to declare non-inferiority across multiple outcomes using
+Estimates empirical power to declare non-inferiority between two groups across multiple outcomes using
 t-tests. Simulates normally distributed data under the null (no difference) and applies
 non-inferiority rules based on user-defined required and optional tests.
 }
@@ -55,24 +52,26 @@ than the specified non-inferiority limit. Overall non-inferiority is declared if
 \code{test_req} and at least \code{test_opt} of the remaining tests are non-inferior.
 }
 \note{
-\itemize{
-\item If only one test is used, correlation is ignored.
-\item When using a correlation vector, it must match the number of test pairs:
+If only one test is used, correlation is ignored.
+
+Use correlation 0 for independent outcomes
+
+When using a correlation vector, it must match the number of test pairs:
 \code{ntest*(ntest-1)/2}, in this order: (1,2), (1,3), ..., (1,ntest), (2,3), ..., (ntest-1,ntest).
-\item The covariance matrix is derived from the correlation matrix and the standard deviations.
-\item For example, with \code{ntest = 3} and \code{corr = c(0.2, 0.3, 0.4)}, the resulting correlation matrix is:\tabular{llll}{
+
+The covariance matrix is derived from the correlation matrix and the standard deviations.
+
+For example: with \code{ntest = 3} and \code{corr = c(0.2, 0.3, 0.4)}, the resulting correlation matrix is:\tabular{llll}{
     \tab [,1] \tab [,2] \tab [,3] \cr
    [1, ] \tab 1 \tab 0.2 \tab 0.3 \cr
    [2, ] \tab 0.2. \tab 1 \tab 0.4 \cr
    [3, ] \tab 0.3. \tab 0.4 \tab 1 \cr
 }
-
-}
 }
 \examples{
 \dontrun{
 sim_power_ni_normal(
-  nsimul = 1000,
+  nsim = 1000,
   npergroup = 250,
   ntest = 7,
   ni_limit = log10(2/3),
@@ -80,7 +79,7 @@ sim_power_ni_normal(
   test_opt = 3,
   sd = 0.4,
   corr = 0,
-  conf.level = 0.95
+  t_level = 0.05
 )
 }
 }

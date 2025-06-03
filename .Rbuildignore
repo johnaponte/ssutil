@@ -3,3 +3,6 @@
 ^LICENSE\.md$
 chk_book_tables
 
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

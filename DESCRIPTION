@@ -15,7 +15,9 @@ Authors@R: c(
               role = "ctb")
             )
 Description: Utilities for the sample size estimation and
-             simulations of clinical trials.
+             simulations of clinical trials, including selection of the
+             best group using the Indifferent-zone approach, non-inferiority,
+             equivalence and negative binomial.
 License: AGPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

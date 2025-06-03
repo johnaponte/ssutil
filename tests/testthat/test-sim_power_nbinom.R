@@ -4,15 +4,14 @@ test_that("sim_power_nbinom returns valid structure and values", {
     ir1 = 0.5,
     tm = 1.5,
     rr = 0.7,
-    lowrr = 1,
+    boundary = 1,
     dispersion = 2,
     alpha = 0.05,
-    nsimul = 100
+    nsim = 100
   )
 
-  expect_type(result, "double")
-  expect_named(result, c("pwr", "lci", "uci", "pw2"))
-  expect_true(all(result >= 0 & result <= 1))
+  expect_s3_class(result, "empirical_power_result")
+  expect_named(result, c("power", "conf.low", "conf.high", "conf.level", "nsim"))
 })
 
 test_that("Function throws error for invalid inputs", {
@@ -21,10 +20,10 @@ test_that("Function throws error for invalid inputs", {
     ir1 = 0.5,
     tm = 1.5,
     rr = 0.7,
-    lowrr = 1,
+    boundary = 1,
     dispersion = 2,
     alpha = 0.05,
-    nsimul = 100
+    nsim = 100
   ), regexp = "n1 > 0")
 
   expect_error(sim_power_nbinom(
@@ -32,10 +31,10 @@ test_that("Function throws error for invalid inputs", {
     ir1 = -0.5,
     tm = 1.5,
     rr = 0.7,
-    lowrr = 1,
+    boundary = 1,
     dispersion = 2,
     alpha = 0.05,
-    nsimul = 100
+    nsim = 100
   ), regexp = "ir1 > 0")
 })
 
@@ -45,11 +44,11 @@ test_that("Power is close to 1 when difference is large and sample size is high"
     ir1 = 0.5,
     tm = 1.5,
     rr = 0.3,  # large effect
-    lowrr = 0.8,
+    boundary = 0.8,
     dispersion = 1,
     alpha = 0.05,
-    nsimul = 100
+    nsim = 100
   )
 
-  expect_gt(result["pwr"], 0.2)
+  expect_gt(result$power, 0.9)
 })

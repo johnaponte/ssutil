@@ -10,7 +10,7 @@ sim_power_nbinom(
   ir1,
   tm,
   rr,
-  lowrr,
+  boundary,
   dispersion,
   alpha,
   nsim,
@@ -28,7 +28,7 @@ sim_power_nbinom(
 
 \item{rr}{Numeric. True relative risk between groups (group 2 rate = rr × group 1 rate).}
 
-\item{lowrr}{Numeric. Lower bound of the relative risk under the null hypothesis.}
+\item{boundary}{Numeric. Relative risk boundary under the null hypothesis.}
 
 \item{dispersion}{Numeric. Dispersion parameter (\eqn{\phi}) for the negative binomial distribution.}
 
@@ -42,27 +42,34 @@ sim_power_nbinom(
 an S3 object of class \link{empirical_power_result}
 }
 \description{
-Estimates empirical power to detect a rate ratio below a specified threshold
-using a negative binomial model. Simulates count data with overdispersion,
+Estimates empirical power to detect a relative risk either above or below a specified boundary,
+depending on the direction of the alternative hypothesis. Simulates count data with over dispersion,
 fits a model with \code{glm.nb}, and evaluates the power to reject the null
-hypothesis under the alternative.
+hypothesis using a negative binomial model.
 }
 \note{
 Uses the alternative parameterization of the negative binomial: \code{mu} is the mean,
 and \code{size = 1/dispersion}. In \code{glm.nb}, dispersion is estimated as \code{theta}.
+The 'boundary' parameter defines the relative risk under the null hypothesis. When rr < 1,
+rejection occurs if the upper limit of the confidence interval is below the boundary.
+When rr > 1, rejection occurs if the lower limit is above the boundary.
+
+The \code{alpha} parameter is two-sided as it is used to estimate two-sided confidence intervals
 }
 \examples{
 \dontrun{
 sim_power_nbinom(
-  n1 = 150, n2 = 150,
-  ir1 = 0.55, tm = 1.7,
-  rr = 0.6, lowrr = 1,
-  dispersion = 2,
-  alpha = 0.025,
-  nsim = 1000
+ n1 = 150, n2 = 150,
+ ir1 = 0.55, tm = 1.7,
+ rr = 0.6, boundary = 1,
+ dispersion = 2,
+ alpha = 0.05,
+ nsim = 1000
 )
 }
 }
 \author{
 Chris Gast
+
+John J. Aponte
 }

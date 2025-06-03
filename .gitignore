@@ -40,3 +40,4 @@ vignettes/*.pdf
 .Rproj.user
 ssutil.Rproj
 inst/doc
+**/.DS_Store

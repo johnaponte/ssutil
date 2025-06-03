@@ -1,6 +1,6 @@
 Package: ssutil
-Title: Utilities for Sample Size calculation
-Version: 0.15
+Title: Utilities for Sample Size Calculation
+Version: 1.0.0
 Authors@R: c(
               person(
               given = "John J.",

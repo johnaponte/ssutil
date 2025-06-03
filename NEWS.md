@@ -1,3 +1,6 @@
+# ssutil 1.0.0
+- CRAN submission
+
 # ssutil 0.15.0
 - Remove lf_config functions as they are not useful. Replace by the worst
   case scenario function.

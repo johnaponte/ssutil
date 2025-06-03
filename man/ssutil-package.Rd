@@ -9,6 +9,13 @@
 Utilities for the sample size estimation and
 simulations of clinical trials.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://johnaponte.github.io/ssutil/}
+}
+
+}
 \author{
 \strong{Maintainer}: John J. Aponte \email{john.j.aponte@gmail.com} (\href{https://orcid.org/0000-0002-3014-3673}{ORCID})
 

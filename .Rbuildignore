@@ -7,3 +7,4 @@ chk_book_tables
 ^docs$
 ^pkgdown$
 ^\.github$
+^cran-comments\.md$

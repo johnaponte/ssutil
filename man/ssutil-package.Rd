@@ -13,6 +13,8 @@ simulations of clinical trials.
 Useful links:
 \itemize{
   \item \url{https://johnaponte.github.io/ssutil/}
+  \item \url{https://github.com/johnaponte/ssutil}
+  \item Report bugs at \url{https://github.com/johnaponte/ssutil/issues}
 }
 
 }

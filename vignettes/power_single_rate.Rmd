@@ -1,0 +1,58 @@
+---
+title: "Detectable Event Rate for Safety Signal Detection: Using `power_single_rate`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Detectable Event Rate for Safety Signal Detection}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Introduction
+
+One important question in drug safety monitoring or rare event studies is:
+
+> "**Given a specific sample size and the desired statistical power, what is the smallest event rate 
+(proportion) that can be reliably detected (i.e., at least one event expected with a set probability)?**"
+
+The function `power_single_rate()` addresses this by calculating the minimum true underlying proportion of an event needed, so that, with a specified sample size, there is a specified power to observe at least one event.
+
+This is typically used in clinical trial planning or post-marketing safety surveillance, where the event (such as a serious adverse reaction) is rare, but assuring a high probability to observe at least one event if the true rate is sufficiently high is crucial for safety oversight.
+
+## Function
+
+The function signature is:
+
+```r
+power_single_rate(subjects, power)
+```
+
+- `subjects`: Integer or vector. Sample size(s).
+- `power`: Numeric or vector. Desired power(s), between 0 and 1.
+
+The function returns a matrix (class `power_single_rate`) with columns:
+- `n`: sample size,
+- `power`: statistical power,
+- `proportion`: minimum detectable event rate.
+
+A formatted print and summary are provided for nice displays.
+
+## Examples
+
+### Example 1: 100 Subjects, Power 0.95
+
+Suppose you want to know the lowest event rate that would provide a 95% chance of observing at least one event among 100 subjects.
+
+```{r example1}
+library(ssutil)
+power_single_rate(100, 0.95)
+
+```
+
+### Example 2: 30 Subjects, Power 0.95, 0.90, and 0.8
+
+Suppose your sample size is 30, and you want to know what true event rate you can potentially detect (at least one event) with powers of 80%, 90%, and 95%.
+
+```{r example2}
+power_single_rate(30, c(0.95, 0.90, 0.8))
+```
+

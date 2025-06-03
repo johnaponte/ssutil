@@ -30,16 +30,17 @@ This vignette shows how to use the `sim_power_ni_normal()` function from the
 
 ## Example
 
-What is the empiriclal power of a trial that wants to evaluate non-inferiority
-of the immune response for a vaccine against 7 serotypes. Non inferiority is
-achived if the geometrical mean ratio between the candidate vaccine and the
-reference is greatert than 0.5 for the first two antigens, and to three of the 
+What is the empirical power of a trial that wants to evaluate non-inferiority
+of the immune response for a vaccine against 7 serotypes? Non-inferiority is
+achieved if the geometric mean ratio between the candidate vaccine and the
+reference is greater than 0.5 for the first two antigens, and for three of the 
 other five.
 
-This example simulates 1000 trials with 120 participants per group, 
-5 independent outcomes, a standard deviation of 0.4 on the log10 scale for all outcomes, 
-and a common non-inferiority margin equivalent to log10(2/3). Non-inferiority 
-is required in the first two outcomes, and in at least two of the remaining three.
+This example simulates 1000 trials with 125 participants per group, 
+7 independent outcomes, a standard deviation of 0.8 on the log10 scale for all 
+outcomes, and a common non-inferiority margin equivalent to log10(2/3). 
+Non-inferiority is required in the first two outcomes, and in at least three 
+of the remaining five.
 
 ```{r noninferiority-example}
 library(ssutil)
@@ -47,7 +48,7 @@ set.seed(123)
 
 res <- sim_power_ni_normal(
   nsim = 1000,
-  npergroup =125,
+  npergroup = 125,
   ntest = 7,
   ni_limit = log10(2/3),
   test_req = 2,
@@ -61,7 +62,7 @@ res
 ```
 
 The result shows the proportion of simulations in which the full
-non-inferiority rule was satisfied, along with a confidence interval.
+non-inferiority rule was satisfied.
 
 ```{r setup}
 library(ssutil)

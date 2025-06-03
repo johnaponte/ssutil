@@ -39,4 +39,5 @@ Imports:
     tibble
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-URL: https://johnaponte.github.io/ssutil/
+URL: https://johnaponte.github.io/ssutil/, https://github.com/johnaponte/ssutil
+BugReports: https://github.com/johnaponte/ssutil/issues

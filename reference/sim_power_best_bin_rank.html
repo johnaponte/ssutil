@@ -95,12 +95,15 @@ based on binomial outcomes, via simulation.</p>
 
 
 <dt id="arg-conf-level">conf.level<a class="anchor" aria-label="anchor" href="#arg-conf-level"></a></dt>
-<dd><p>Numeric. Confidence level for the empirical power estimate</p></dd>
+<dd><p>Numeric. Confidence level for the empirical power estimate#'</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>an S3 object of class <a href="empirical_power_result.html">empirical_power_result</a></p>
+    <p>An S3 object of class <code>empirical_power_result</code>, which contains
+the estimated empirical power and its confidence interval. The object can
+be printed, formatted, or further processed using associated S3 methods.
+See also <code><a href="empirical_power_result.html">empirical_power_result</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -112,11 +115,14 @@ determine the top group.</p>
 outcomes over others. Weights are automatically scaled to sum 1. The group
 with the lowest total rank is considered the best.</p>
     </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="empirical_power_result.html">empirical_power_result</a></code></p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span>  <span class="fu">sim_power_best_bin_rank</span><span class="op">(</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span>  <span class="fu">sim_power_best_bin_rank</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  noutcomes <span class="op">=</span> <span class="fl">2</span>,</span></span>
 <span class="r-in"><span>  p1 <span class="op">=</span> <span class="fl">0.80</span>,</span></span>
 <span class="r-in"><span>  dif <span class="op">=</span> <span class="fl">0.15</span>,</span></span>
@@ -125,7 +131,11 @@ with the lowest total rank is considered the best.</p>
 <span class="r-in"><span>  npergroup <span class="op">=</span> <span class="fl">30</span>,</span></span>
 <span class="r-in"><span>  nsim <span class="op">=</span> <span class="fl">1000</span>,</span></span>
 <span class="r-in"><span>  conf.level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Empirical Power Result</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------- </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Power:       0.8820</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95% CI:      [0.8604, 0.9013]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simulations: 1000</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

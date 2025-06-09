@@ -101,7 +101,10 @@ promising group has a higher success probability than the others by at least
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>an S3 object of class <a href="empirical_power_result.html">empirical_power_result</a></p>
+    <p>An S3 object of class <code>empirical_power_result</code>, which contains
+the estimated empirical power and its confidence interval. The object can
+be printed, formatted, or further processed using associated S3 methods.
+See also <code><a href="empirical_power_result.html">empirical_power_result</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -109,11 +112,14 @@ promising group has a higher success probability than the others by at least
 the proportion of simulations where the most promising group is selected best
 in all outcomes.</p>
     </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="empirical_power_result.html">empirical_power_result</a></code></p></div>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="fu">sim_power_best_binomial</span><span class="op">(</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">sim_power_best_binomial</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  noutcomes <span class="op">=</span> <span class="fl">1</span>,</span></span>
 <span class="r-in"><span>  p1 <span class="op">=</span> <span class="fl">0.7</span>,</span></span>
 <span class="r-in"><span>  dif <span class="op">=</span> <span class="fl">0.2</span>,</span></span>
@@ -121,7 +127,11 @@ in all outcomes.</p>
 <span class="r-in"><span>  npergroup <span class="op">=</span> <span class="fl">30</span>,</span></span>
 <span class="r-in"><span>  nsim <span class="op">=</span> <span class="fl">1000</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Empirical Power Result</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------- </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Power:       0.9050</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95% CI:      [0.8851, 0.9225]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Simulations: 1000</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

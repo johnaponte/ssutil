@@ -12,6 +12,7 @@
 <url><loc>https://johnaponte.github.io/ssutil/index.html</loc></url>
 <url><loc>https://johnaponte.github.io/ssutil/news/index.html</loc></url>
 <url><loc>https://johnaponte.github.io/ssutil/reference/empirical_power_result.html</loc></url>
+<url><loc>https://johnaponte.github.io/ssutil/reference/format.power_single_rate.html</loc></url>
 <url><loc>https://johnaponte.github.io/ssutil/reference/index.html</loc></url>
 <url><loc>https://johnaponte.github.io/ssutil/reference/is.empirical_power_result.html</loc></url>
 <url><loc>https://johnaponte.github.io/ssutil/reference/multp.html</loc></url>
@@ -20,6 +21,7 @@
 <url><loc>https://johnaponte.github.io/ssutil/reference/power_best_normal.html</loc></url>
 <url><loc>https://johnaponte.github.io/ssutil/reference/power_single_rate.html</loc></url>
 <url><loc>https://johnaponte.github.io/ssutil/reference/print.empirical_power_result.html</loc></url>
+<url><loc>https://johnaponte.github.io/ssutil/reference/print.power_single_rate.html</loc></url>
 <url><loc>https://johnaponte.github.io/ssutil/reference/prophr.html</loc></url>
 <url><loc>https://johnaponte.github.io/ssutil/reference/sim_power_best_bin_rank.html</loc></url>
 <url><loc>https://johnaponte.github.io/ssutil/reference/sim_power_best_binomial.html</loc></url>

@@ -53,6 +53,7 @@ empirical_power_result <- function(
 #' @param x An object of class "empirical_power_result".
 #' @param ... Further arguments passed to or from other methods (ignored).
 #'
+#' @return Invisibly returns the object passed in.
 #' @export
 print.empirical_power_result <- function(x, ...) {
   cat("Empirical Power Result\n")

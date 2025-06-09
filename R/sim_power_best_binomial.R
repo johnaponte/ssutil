@@ -21,12 +21,15 @@
 #' @param nsim Integer. Number of simulations.
 #' @param conf.level Numeric. Confidence level for the empirical power estimate
 #'
-#' @return an S3 object of class \link{empirical_power_result}
+#' @return An S3 object of class \code{empirical_power_result}, which contains
+#'   the estimated empirical power and its confidence interval. The object can
+#'   be printed, formatted, or further processed using associated S3 methods.
+#'   See also \code{\link{empirical_power_result}}.
+#' @seealso \code{\link{empirical_power_result}}
 #'
 #' @importFrom stats rbinom 
 #' @export
 #' @examples
-#' \dontrun{
 #' sim_power_best_binomial(
 #'   noutcomes = 1,
 #'   p1 = 0.7,
@@ -35,7 +38,6 @@
 #'   npergroup = 30,
 #'   nsim = 1000
 #' )
-#' }
 sim_power_best_binomial <- function(noutcomes, p1, dif, ngroups, npergroup, nsim, conf.level = 0.95) {
   stopifnot("Incorrect length of npergroup!" =
               length(npergroup) == 1 | length(npergroup) == ngroups)

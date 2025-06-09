@@ -33,7 +33,10 @@ sim_power_best_norm_rank(
 \item{conf.level}{Numeric. Confidence level for the empirical power estimate}
 }
 \value{
-an S3 object of class \link{empirical_power_result}
+An S3 object of class \code{empirical_power_result}, which contains
+the estimated empirical power and its confidence interval. The object can
+be printed, formatted, or further processed using associated S3 methods.
+See also \code{\link{empirical_power_result}}.
 }
 \description{
 Estimates the empirical power to identify the most promising group as best,
@@ -48,7 +51,6 @@ If \code{weights} is specified, it is internally scaled to sum to 1.
 The most promising group is always considered to be the first group.
 }
 \examples{
-\dontrun{
 sim_power_best_norm_rank(
   noutcomes = 3,
   sd = c(1, 0.8, 1.5),
@@ -59,4 +61,6 @@ sim_power_best_norm_rank(
   nsim = 1000
 )
 }
+\seealso{
+\code{\link{empirical_power_result}}
 }

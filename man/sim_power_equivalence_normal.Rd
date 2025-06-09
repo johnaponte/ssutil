@@ -33,7 +33,10 @@ sim_power_equivalence_normal(
 \item{conf.level}{Numeric. Confidence level for the empirical power estimate}
 }
 \value{
-an S3 object of class \link{empirical_power_result}
+An S3 object of class \code{empirical_power_result}, which contains
+the estimated empirical power and its confidence interval. The object can
+be printed, formatted, or further processed using associated S3 methods.
+See also \code{\link{empirical_power_result}}.
 }
 \description{
 Estimates the empirical power to detect equivalence among multiple groups assuming
@@ -47,7 +50,6 @@ and calculates the proportion of simulations in which all pairwise comparisons f
 the specified equivalence limits.
 }
 \examples{
-\dontrun{
 #Equivalence testing for three groups with log-scale outcome
 sim_power_equivalence_normal(
   ngroups = 3,
@@ -59,4 +61,6 @@ sim_power_equivalence_normal(
   t_level = 0.95
 )
 }
+\seealso{
+\code{\link{empirical_power_result}}
 }

@@ -30,10 +30,13 @@ sim_power_best_bin_rank(
 
 \item{nsim}{Integer. Number of simulations.}
 
-\item{conf.level}{Numeric. Confidence level for the empirical power estimate}
+\item{conf.level}{Numeric. Confidence level for the empirical power estimate#'}
 }
 \value{
-an S3 object of class \link{empirical_power_result}
+An S3 object of class \code{empirical_power_result}, which contains
+the estimated empirical power and its confidence interval. The object can
+be printed, formatted, or further processed using associated S3 methods.
+See also \code{\link{empirical_power_result}}.
 }
 \description{
 Estimates the empirical power to rank the most promising group as the best,
@@ -50,7 +53,6 @@ outcomes over others. Weights are automatically scaled to sum 1. The group
 with the lowest total rank is considered the best.
 }
 \examples{
-\dontrun{
   sim_power_best_bin_rank(
   noutcomes = 2,
   p1 = 0.80,
@@ -61,4 +63,6 @@ with the lowest total rank is considered the best.
   nsim = 1000,
   conf.level = 0.95)
 }
+\seealso{
+\code{\link{empirical_power_result}}
 }

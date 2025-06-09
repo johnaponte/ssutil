@@ -23,13 +23,16 @@
 #' @param nsim Integer. Number of simulations.
 #' @param conf.level Numeric. Confidence level for the empirical power estimate
 #' 
-#' @return an S3 object of class \link{empirical_power_result}
+#' @return An S3 object of class \code{empirical_power_result}, which contains
+#'   the estimated empirical power and its confidence interval. The object can
+#'   be printed, formatted, or further processed using associated S3 methods.
+#'   See also \code{\link{empirical_power_result}}.
+#' @seealso \code{\link{empirical_power_result}}
 #'
 #' @importFrom stats rnorm binom.test
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' sim_power_best_norm_rank(
 #'   noutcomes = 3,
 #'   sd = c(1, 0.8, 1.5),
@@ -39,7 +42,6 @@
 #'   npergroup = c(30, 25, 25),
 #'   nsim = 1000
 #' )
-#' }
 sim_power_best_norm_rank <- function(
     noutcomes,
     sd,

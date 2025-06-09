@@ -8,3 +8,4 @@ chk_book_tables
 ^pkgdown$
 ^\.github$
 ^cran-comments\.md$
+^CRAN-SUBMISSION$

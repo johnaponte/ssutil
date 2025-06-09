@@ -23,7 +23,11 @@
 #' @param t_level Numeric. Confidence level used for the t-tests (e.g., 0.95 for 95% CI).scalar or vector of length \code{ntest}.
 #' @param conf.level Numeric. Confidence level for the empirical power estimate
 #' 
-#' @return a S3 object of class \link{empirical_power_result}
+#' @return An S3 object of class \code{empirical_power_result}, which contains
+#'   the estimated empirical power and its confidence interval. The object can
+#'   be printed, formatted, or further processed using associated S3 methods.
+#'   See also \code{\link{empirical_power_result}}.
+#' @seealso \code{\link{empirical_power_result}}
 #'
 #' @note
 #'  If only one test is used, correlation is ignored.
@@ -49,7 +53,6 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
 #' sim_power_ni_normal(
 #'   nsim = 1000,
 #'   npergroup = 250,
@@ -61,7 +64,6 @@
 #'   corr = 0,
 #'   t_level = 0.05
 #' )
-#' }
 sim_power_ni_normal <- function(
     nsim,
     npergroup,

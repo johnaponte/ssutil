@@ -12,9 +12,12 @@ power_single_rate(subjects, power)
 \item{power}{Numeric or vector of numerics. Desired power(s), between 0 and 1.}
 }
 \value{
-An object of class \code{power_single_rate}, which is a matrix with
-columns \code{n} (sample size), \code{power} (requested power), and
-\code{proportion} (minimum detectable event rate).
+A matrix of class \code{power_single_rate} with columns:
+\describe{
+\item{n}{Sample size}
+\item{power}{Requested power}
+\item{proportion}{Minimum detectable event rate to observe at least one event}
+}
 }
 \description{
 Estimates the minimum true proportion of events needed to detect at least one

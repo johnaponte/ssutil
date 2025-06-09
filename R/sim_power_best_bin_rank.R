@@ -23,10 +23,8 @@
 #' @param ngroups Integer. Number of groups.
 #' @param npergroup Integer or vector. Sample size per group.
 #' @param nsim Integer. Number of simulations.
-#' @param conf.level Numeric. Confidence level for the empirical power estimate
-#'
+#' @param conf.level Numeric. Confidence level for the empirical power estimate#'
 #' @examples
-#' \dontrun{
 #'   sim_power_best_bin_rank(
 #'   noutcomes = 2,
 #'   p1 = 0.80,
@@ -36,8 +34,11 @@
 #'   npergroup = 30,
 #'   nsim = 1000,
 #'   conf.level = 0.95)
-#' }
-#' @return an S3 object of class \link{empirical_power_result}
+#' @return An S3 object of class \code{empirical_power_result}, which contains
+#'   the estimated empirical power and its confidence interval. The object can
+#'   be printed, formatted, or further processed using associated S3 methods.
+#'   See also \code{\link{empirical_power_result}}.
+#' @seealso \code{\link{empirical_power_result}}
 #'
 #' @importFrom stats rbinom
 #' @export
@@ -114,4 +115,3 @@ sim_power_best_bin_rank <- function(
     n= length(simrest), 
     conf.level = conf.level)
 }
-

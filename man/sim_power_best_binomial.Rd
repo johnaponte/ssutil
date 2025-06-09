@@ -30,7 +30,10 @@ sim_power_best_binomial(
 \item{conf.level}{Numeric. Confidence level for the empirical power estimate}
 }
 \value{
-an S3 object of class \link{empirical_power_result}
+An S3 object of class \code{empirical_power_result}, which contains
+the estimated empirical power and its confidence interval. The object can
+be printed, formatted, or further processed using associated S3 methods.
+See also \code{\link{empirical_power_result}}.
 }
 \description{
 Estimates the empirical power to correctly identify the best group as having
@@ -44,7 +47,6 @@ the proportion of simulations where the most promising group is selected best
 in all outcomes.
 }
 \examples{
-\dontrun{
 sim_power_best_binomial(
   noutcomes = 1,
   p1 = 0.7,
@@ -54,4 +56,6 @@ sim_power_best_binomial(
   nsim = 1000
 )
 }
+\seealso{
+\code{\link{empirical_power_result}}
 }

@@ -11,6 +11,9 @@
 
 \item{...}{Further arguments passed to or from other methods (ignored).}
 }
+\value{
+Invisibly returns the object passed in.
+}
 \description{
 Nicely formats the output of an object of class \code{empirical_power_result},
 showing the power estimate, confidence interval, and number of simulations.

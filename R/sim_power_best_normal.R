@@ -25,7 +25,6 @@
 #' @param conf.level Numeric. Confidence level for the empirical power estimate
 
 #' @examples
-#' \dontrun{
 #'   sim_power_best_normal(
 #'    noutcomes = 2,
 #'    sd = c(1, 1.2),
@@ -34,8 +33,11 @@
 #'    npergroup = c(30, 25, 25),
 #'    nsim = 1000
 #'   )
-#' }
-#'@return an S3 object of class \link{empirical_power_result}
+#' @return An S3 object of class \code{empirical_power_result}, which contains
+#'   the estimated empirical power and its confidence interval. The object can
+#'   be printed, formatted, or further processed using associated S3 methods.
+#'   See also \code{\link{empirical_power_result}}.
+#' @seealso \code{\link{empirical_power_result}}
 #'
 #' @importFrom stats rnorm binom.test
 #' @importFrom broom tidy

@@ -9,9 +9,13 @@
 #' @param subjects Integer or vector of integers. Sample size(s).
 #' @param power Numeric or vector of numerics. Desired power(s), between 0 and 1.
 #'
-#' @return An object of class \code{power_single_rate}, which is a matrix with
-#' columns \code{n} (sample size), \code{power} (requested power), and
-#' \code{proportion} (minimum detectable event rate).
+##'
+#' @return A matrix of class \code{power_single_rate} with columns:
+#' \describe{
+#'   \item{n}{Sample size}
+#'   \item{power}{Requested power}
+#'   \item{proportion}{Minimum detectable event rate to observe at least one event}
+#' }
 #'
 #' @examples
 #' power_single_rate(30, 0.9)
@@ -39,6 +43,14 @@ power_single_rate <- function(subjects, power) {
   rem
 }
 
+#' Format method for power_single_rate class
+#' 
+#' @return A character string with a human-readable summary of the detection
+#'         power or a markdown-style table, depending on the number of rows.
+#' @param x an R object of class power_single_rate  
+#' @param digits  a positive integer indicating how many significant digits are
+#'                to be used for numeric  x.
+#' @param ... further arguments passed to or from other methods                       
 #' @export
 format.power_single_rate <- function(x, digits = 3, ...) {
   stopifnot(inherits(x, "power_single_rate"))
@@ -95,6 +107,11 @@ format.power_single_rate <- function(x, digits = 3, ...) {
 }
 
 
+#' Print method for class power_single_rate
+#' 
+#' @param x an object of class power_single_rate
+#' @param ... further arguments passed to or from other methods
+#' @return Invisibly returns the object passed in.
 #' @export
 print.power_single_rate <- function(x, ...) {
   stopifnot(inherits(x, "power_single_rate"))

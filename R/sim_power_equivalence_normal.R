@@ -14,7 +14,6 @@
 #'
 #'
 #' @examples
-#' \dontrun{
 #' #Equivalence testing for three groups with log-scale outcome
 #' sim_power_equivalence_normal(
 #'   ngroups = 3,
@@ -25,7 +24,6 @@
 #'   nsim = 1000,
 #'   t_level = 0.95
 #' )
-#' }
 #' @param ngroups Integer. Number of groups to compare
 #' @param npergroup Integer. Number of observations per group.
 #' @param sd Numeric. Standard deviation of the outcome distribution (common across groups).
@@ -34,8 +32,12 @@
 #' @param nsim Integer. Number of simulations to perform.
 #' @param t_level Numeric. Confidence level used for the t-tests (e.g., 0.95 for 95% CI).
 #' @param conf.level Numeric. Confidence level for the empirical power estimate
-#'
-#' @return an S3 object of class \link{empirical_power_result}
+#' 
+#' @return An S3 object of class \code{empirical_power_result}, which contains
+#'   the estimated empirical power and its confidence interval. The object can
+#'   be printed, formatted, or further processed using associated S3 methods.
+#'   See also \code{\link{empirical_power_result}}.
+#' @seealso \code{\link{empirical_power_result}}
 #'
 #' @importFrom stats t.test
 #' @importFrom utils combn
@@ -60,19 +62,14 @@ sim_power_equivalence_normal <- function(
       yt$conf.int[1] >= llimit && yt$conf.int[2] < ulimit
     })
     
-    x <- combn(1:ngroups, 2, FUN = function(z) {
-      xt1 <- t.test(mat[,z[1]], mat[,z[2]], alternative = "greater", mu = llimit)
-      xt2 <- t.test(mat[,z[1]], mat[,z[2]], alternative = "less", mu = ulimit)
-      xt1$p.value < 0.025 && xt2$p.value < 0.025
-    })  
-    if(! all(y==x)){
-      print(y)
-      print(x)
-      save(mat, file="borrar.rda")
-      cat("---\n")
-      stop()
-    }
+    # The same as TOST ###
+    #x <- combn(1:ngroups, 2, FUN = function(z) {
+    #  xt1 <- t.test(mat[,z[1]], mat[,z[2]], alternative = "greater", mu = llimit)
+    #  xt2 <- t.test(mat[,z[1]], mat[,z[2]], alternative = "less", mu = ulimit)
+    #  xt1$p.value < 0.025 && xt2$p.value < 0.025
+    #})  
     
+  
     all(y)
   }, logical(1))
 

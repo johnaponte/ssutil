@@ -57,7 +57,6 @@ When rr > 1, rejection occurs if the lower limit is above the boundary.
 The \code{alpha} parameter is two-sided as it is used to estimate two-sided confidence intervals
 }
 \examples{
-\dontrun{
 sim_power_nbinom(
  n1 = 150, n2 = 150,
  ir1 = 0.55, tm = 1.7,
@@ -66,7 +65,6 @@ sim_power_nbinom(
  alpha = 0.05,
  nsim = 1000
 )
-}
 }
 \author{
 Chris Gast

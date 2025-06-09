@@ -30,7 +30,10 @@ sim_power_best_normal(
 \item{conf.level}{Numeric. Confidence level for the empirical power estimate}
 }
 \value{
-an S3 object of class \link{empirical_power_result}
+An S3 object of class \code{empirical_power_result}, which contains
+the estimated empirical power and its confidence interval. The object can
+be printed, formatted, or further processed using associated S3 methods.
+See also \code{\link{empirical_power_result}}.
 }
 \description{
 Estimates the empirical power to identify the most promising group as the best,
@@ -47,7 +50,6 @@ The number of subjects per group can be the same or specified per group. In eith
 the first group is assumed to be the most promising.
 }
 \examples{
-\dontrun{
   sim_power_best_normal(
    noutcomes = 2,
    sd = c(1, 1.2),
@@ -57,4 +59,6 @@ the first group is assumed to be the most promising.
    nsim = 1000
   )
 }
+\seealso{
+\code{\link{empirical_power_result}}
 }

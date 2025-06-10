@@ -16,6 +16,7 @@
 #' @param nsim Integer. Number of simulation iterations.
 #' @param conf.level Numeric. Confidence level for the empirical power estimate
 #' @examples
+#' \donttest{
 #' sim_power_nbinom(
 #'  n1 = 150, n2 = 150,
 #'  ir1 = 0.55, tm = 1.7,
@@ -24,7 +25,12 @@
 #'  alpha = 0.05,
 #'  nsim = 1000
 #' )
-#' @return an S3 object of class \link{empirical_power_result}
+#' }
+#' @return An S3 object of class \code{empirical_power_result}, which contains
+#'   the estimated empirical power and its confidence interval. The object can
+#'   be printed, formatted, or further processed using associated S3 methods.
+#'   See also \code{\link{empirical_power_result}}.
+#' @seealso \code{\link{empirical_power_result}}
 #'
 #' @note Uses the alternative parameterization of the negative binomial: \code{mu} is the mean,
 #' and \code{size = 1/dispersion}. In \code{glm.nb}, dispersion is estimated as \code{theta}.

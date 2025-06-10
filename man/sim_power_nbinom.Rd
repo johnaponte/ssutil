@@ -39,7 +39,10 @@ sim_power_nbinom(
 \item{conf.level}{Numeric. Confidence level for the empirical power estimate}
 }
 \value{
-an S3 object of class \link{empirical_power_result}
+An S3 object of class \code{empirical_power_result}, which contains
+the estimated empirical power and its confidence interval. The object can
+be printed, formatted, or further processed using associated S3 methods.
+See also \code{\link{empirical_power_result}}.
 }
 \description{
 Estimates empirical power to detect a relative risk either above or below a specified boundary,
@@ -57,6 +60,7 @@ When rr > 1, rejection occurs if the lower limit is above the boundary.
 The \code{alpha} parameter is two-sided as it is used to estimate two-sided confidence intervals
 }
 \examples{
+\donttest{
 sim_power_nbinom(
  n1 = 150, n2 = 150,
  ir1 = 0.55, tm = 1.7,
@@ -65,6 +69,10 @@ sim_power_nbinom(
  alpha = 0.05,
  nsim = 1000
 )
+}
+}
+\seealso{
+\code{\link{empirical_power_result}}
 }
 \author{
 Chris Gast

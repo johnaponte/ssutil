@@ -8,7 +8,7 @@ articles:
   negative_binomial: negative_binomial.html
   non_inferiority: non_inferiority.html
   power_single_rate: power_single_rate.html
-last_built: 2025-06-10T07:45Z
+last_built: 2025-06-15T14:25Z
 urls:
   reference: https://johnaponte.github.io/ssutil/reference
   article: https://johnaponte.github.io/ssutil/articles

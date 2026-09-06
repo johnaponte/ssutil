@@ -1,3 +1,13 @@
+# ssutil 1.1.0
+- Added the `power_events_rate()` function to compute the exact binomial
+  probability of observing at least a given number of events, across
+  combinations of sample sizes and risks.
+- Updated the "Power for rare events" vignette (formerly "Detectable Event
+  Rate for Safety Signal Detection") to cover `power_events_rate()` alongside
+  `power_single_rate()`.
+- Corrected several grammar, spelling, and terminology errors across the
+  package vignettes.
+
 # ssutil 1.0.0
 - CRAN submission
 

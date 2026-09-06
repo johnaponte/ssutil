@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Equivalence Testing for Normal Outcomes • ssutil</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Equivalence Testing for Normal Outcomes">
 </head>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ssutil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,11 +34,11 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/equivalence.html">Equivalence Testing for Normal Outcomes</a></li>
-    <li><a class="dropdown-item" href="../articles/iz_binomial.html">Selecting the best group using the Indifferent-Zone approach for binomial outcomes</a></li>
-    <li><a class="dropdown-item" href="../articles/iz_normal.html">Selecting the best group using the Indifferent-Zone approach for normal outcomes</a></li>
+    <li><a class="dropdown-item" href="../articles/iz_binomial.html">Selecting the best group using the Indifference-Zone approach for binomial outcomes</a></li>
+    <li><a class="dropdown-item" href="../articles/iz_normal.html">Selecting the best group using the Indifference-Zone approach for normal outcomes</a></li>
     <li><a class="dropdown-item" href="../articles/negative_binomial.html">Simulations for Negative Binomial outcomes</a></li>
     <li><a class="dropdown-item" href="../articles/non_inferiority.html">Simulations for Non-inferiority trials</a></li>
-    <li><a class="dropdown-item" href="../articles/power_single_rate.html">Detectable Event Rate for Safety Signal Detection: Using `power_single_rate`</a></li>
+    <li><a class="dropdown-item" href="../articles/power_rare_events.html">Power for rare events</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -63,7 +63,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Equivalence Testing for Normal Outcomes</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/johnaponte/ssutil/blob/v1.0.0/vignettes/equivalence.Rmd" class="external-link"><code>vignettes/equivalence.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/johnaponte/ssutil/blob/main/vignettes/equivalence.Rmd" class="external-link"><code>vignettes/equivalence.Rmd</code></a></small>
       <div class="d-none name"><code>equivalence.Rmd</code></div>
     </div>
 
@@ -87,16 +87,16 @@ in group means fall within user-specified equivalence limits.</p>
 <p>An evaluation is conducted to determine whether three manufacturing
 lots of a vaccine produce equivalent immune responses. The outcome is
 the antibody concentration measured on the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>10</mn></msub></mrow><annotation encoding="application/x-tex">log_{10}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mn>10</mn></msub><annotation encoding="application/x-tex">\log_{10}</annotation></semantics></math>
 scale, assumed to follow a normal distribution with a standard deviation
-of 0.4.<br>
-Equivalence is declared if the confidence intervals for the ratio of all
-pairwise comparisons fall entirely within the range [2/3, 3/2].</p>
+of 0.4. Equivalence is declared if the confidence intervals for the
+ratio of all pairwise comparisons fall entirely within the range [2/3,
+3/2].</p>
 <p>Since the analysis is conducted on the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>10</mn></msub></mrow><annotation encoding="application/x-tex">log_{10}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mn>10</mn></msub><annotation encoding="application/x-tex">\log_{10}</annotation></semantics></math>
 scale, the equivalence limits are transformed to <code>log10(2/3)</code>
 and <code>log10(3/2)</code>.</p>
-<p>A total of 1,000 trials is simulated with 172 subjects per group and
+<p>A total of 1,000 trials are simulated with 172 subjects per group and
 a 95% confidence level:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">12345</span><span class="op">)</span></span>
@@ -136,7 +136,7 @@ equivalence condition is approximately:
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

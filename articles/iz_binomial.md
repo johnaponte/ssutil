@@ -1,0 +1,195 @@
+# Selecting the best group using the Indifference-Zone approach for binomial outcomes
+
+``` r
+
+library(ssutil)
+```
+
+## Introduction
+
+The indifference-zone approach for binomial outcomes is a statistical
+method designed to select the group with the highest event probability
+while ensuring that this selection is made correctly at a specified
+confidence level. This approach assumes that the difference in event
+probability between the best group and the next-best group exceeds a
+specified threshold, called the “indifference zone”. This zone defines a
+margin of indifference, within which differences are considered
+negligible, allowing the decision process to focus only on differences
+that clearly exceed this margin.
+
+This package offers several functions to help with this design:
+
+[`power_best_binomial()`](https://johnaponte.github.io/ssutil/reference/power_best_binomial.md)
+calculates the exact probability of correctly selecting the best group
+given the event probability in the best group (`p1`), the pre-specified
+indifference-zone threshold (`dif`), the number of groups (`ngroups`),
+and the sample size per group (`npergroup`). This function is based on
+Sobel and Huyett (1957) under the least favorable configuration (i.e.,
+assuming all other groups have an event probability equal to the best
+group’s probability minus the indifference-zone threshold).
+
+[`ss_best_binomial()`](https://johnaponte.github.io/ssutil/reference/ss_best_binomial.md)
+estimates the required sample size per group to achieve a specified
+power for correctly selecting the best group, given the event
+probability in the best group (`p1`), the indifference-zone threshold
+(`dif`), and the number of groups (`ngroups`).
+
+[`sim_power_best_binomial()`](https://johnaponte.github.io/ssutil/reference/sim_power_best_binomial.md)
+estimates the empirical power (i.e., the proportion of simulated trials
+in which the best group is correctly identified) via Monte Carlo
+simulation. It supports multiple outcomes and can estimate the empirical
+power to select the true best group across all outcomes.
+
+[`sim_power_best_bin_rank()`](https://johnaponte.github.io/ssutil/reference/sim_power_best_bin_rank.md)
+is similar to
+[`sim_power_best_binomial()`](https://johnaponte.github.io/ssutil/reference/sim_power_best_binomial.md),
+but it defines the best group based on overall ranking across multiple
+outcomes rather than requiring top performance on every outcome.
+
+[`wcs_power_best_binomial()`](https://johnaponte.github.io/ssutil/reference/wcs_power_best_binomial.md)
+searches for the probability in the best group that leads to the lowest
+power given a pre-specified indifference-zone threshold (`dif`), the
+number of groups (`ngroups`), and the sample size per group
+(`npergroup`).
+
+## Examples with a single outcome
+
+1.  What is the probability of correctly selecting the best group in a
+    trial with three groups of 30 participants each? Assume the best
+    group has an event probability of 90% and the indifference-zone
+    threshold is 10%.
+
+``` r
+
+power_best_binomial(p1 = 0.9, dif = 0.1, ngroups = 3, npergroup = 30)
+#> [1] 0.7584432
+```
+
+2.  What is the sample size required per group to achieve 90% power for
+    correctly selecting the best group among three groups, assuming the
+    best group has an event probability of 90% and the indifference-zone
+    threshold is 10%.
+
+``` r
+
+ss_best_binomial(power = 0.9, p1 = 0.9, dif = 0.1, ngroups = 3)
+#> [1] 64
+```
+
+3.  Using simulations, what is the probability of correctly selecting
+    the best group in a trial with three groups of 30 participants each?
+    Assume the best group has an event probability of 90% and the
+    indifference-zone threshold is 10%.
+
+``` r
+
+set.seed(12345)
+sim_power_best_binomial(
+  noutcomes = 1,
+  p1 = 0.9,
+  dif = 0.1,
+  ngroups = 3,
+  npergroup = 30,
+  nsim = 1000
+)
+#> Empirical Power Result
+#> ----------------------- 
+#> Power:       0.7740
+#> 95% CI:      [0.7468, 0.7996]
+#> Simulations: 1000
+```
+
+4.  What is the lowest power in a study where the indifference-zone is
+    setup to 10%, there are 3 groups and 50 participants per group?
+
+``` r
+
+wcs_power_best_binomial(dif = 0.1, ngroups = 3, npergroup = 50)
+#> $p1
+#> [1] 0.5541703
+#> 
+#> $minimum_power
+#> [1] 0.7410576
+```
+
+## Examples using multiple outcomes
+
+The
+[`sim_power_best_binomial()`](https://johnaponte.github.io/ssutil/reference/sim_power_best_binomial.md)
+and
+[`sim_power_best_bin_rank()`](https://johnaponte.github.io/ssutil/reference/sim_power_best_bin_rank.md)
+allow simulating multiple outcomes. These functions differ in how they
+define the ‘best’ group.
+[`sim_power_best_binomial()`](https://johnaponte.github.io/ssutil/reference/sim_power_best_binomial.md)
+requires that the best group be the top performer for every outcome,
+whereas
+[`sim_power_best_bin_rank()`](https://johnaponte.github.io/ssutil/reference/sim_power_best_bin_rank.md)
+defines the best group based on overall ranking across outcomes. For
+example, a group might rank first for the first two outcomes but second
+for the third, yet still achieve the best overall rank among all groups.
+
+This ranking approach supports weighting of outcomes, allowing greater
+importance to be assigned to some outcomes over others. For instance, if
+performance on the first two outcomes is twice as important as the
+third, weights such as `c(0.4, 0.4, 0.2)` can be specified. Weights are
+scaled internally to sum to 1.
+
+The functions are flexible and allow specification of, for each outcome,
+the event probabilities, indifference-zone thresholds, and group sample
+sizes.
+
+1.  What is the probability that the best group is correctly identified
+    as having the highest seroconversion rate across five antigens in a
+    trial with three groups of 30 participants each? Assume the best
+    group’s seroconversion rate is 80% and the indifference-zone
+    threshold is 10% for all outcomes.
+
+``` r
+
+set.seed(12345)
+sim_power_best_binomial(
+  noutcomes = 5,
+  p1 = 0.8,
+  dif = 0.10,
+  ngroups = 3,
+  npergroup = 30,
+  nsim = 1000
+)
+#> Empirical Power Result
+#> ----------------------- 
+#> Power:       0.1670
+#> 95% CI:      [0.1444, 0.1916]
+#> Simulations: 1000
+```
+
+2.  Same setup, but define the best group based on overall ranking
+    across the five outcomes with equal weights.
+
+``` r
+
+set.seed(12345)
+sim_power_best_bin_rank(
+  noutcomes = 5,
+  p1 = 0.8,
+  dif = 0.10,
+  weights = 1,
+  ngroups = 3,
+  npergroup = 30,
+  nsim = 1000
+)
+#> Empirical Power Result
+#> ----------------------- 
+#> Power:       0.9190
+#> 95% CI:      [0.9003, 0.9352]
+#> Simulations: 1000
+```
+
+## References
+
+Sobel, M., & Huyett, M. J. (1957). Selecting the Best One of Several
+Binomial Populations. Bell System Technical Journal, 36(2), 537-576.
+<https://doi.org/10.1002/j.1538-7305.1957.tb02411.x>
+
+Bechhofer, R. E., Santner, T. J., & Goldsman, D. M. (1995). Design and
+analysis of experiments for statistical selection, screening, and
+multiple comparisons. Wiley. ISBN 978-0-471-57427-9

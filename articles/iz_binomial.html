@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Selecting the best group using the Indifferent-Zone approach for binomial outcomes • ssutil</title>
+<title>Selecting the best group using the Indifference-Zone approach for binomial outcomes • ssutil</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Selecting the best group using the Indifferent-Zone approach for binomial outcomes">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Selecting the best group using the Indifference-Zone approach for binomial outcomes">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ssutil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,11 +34,11 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/equivalence.html">Equivalence Testing for Normal Outcomes</a></li>
-    <li><a class="dropdown-item" href="../articles/iz_binomial.html">Selecting the best group using the Indifferent-Zone approach for binomial outcomes</a></li>
-    <li><a class="dropdown-item" href="../articles/iz_normal.html">Selecting the best group using the Indifferent-Zone approach for normal outcomes</a></li>
+    <li><a class="dropdown-item" href="../articles/iz_binomial.html">Selecting the best group using the Indifference-Zone approach for binomial outcomes</a></li>
+    <li><a class="dropdown-item" href="../articles/iz_normal.html">Selecting the best group using the Indifference-Zone approach for normal outcomes</a></li>
     <li><a class="dropdown-item" href="../articles/negative_binomial.html">Simulations for Negative Binomial outcomes</a></li>
     <li><a class="dropdown-item" href="../articles/non_inferiority.html">Simulations for Non-inferiority trials</a></li>
-    <li><a class="dropdown-item" href="../articles/power_single_rate.html">Detectable Event Rate for Safety Signal Detection: Using `power_single_rate`</a></li>
+    <li><a class="dropdown-item" href="../articles/power_rare_events.html">Power for rare events</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -60,10 +60,10 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Selecting the best group using the Indifferent-Zone approach for binomial outcomes</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Selecting the best group using the Indifference-Zone approach for binomial outcomes</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/johnaponte/ssutil/blob/v1.0.0/vignettes/iz_binomial.Rmd" class="external-link"><code>vignettes/iz_binomial.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/johnaponte/ssutil/blob/main/vignettes/iz_binomial.Rmd" class="external-link"><code>vignettes/iz_binomial.Rmd</code></a></small>
       <div class="d-none name"><code>iz_binomial.Rmd</code></div>
     </div>
 
@@ -74,29 +74,29 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>The indifferent-zone approach for binomial outcomes is a statistical
+<p>The indifference-zone approach for binomial outcomes is a statistical
 method designed to select the group with the highest event probability
 while ensuring that this selection is made correctly at a specified
 confidence level. This approach assumes that the difference in event
 probability between the best group and the next-best group exceeds a
-specified threshold, called the “indifferent zone”. This zone defines a
+specified threshold, called the “indifference zone”. This zone defines a
 margin of indifference, within which differences are considered
 negligible, allowing the decision process to focus only on differences
 that clearly exceed this margin.</p>
 <p>This package offers several functions to help with this design:</p>
 <p><code><a href="../reference/power_best_binomial.html">power_best_binomial()</a></code> calculates the exact probability
 of correctly selecting the best group given the event probability in the
-best group (<code>p1</code>), the pre-specified indifferent-zone
+best group (<code>p1</code>), the pre-specified indifference-zone
 threshold (<code>dif</code>), the number of groups
 (<code>ngroups</code>), and the sample size per group
 (<code>npergroup</code>). This function is based on Sobel and Huyett
 (1957) under the least favorable configuration (i.e., assuming all other
 groups have an event probability equal to the best group’s probability
-minus the indifferent-zone threshold).</p>
+minus the indifference-zone threshold).</p>
 <p><code><a href="../reference/ss_best_binomial.html">ss_best_binomial()</a></code> estimates the required sample size
 per group to achieve a specified power for correctly selecting the best
 group, given the event probability in the best group (<code>p1</code>),
-the indifferent-zone threshold (<code>dif</code>), and the number of
+the indifference-zone threshold (<code>dif</code>), and the number of
 groups (<code>ngroups</code>).</p>
 <p><code><a href="../reference/sim_power_best_binomial.html">sim_power_best_binomial()</a></code> estimates the empirical power
 (i.e., the proportion of simulated trials in which the best group is
@@ -109,9 +109,9 @@ based on overall ranking across multiple outcomes rather than requiring
 top performance on every outcome.</p>
 <p><code><a href="../reference/wcs_power_best_binomial.html">wcs_power_best_binomial()</a></code> searches for the probability
 in the best group that leads to the lowest power given a pre-specified
-indifferent-zone threshold (<code>dif</code>), the number of groups
+indifference-zone threshold (<code>dif</code>), the number of groups
 (<code>ngroups</code>), and the sample size per group
-(<code>npergroup</code>)</p>
+(<code>npergroup</code>).</p>
 </div>
 <div class="section level2">
 <h2 id="examples-with-a-single-outcome">Examples with a single outcome<a class="anchor" aria-label="anchor" href="#examples-with-a-single-outcome"></a>
@@ -119,7 +119,7 @@ indifferent-zone threshold (<code>dif</code>), the number of groups
 <ol style="list-style-type: decimal">
 <li>What is the probability of correctly selecting the best group in a
 trial with three groups of 30 participants each? Assume the best group
-has an event probability of 90% and the indifferent-zone threshold is
+has an event probability of 90% and the indifference-zone threshold is
 10%.</li>
 </ol>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -128,8 +128,8 @@ has an event probability of 90% and the indifferent-zone threshold is
 <ol start="2" style="list-style-type: decimal">
 <li>What is the sample size required per group to achieve 90% power for
 correctly selecting the best group among three groups, assuming the best
-group has an event probability of 90% and the indifferent-zone threshold
-is 10%.</li>
+group has an event probability of 90% and the indifference-zone
+threshold is 10%.</li>
 </ol>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ss_best_binomial.html">ss_best_binomial</a></span><span class="op">(</span>power <span class="op">=</span> <span class="fl">0.9</span>, p1 <span class="op">=</span> <span class="fl">0.9</span>, dif <span class="op">=</span> <span class="fl">0.1</span>, ngroups <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
@@ -138,7 +138,7 @@ is 10%.</li>
 <li>Using simulations, what is the probability of correctly selecting
 the best group in a trial with three groups of 30 participants each?
 Assume the best group has an event probability of 90% and the
-indifferent-zone threshold is 10%.</li>
+indifference-zone threshold is 10%.</li>
 </ol>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">12345</span><span class="op">)</span></span>
@@ -183,16 +183,16 @@ the best overall rank among all groups.</p>
 greater importance to be assigned to some outcomes over others. For
 instance, if performance on the first two outcomes is twice as important
 as the third, weights such as <code>c(0.4, 0.4, 0.2)</code> can be
-specified. Weights are scaled internally to sum 1.</p>
+specified. Weights are scaled internally to sum to 1.</p>
 <p>The functions are flexible and allow specification of, for each
-outcome, the event probabilities, indifferent-zone thresholds, and group
-sample sizes.</p>
+outcome, the event probabilities, indifference-zone thresholds, and
+group sample sizes.</p>
 <ol style="list-style-type: decimal">
 <li>What is the probability that the best group is correctly identified
 as having the highest seroconversion rate across five antigens in a
 trial with three groups of 30 participants each? Assume the best group’s
-seroconversion rate is 80% and the indifferent-zone threshold is 10% for
-all outcomes.</li>
+seroconversion rate is 80% and the indifference-zone threshold is 10%
+for all outcomes.</li>
 </ol>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">12345</span><span class="op">)</span></span>
@@ -251,7 +251,7 @@ and multiple comparisons. Wiley. ISBN 978-0-471-57427-9</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

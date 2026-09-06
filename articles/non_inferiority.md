@@ -1,0 +1,58 @@
+# Simulations for Non-inferiority trials
+
+## Introduction
+
+Non-inferiority tests are used in clinical trials when the objective is
+to demonstrate that a new treatment is not significantly worse than a
+reference treatment by more than a pre-specified margin.
+
+In designs involving multiple outcomes, it may be required that some
+outcomes meet strict non-inferiority criteria (e.g., the primary
+outcomes) while others can meet more flexible conditions (e.g., at least
+two out of three secondary outcomes).
+
+This vignette shows how to use the
+[`sim_power_ni_normal()`](https://johnaponte.github.io/ssutil/reference/sim_power_ni_normal.md)
+function from the **ssutil** package to estimate power in such a design.
+
+## Example
+
+What is the empirical power of a trial that wants to evaluate
+non-inferiority of the immune response for a vaccine against 7
+serotypes? Non-inferiority is achieved if the geometric mean ratio
+between the candidate vaccine and the reference is greater than 0.5 for
+the first two antigens, and for three of the other five.
+
+This example simulates 1000 trials with 125 participants per group, 7
+independent outcomes, a standard deviation of 0.8 on the log10 scale for
+all outcomes, and a common non-inferiority margin equivalent to
+log10(2/3). Non-inferiority is required in the first two outcomes, and
+in at least three of the remaining five.
+
+``` r
+
+library(ssutil)
+set.seed(123)
+
+res <- sim_power_ni_normal(
+  nsim = 1000,
+  npergroup = 125,
+  ntest = 7,
+  ni_limit = log10(2/3),
+  test_req = 2,
+  test_opt = 3,
+  sd = 0.8,
+  corr = 0,
+  t_level = 0.05
+)
+
+res
+#> Empirical Power Result
+#> ----------------------- 
+#> Power:       0.9120
+#> 95% CI:      [0.8927, 0.9288]
+#> Simulations: 1000
+```
+
+The result shows the proportion of simulations in which the full
+non-inferiority rule was satisfied.

@@ -37,10 +37,11 @@ A matrix of class `power_events_rate` with columns:
 
   Per-subject event probability
 
-- ≥e:
+- \>= e:
 
-  One column per threshold in `e`, giving P(X \>= e) for X ~ Binomial(N,
-  Risk)
+  One column per threshold in `e`, named using the "greater than or
+  equal to" symbol followed by the threshold value, giving P(X \>= e)
+  for X ~ Binomial(N, Risk)
 
 ## Examples
 

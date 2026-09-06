@@ -8,7 +8,7 @@ articles:
   negative_binomial: negative_binomial.html
   non_inferiority: non_inferiority.html
   power_rare_events: power_rare_events.html
-last_built: 2026-09-06T16:42Z
+last_built: 2026-09-06T20:56Z
 urls:
   reference: https://johnaponte.github.io/ssutil/reference
   article: https://johnaponte.github.io/ssutil/articles

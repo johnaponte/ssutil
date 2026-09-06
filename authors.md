@@ -10,7 +10,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/johnaponte/ssutil/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/johnaponte/ssutil/blob/v1.1.0/DESCRIPTION)
 
 Aponte J (2026). *ssutil: Sample Size Calculation Tools*. R package
 version 1.1.0, <https://johnaponte.github.io/ssutil/>.

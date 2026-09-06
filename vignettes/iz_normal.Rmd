@@ -4,7 +4,7 @@ output:
   # word_document: default
   rmarkdown::html_vignette: default
 vignette: >
-  %\VignetteIndexEntry{Indifference-Zone approach for normal outcomes}
+  %\VignetteIndexEntry{Selecting the best group using the Indifference-Zone approach for normal outcomes}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

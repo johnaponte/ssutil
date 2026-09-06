@@ -2,7 +2,7 @@
 title: "Equivalence Testing for Normal Outcomes"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Equivalence for Normal Outcomes}
+  %\VignetteIndexEntry{Equivalence Testing for Normal Outcomes}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

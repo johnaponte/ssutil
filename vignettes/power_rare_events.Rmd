@@ -56,7 +56,8 @@ power_single_rate(30, c(0.95, 0.90, 0.8))
 
 ### Example 3: 500 and 1500 Subjects
 
-Larger safety databases are common in post-marketing surveillance. With 500 and 1500 subjects, the minimum detectable event rate for 95% power is:
+Larger safety databases are common more advanced phases of clinical development.
+With 500 and 1500 subjects, the minimum detectable event rate for 95% power is:
 
 ```{r example3}
 power_single_rate(c(500, 1500), 0.95)

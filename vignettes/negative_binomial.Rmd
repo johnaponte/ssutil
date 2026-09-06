@@ -2,7 +2,7 @@
 title: "Simulations for Negative Binomial outcomes"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Negative Binomial outcomes}
+  %\VignetteIndexEntry{Simulations for Negative Binomial outcomes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

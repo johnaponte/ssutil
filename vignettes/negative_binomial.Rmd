@@ -23,8 +23,8 @@ library(ssutil)
 ## Introduction
 
 The `sim_power_nbinom` function is used to estimate the empirical power of a 
-negative binomial regression model. This method is useful when outcomes consist 
-of over dispersed count data, and the objective is to test whether the relative 
+negative binomial regression model. This method is useful when outcomes consist
+of overdispersed count data, and the objective is to test whether the relative
 risk (RR) between two groups differs significantly from a null boundary.
 
 Data are simulated under a negative binomial distribution, a model is fit 
@@ -36,10 +36,11 @@ appropriate directional test logic.
 
 ## Example
 
-What is the empirical power using negative binomial regression to detect efficacy of
-vaccine with a 95% lower vaccine efficacy boundary above 30% assuming the true vaccine efficacy is 60%?
-if the sample size is 500 per group average follow-up of 1 year, the event rate is 0.25 
-episode per person-year in the control group, and the dispersion parameter is 2?
+What is the empirical power, using negative binomial regression, to detect a
+vaccine efficacy of 60% when the lower bound of a 95% confidence interval must
+exceed a boundary of 30%, if the sample size is 500 per group, the average
+follow-up is 1 year, the event rate in the control group is 0.2 episodes per
+person-year, and the dispersion parameter is 2?
 
 ```{r example-sim-power-vaccine, message=FALSE}
 library(ssutil)

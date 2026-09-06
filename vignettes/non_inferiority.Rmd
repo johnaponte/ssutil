@@ -63,7 +63,3 @@ res
 
 The result shows the proportion of simulations in which the full
 non-inferiority rule was satisfied.
-
-```{r setup}
-library(ssutil)
-```

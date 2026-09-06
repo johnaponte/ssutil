@@ -1,10 +1,10 @@
 ---
-title: "Selecting the best group using the Indifferent-Zone approach for binomial outcomes"
+title: "Selecting the best group using the Indifference-Zone approach for binomial outcomes"
 output:
   # word_document: default
   rmarkdown::html_vignette: default
 vignette: >
-  %\VignetteIndexEntry{Indifferent-Zone approach for binomial outcomes}
+  %\VignetteIndexEntry{Indifference-Zone approach for binomial outcomes}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -25,12 +25,12 @@ library(ssutil)
 
 ## Introduction
 
-The indifferent-zone approach for binomial outcomes is a statistical method
+The indifference-zone approach for binomial outcomes is a statistical method
 designed to select the group with the highest event probability while ensuring
 that this selection is made correctly at a specified confidence level. This
 approach assumes that the difference in event probability between the best
 group and the next-best group exceeds a specified threshold, called the
-"indifferent zone". This zone defines a margin of indifference, within which
+"indifference zone". This zone defines a margin of indifference, within which
 differences are considered negligible, allowing the decision process to focus
 only on differences that clearly exceed this margin. 
 
@@ -38,15 +38,15 @@ This package offers several functions to help with this design:
 
 `power_best_binomial()` calculates the exact probability of correctly selecting
 the best group given the event probability in the best group (`p1`), the
-pre-specified indifferent-zone threshold (`dif`), the number of groups
+pre-specified indifference-zone threshold (`dif`), the number of groups
 (`ngroups`), and the sample size per group (`npergroup`). This function is
 based on Sobel and Huyett (1957) under the least favorable configuration
 (i.e., assuming all other groups have an event probability equal to the best
-group's probability minus the indifferent-zone threshold).
+group's probability minus the indifference-zone threshold).
 
 `ss_best_binomial()` estimates the required sample size per group to achieve a
 specified power for correctly selecting the best group, given the event
-probability in the best group (`p1`), the indifferent-zone threshold (`dif`),
+probability in the best group (`p1`), the indifference-zone threshold (`dif`),
 and the number of groups (`ngroups`).
 
 `sim_power_best_binomial()` estimates the empirical power (i.e., the proportion
@@ -59,15 +59,15 @@ defines the best group based on overall ranking across multiple outcomes rather
 than requiring top performance on every outcome.
 
 `wcs_power_best_binomial()` searches for the probability in the best group that
-leads to the lowest power given a pre-specified indifferent-zone threshold 
+leads to the lowest power given a pre-specified indifference-zone threshold 
 (`dif`), the number of groups (`ngroups`), and the sample size per group 
-(`npergroup`)
+(`npergroup`).
 
 ## Examples with a single outcome
 
 1. What is the probability of correctly selecting the best group in a trial with
    three groups of 30 participants each? Assume the best group has an event
-   probability of 90% and the indifferent-zone threshold is 10%.
+   probability of 90% and the indifference-zone threshold is 10%.
 
 ```{r}
 power_best_binomial(p1 = 0.9, dif = 0.1, ngroups = 3, npergroup = 30)
@@ -75,7 +75,7 @@ power_best_binomial(p1 = 0.9, dif = 0.1, ngroups = 3, npergroup = 30)
 
 2. What is the sample size required per group to achieve 90% power for
    correctly selecting the best group among three groups, assuming the best
-   group has an event probability of 90% and the indifferent-zone threshold is
+   group has an event probability of 90% and the indifference-zone threshold is
    10%.
 
 ```{r}
@@ -84,7 +84,7 @@ ss_best_binomial(power = 0.9, p1 = 0.9, dif = 0.1, ngroups = 3)
 
 3. Using simulations, what is the probability of correctly selecting the best
    group in a trial with three groups of 30 participants each? Assume the best
-   group has an event probability of 90% and the indifferent-zone threshold is
+   group has an event probability of 90% and the indifference-zone threshold is
    10%.
 
 ```{r}
@@ -121,15 +121,15 @@ overall rank among all groups.
 This ranking approach supports weighting of outcomes, allowing greater importance
 to be assigned to some outcomes over others. For instance, if performance
 on the first two outcomes is twice as important as the third, weights such as
-`c(0.4, 0.4, 0.2)` can be specified. Weights are scaled internally to sum 1.
+`c(0.4, 0.4, 0.2)` can be specified. Weights are scaled internally to sum to 1.
 
 The functions are flexible and allow specification of, for each outcome, the event
-probabilities, indifferent-zone thresholds, and group sample sizes.
+probabilities, indifference-zone thresholds, and group sample sizes.
 
 1. What is the probability that the best group is correctly identified as
    having the highest seroconversion rate across five antigens in a trial with
    three groups of 30 participants each? Assume the best group's seroconversion
-   rate is 80% and the indifferent-zone threshold is 10% for all outcomes.
+   rate is 80% and the indifference-zone threshold is 10% for all outcomes.
 
 ```{r}
 set.seed(12345)

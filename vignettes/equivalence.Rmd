@@ -33,16 +33,16 @@ in group means fall within user-specified equivalence limits.
 ## Example: Equivalence Among Vaccine Lots
 
 An evaluation is conducted to determine whether three manufacturing lots of a 
-vaccine produce equivalent immune responses. The outcome is the antibody 
-concentration measured on the $log_{10}$  scale, assumed to follow a normal 
-distribution with a standard deviation of 0.4.  
+vaccine produce equivalent immune responses. The outcome is the antibody
+concentration measured on the $\log_{10}$ scale, assumed to follow a normal
+distribution with a standard deviation of 0.4.
 Equivalence is declared if the confidence intervals for the ratio of all 
 pairwise comparisons fall entirely within the range [2/3, 3/2].
 
-Since the analysis is conducted on the $log_{10}$ scale, the equivalence limits
+Since the analysis is conducted on the $\log_{10}$ scale, the equivalence limits
 are transformed to `log10(2/3)` and `log10(3/2)`.
 
-A total of 1,000 trials is simulated with 172 subjects per group and a 95% 
+A total of 1,000 trials are simulated with 172 subjects per group and a 95%
 confidence level:
 
 ```{r equivalence-example}
@@ -64,6 +64,6 @@ satisfy the equivalence criterion.
 A power calculation in nQuery® shows that a Two One-Sided Equivalence Test (TOST) 
 for a two-group design, with an alpha level of 0.025, 172 participants per group, 
 a standard deviation of 0.4, and equivalence limits of `log10(2/3)` and 
-`log10(3/2)`, has a power of 96.98%.  When extended to three comparisons, 
-assuming independence, the joint probability  of all three satisfying the
-equivalence condition is approximately:  $96.98\%^3 = 91.21\%$.
+`log10(3/2)`, has a power of 96.98%. When extended to three comparisons,
+assuming independence, the joint probability of all three satisfying the
+equivalence condition is approximately: $96.98\%^3 = 91.21\%$.

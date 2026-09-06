@@ -32,3 +32,5 @@ inst/doc
 **/.DS_Store
 docs
 pkgdown
+CRAN-SUBMISSION
+cran-comments.md

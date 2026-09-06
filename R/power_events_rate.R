@@ -13,8 +13,9 @@
 #' \describe{
 #'   \item{N}{Sample size}
 #'   \item{Risk}{Per-subject event probability}
-#'   \item{≥e}{One column per threshold in \code{e}, giving
-#'     P(X >= e) for X ~ Binomial(N, Risk)}
+#'   \item{>= e}{One column per threshold in \code{e}, named using the
+#'     "greater than or equal to" symbol followed by the threshold value,
+#'     giving P(X >= e) for X ~ Binomial(N, Risk)}
 #' }
 #'
 #' @examples

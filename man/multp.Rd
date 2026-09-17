@@ -2,9 +2,9 @@
 % Please edit documentation in R/multz.R
 \name{multp}
 \alias{multp}
-\title{Calculate the Multivariate Normal Probability}
+\title{Multivariate Normal Equicoordinate Cumulative Distribution Function}
 \usage{
-multp(q, k, rho, seed = NULL)
+multp(q, k, rho, lower.tail = TRUE, seed = NULL)
 }
 \arguments{
 \item{q}{Numeric. Quantile of the distribution.}
@@ -15,15 +15,20 @@ Must be >= 1.}
 \item{rho}{Numeric. Common correlation coefficient between variables (typically
 between 0 and 1).}
 
+\item{lower.tail}{Logical. If \code{TRUE} (default), probability is
+\eqn{P(X \le q)}; if \code{FALSE}, \eqn{P(X > q)}. Mirrors \code{\link{pnorm}}.}
+
 \item{seed}{Optional. An object specifying if and how the random number generator
 should be initialized. Passed to \code{\link[mvtnorm]{pmvnorm}}.}
 }
 \value{
-Numeric. The multivariate probability
+Numeric. The joint cumulative probability.
 }
 \description{
-Computes the multivariate normal probabilities with arbitrary correlation matrices
-It is the inverse of the \code{multz} function
+Computes the joint CDF for a multivariate standard normal distribution
+with unit variances and a common correlation coefficient \code{rho}.
+It is the exact functional inverse of \code{multz}:
+\code{multp(multz(q, k, rho), k, rho) == q}.
 }
 \examples{
 q <- 1.3      

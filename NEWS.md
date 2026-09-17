@@ -20,6 +20,14 @@
   no longer restricted to a true difference of 0 between groups, allowing
   sensitivity evaluation when the experimental group is truly slightly worse
   or better than control
+- Fixed `prophr()` to accept vector inputs for `p0`/`hr` without an "condition
+  has length > 1" error
+- Corrected documentation: `sim_power_best_bin_rank()` selects the group with
+  the *highest* total rank as best (roxygen said "lowest"); `power_best_normal()`
+  returns a probability, not an integer sample size; `sim_power_ni_normal()`'s
+  and `sim_power_equivalence_normal()`'s `t_level` examples/docs clarified
+- Removed dead/superseded code and a missing-comma typo in `sim_power_nbinom()`'s
+  example
 
 
 # ssutil 1.1.0

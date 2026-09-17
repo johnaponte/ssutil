@@ -31,8 +31,13 @@
 #' @param ulimit Numeric. Upper equivalence limit.
 #' @param nsim Integer. Number of simulations to perform.
 #' @param t_level Numeric. Confidence level used for the t-tests (e.g., 0.95 for 95% CI).
+#'   Equivalence is assessed via a two-sided \code{t_level} CI, which is equivalent to two
+#'   one-sided tests (TOST) each at a one-sided alpha of \code{(1 - t_level) / 2}. The
+#'   default \code{t_level = 0.95} therefore implements TOST at a one-sided alpha of 0.025;
+#'   for the more common bioequivalence convention of one-sided alpha = 0.05 (e.g. FDA/EMA
+#'   guidance), use \code{t_level = 0.90} instead.
 #' @param conf.level Numeric. Confidence level for the empirical power estimate
-#' 
+#'
 #' @return An S3 object of class \code{empirical_power_result}, which contains
 #'   the estimated empirical power and its confidence interval. The object can
 #'   be printed, formatted, or further processed using associated S3 methods.

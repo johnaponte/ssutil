@@ -88,7 +88,7 @@ sim_power_ni_normal(
   test_opt = 3,
   sd = 0.4,
   corr = 0,
-  t_level = 0.05
+  t_level = 0.95
 )
 }
 \seealso{

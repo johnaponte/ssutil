@@ -8,17 +8,24 @@
 #' based on binomial outcomes, via simulation.
 #'
 #' Each outcome is assumed to follow an independent binomial distribution. The
-#' best group is defined as having a probability at least `dif` higher than the
-#' other groups. The function sums weighted ranks across multiple outcomes to
-#' determine the top group.
+#' first group is always the true best group: it is simulated with event
+#' probability `p1`, while the other `ngroups - 1` groups share probability
+#' `p1 - dif`. The function sums weighted ranks across multiple outcomes to
+#' determine the top group, and estimates the empirical power to correctly
+#' identify the first group as the best.
 #'
 #' If multiple outcomes are defined, weights can be applied to prioritize some
-#' outcomes over others. Weights are automatically scaled to sum 1. The group 
-#' with the lowest total rank is considered the best.
+#' outcomes over others. Weights are automatically scaled to sum 1. For each
+#' outcome, groups are ranked from lowest (1) to highest (`ngroups`) observed
+#' proportion; the group with the highest total weighted rank across outcomes
+#' is considered the best. Power is the proportion of simulations in which
+#' that group is the first group.
 #'
 #' @param noutcomes Integer. Number of outcomes to evaluate.
-#' @param p1 Numeric. Event probability in the best group (scalar or vector of length `noutcomes`).
-#' @param dif Numeric. Difference between the best group and the rest (scalar or vector of length `noutcomes`).
+#' @param p1 Numeric. Event probability in the first group, i.e. the true best
+#'   group (scalar or vector of length `noutcomes`).
+#' @param dif Numeric. Amount by which the first (true best) group's probability
+#'   exceeds the other `ngroups - 1` groups (scalar or vector of length `noutcomes`).
 #' @param weights Numeric vector. Weights for each outcome. If scalar, applied equally.
 #' @param ngroups Integer. Number of groups.
 #' @param npergroup Integer or vector. Sample size per group.

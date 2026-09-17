@@ -4,10 +4,10 @@
 \alias{multz}
 \title{Calculate the Upper Equicoordinate Point of a Multivariate Normal Distribution}
 \usage{
-multz(alpha, k, rho, seed = NULL)
+multz(p, k, rho, lower.tail = TRUE, seed = NULL)
 }
 \arguments{
-\item{alpha}{Numeric. Significance level (e.g., 0.05 for a 95\% confidence level).}
+\item{p}{Numeric. Cumulative probability (e.g., 0.95 for the 95th}
 
 \item{k}{Integer. Number of variables in the multivariate normal distribution.
 Must be >= 1.}
@@ -15,24 +15,25 @@ Must be >= 1.}
 \item{rho}{Numeric. Common correlation coefficient between variables (typically
 between 0 and 1).}
 
+\item{lower.tail}{Logical. If \code{TRUE} (default), probability is
+\eqn{P(X \le z)}; if \code{FALSE}, \eqn{P(X > z)}}
+
 \item{seed}{Optional. An object specifying if and how the random number generator
 should be initialized. Passed to \code{\link[mvtnorm]{qmvnorm}}.}
 }
 \value{
-Numeric. The upper equicoordinate point \eqn{z} such that the joint
-probability of all variables being less than or equal to \eqn{z} is
-\eqn{1 - \alpha}.
+Numeric. The equicoordinate quantile \eqn{z}
 }
 \description{
 Computes the upper equicoordinate quantile for a multivariate standard normal
 distribution with unit variances and a common correlation coefficient \code{rho}.
 That is, it returns the value \eqn{z} such that the joint probability
-\eqn{P(X_1 \le z, \ldots, X_n \le z) = 1 - \alpha}.
+\eqn{P(X_1 \le z, \ldots, X_n \le z) = p}.
 }
 \examples{
-alpha <- 0.1  # Significance level (10\%)
-k <- 3        # Number of variables
-rho <- 0.5    # Common correlation coefficient
-multz(alpha, k, rho)
+p <- 0.9    # Significance level (10\%)
+k <- 3      # Number of variables
+rho <- 0.5  # Common correlation coefficient
+multz(p, k, rho)
 
 }

@@ -18,7 +18,7 @@ power_best_normal(dif, sd, ngroups, npergroup, seed = NULL)
 \item{seed}{Optional. Integer seed to use in the internal call to \code{multp()}.}
 }
 \value{
-Integer. Sample size required per group to achieve the specified power.
+Numeric. Probability of correctly selecting the best group.
 }
 \description{
 Estimate the probability of correctly select the best group among
@@ -26,7 +26,7 @@ Estimate the probability of correctly select the best group among
 is at least \code{dif}(the Indifferent-Zone), and the standard deviation is \code{sd}
 }
 \note{
-The function uses the quantile function \code{multp()}, which computes critical values
+The function uses \code{multp()}, which computes the joint cumulative distribution
 for the selection procedure. This implementation assumes equal variances and independent samples.
 }
 \examples{

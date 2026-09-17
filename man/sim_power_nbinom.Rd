@@ -13,6 +13,7 @@ sim_power_nbinom(
   boundary,
   dispersion,
   alpha,
+  direction = c("less", "greater"),
   nsim,
   conf.level = 0.95
 )
@@ -33,6 +34,8 @@ sim_power_nbinom(
 \item{dispersion}{Numeric. Dispersion parameter (\eqn{\phi}) for the negative binomial distribution.}
 
 \item{alpha}{Numeric. Type I error rate (two-sided).}
+
+\item{direction}{= Direction of the alternative hypothesis}
 
 \item{nsim}{Integer. Number of simulation iterations.}
 
@@ -58,6 +61,12 @@ rejection occurs if the upper limit of the confidence interval is below the boun
 When rr > 1, rejection occurs if the lower limit is above the boundary.
 
 The \code{alpha} parameter is two-sided as it is used to estimate two-sided confidence intervals
+
+Direction of the alternative hypothesis:
+"less" rejects when the CI upper bound of the simulation is below \code{boundary}
+(e.g. non-inferiority, RR bounded above); "greater" rejects when the
+CI lower bound of the simulation is above \code{boundary} (RR bounded below).
+Must be specified explicitly.
 }
 \examples{
 \donttest{
@@ -67,6 +76,7 @@ sim_power_nbinom(
  rr = 0.6, boundary = 1,
  dispersion = 2,
  alpha = 0.05,
+ direction = "less",
  nsim = 1000
 )
 }

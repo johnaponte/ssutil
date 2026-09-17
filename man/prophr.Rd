@@ -7,9 +7,9 @@
 prophr(p0, hr)
 }
 \arguments{
-\item{p0}{Numeric scalar. Probability of an event in the control group (between 0 and 1).}
+\item{p0}{Numeric scalar or vector. Probability of an event in the control group (between 0 and 1).}
 
-\item{hr}{Numeric scalar. Hazard ratio (must be > 0).}
+\item{hr}{Numeric scalar or vector. Hazard ratio (must be > 0). Must be the same length as \code{p0}.}
 }
 \value{
 Numeric. The probability of an event in the experimental group.

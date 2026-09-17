@@ -7,8 +7,8 @@
 #' This is useful for sample size calculations, for example in PASS (TM), which does
 #' not automatically adjust the event rate for the experimental group.
 #'
-#' @param p0 Numeric scalar. Probability of an event in the control group (between 0 and 1).
-#' @param hr Numeric scalar. Hazard ratio (must be > 0).
+#' @param p0 Numeric scalar or vector. Probability of an event in the control group (between 0 and 1).
+#' @param hr Numeric scalar or vector. Hazard ratio (must be > 0). Must be the same length as \code{p0}.
 #'
 #' @return Numeric. The probability of an event in the experimental group.
 #'
@@ -23,9 +23,9 @@ prophr <- function(p0, hr) {
     stop("hr must be numeric value.")
   if (length(p0) != length(hr))
     stop("p0 and hr must be of the same length")
-  if (p0 < 0 || p0 > 1)
+  if (any(p0 < 0) || any(p0 > 1))
     stop("p0 must be between 0 and 1.")
-  if (hr <= 0)
+  if (any(hr <= 0))
     stop("hr must be greater than 0.")
 
   1 - (1 - p0)^hr

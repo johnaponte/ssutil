@@ -66,7 +66,7 @@ binomial confidence interval via \code{binom.test}.
 }
 \examples{
 # Table 1: rule out margin delta, assuming EXP has the same true efficacy
-# as AC (175-event active-comparator trial, 95% VE, HR upper 95% CI = 0.0855)
+# as AC (175-event active-comparator trial, 95\% VE, HR upper 95\% CI = 0.0855)
 ss_ni_ve(ve_lci = 1 - 0.0855, power = 0.9)
 
 # The 90-70 rule (use70 = TRUE) rules out the more lenient margin delta0
@@ -74,8 +74,8 @@ ss_ni_ve(ve_lci = 1 - 0.0855, power = 0.9)
 ss_ni_ve(ve_lci = 1 - 0.0855, power = 0.9, use70 = TRUE)
 
 # Table 2: rule out margin delta0, assuming the experimental vaccine has a
-# fixed 60% efficacy versus placebo regardless of AC's own efficacy (here,
-# AC has 60% VE, HR upper 95% CI = 0.4997)
+# fixed 60\% efficacy versus placebo regardless of AC's own efficacy (here,
+# AC has 60\% VE, HR upper 95\% CI = 0.4997)
 ss_ni_ve(ve_lci = 1 - 0.4997, power = 0.9, use70 = TRUE, ve_exp = 0.60, ve_ac = 0.60)
 
 }

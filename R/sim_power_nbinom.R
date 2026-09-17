@@ -24,7 +24,7 @@
 #'  rr = 0.6, boundary = 1,
 #'  dispersion = 2,
 #'  alpha = 0.05,
-#'  direction = "less"
+#'  direction = "less",
 #'  nsim = 1000
 #' )
 #' }
@@ -99,16 +99,7 @@ sim_power_nbinom <- function(n1,
       )
     )
 
-    # Reject boundary according to the rr
-    if (rr < 1) {
-      pwr[i] <- ifelse(ci[2] < boundary, 1, 0)
-    } else {
-      pwr[i] <- ifelse(ci[1] > boundary, 1, 0)
-    }
-    #pwr[i] <- ifelse((lowrr - exp(sm[1] + qval * sm[2])) > 0, 1, 0)
-    #pw2[i] <- ifelse(sm[4] < alpha / 2, 1, 0)
-  
-    # Reject according to the DECLARED direction
+    # Reject according to the declared direction of the alternative hypothesis
     if (direction == "less") {
       pwr[i] <- ifelse(ci[2] < boundary, 1, 0)
     } else {

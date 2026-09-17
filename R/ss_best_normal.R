@@ -54,10 +54,10 @@ ss_best_normal <- function(power, dif, sd, ngroups, seed = NULL) {
 #' @param npergroup Integer. Number in each group.
 #' @param seed Optional. Integer seed to use in the internal call to \code{multp()}.
 #'
-#' @return Integer. Sample size required per group to achieve the specified power.
+#' @return Numeric. Probability of correctly selecting the best group.
 #'
 #' @note
-#' The function uses the quantile function \code{multp()}, which computes critical values
+#' The function uses \code{multp()}, which computes the joint cumulative distribution
 #' for the selection procedure. This implementation assumes equal variances and independent samples.
 #' @examples
 #' power_best_normal(dif = 0.5, sd = 1, ngroups = 3, npergroup = 11)

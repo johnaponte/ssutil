@@ -19,7 +19,12 @@
 #' @param test_req Integer. Number of required tests that must show non-inferiority (first \code{test_req} tests).
 #' @param test_opt Integer. Number of optional tests that must also show non-inferiority from the remaining tests.
 #' @param sd Numeric. Standard deviation(s) of the outcomes. Scalar or vector of length \code{ntest}.
-#' @param corr Numeric. Correlation between the tests. Scalar (common correlation), or vector of length \code{ntest*(ntest-1)/2}. 
+#' @param true_diff Numeric. True difference(s) in means (experimental minus control) used to
+#'   simulate the data, i.e. \eqn{\mu_E - \mu_C}. Scalar or vector of length \code{ntest}.
+#'   Defaults to 0 (no true difference between groups); set to a small negative value to
+#'   evaluate power when the experimental group is truly slightly worse than control, or a
+#'   positive value when it is truly better.
+#' @param corr Numeric. Correlation between the tests. Scalar (common correlation), or vector of length \code{ntest*(ntest-1)/2}.
 #' @param t_level Numeric. Confidence level used for the t-tests (e.g., 0.95 for 95% CI).scalar or vector of length \code{ntest}.
 #' @param conf.level Numeric. Confidence level for the empirical power estimate
 #' 
@@ -72,6 +77,7 @@ sim_power_ni_normal <- function(
     test_req,
     test_opt,
     sd,
+    true_diff = 0,
     corr = 0,
     t_level = 0.95,
     conf.level = 0.95
@@ -88,6 +94,9 @@ sim_power_ni_normal <- function(
   
   if (length(sd) == 1) sd <- rep(sd, ntest)
   stopifnot("Length of sd is incorrect" = length(sd) == ntest)
+
+  if (length(true_diff) == 1) true_diff <- rep(true_diff, ntest)
+  stopifnot("Length of true_diff is incorrect" = length(true_diff) == ntest)
 
   if (length(ni_limit) == 1) ni_limit <- rep(ni_limit, ntest)
   stopifnot("Length of ni_limit is incorrect" = length(ni_limit) == ntest)
@@ -112,7 +121,7 @@ sim_power_ni_normal <- function(
   }
 
   vres <- vapply(1:nsim, function(x) {
-    mat1 <- mvrnorm(npergroup, mu = rep(0, ntest), Sigma = varm)
+    mat1 <- mvrnorm(npergroup, mu = true_diff, Sigma = varm)
     mat2 <- mvrnorm(npergroup, mu = rep(0, ntest), Sigma = varm)
 
     lowlim <- vapply(1:ntest, function(y) {

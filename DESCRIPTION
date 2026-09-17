@@ -1,6 +1,6 @@
 Package: ssutil
 Title: Sample Size Calculation Tools
-Version: 1.1.0
+Version: 1.2.0
 Authors@R: c(
   person(
     given = "John J.",
@@ -37,7 +37,6 @@ Imports:
     stringr,
     broom,
     MASS,
-    gsDesign,
     mvtnorm,
     tibble
 Config/testthat/edition: 3

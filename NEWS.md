@@ -1,3 +1,27 @@
+# ssutil 1.2.0
+- Fix bug on `power_best_binomial()`
+- Improve performance of `sim_power_best_binomial()`
+- Add test to confirm `power_best_binomial()` produces a valid result using simulations.
+- constrain parameter in `wcs_power_best_binomial()` to avoid search probabilities
+  lower than the difference.
+- Modify `sim_power_nbinom()` to explicitly indicate the direction of the alternative
+  hypothesis as it could be wrongly inferred from the `rr` alone.
+- Modify `multz()` and `multq()` to follow R convention in distributions. A new
+  parameter `lower.tail` is added
+- Fix a bug an `ss_best_normal()` returns now an integer value
+- `ss_ni_ve()` now computes the total number of events using Freedman's (1982)
+  log-rank sample size formula instead of `gsDesign::nBinomial1Sample()`,
+  which better reproduces Table 1 of Fleming et al. (2021) and removes the
+  `gsDesign` package dependency
+- Added `ve_exp`/`ve_ac` parameters to `ss_ni_ve()`, allowing the experimental
+  vaccine's assumed efficacy to differ from the active comparator's, which
+  reproduces Table 2 of Fleming et al. (2021)
+- Added a `true_diff` parameter to `sim_power_ni_normal()` so simulations are
+  no longer restricted to a true difference of 0 between groups, allowing
+  sensitivity evaluation when the experimental group is truly slightly worse
+  or better than control
+
+
 # ssutil 1.1.0
 - Added the `power_events_rate()` function to compute the exact binomial
   probability of observing at least a given number of events, across

@@ -489,20 +489,33 @@ test_that("ss_best_normal and power_best_normal agrees",{
    for (difi in c(1,0.5,0.25)) {
      for(ngroupsi in c(3,5,8)) {
        for(sdi in c(2,1,0.5)){
-        # cat(poweri,difi,ngroupsi,sdi,"\n")
-         expect_equal(
-            power_best_normal( 
-                npergroup = ss_best_normal(
-                power = poweri,
-                dif = difi,
-                sd = sdi,
-                ngroups = ngroupsi
-                ),
-            dif = difi,
-            sd = sdi,
-            ngroups = ngroupsi
-            ),
-            poweri, tolerance = 0.001)
+        #cat(poweri,difi,ngroupsi,sdi,"\n")
+         n <- ss_best_normal(
+           power = poweri,
+           dif = difi,
+           sd = sdi,
+           ngroups = ngroupsi
+         )
+         pbn <- power_best_normal(
+           npergroup = n,
+           dif = difi,
+           sd = sdi,
+           ngroups = ngroupsi
+         )
+         # n is an integer (ceiling), so it must reach at least the requested
+         # power, but n - 1 must not (otherwise n would not be minimal)
+         expect_gte(pbn, poweri)
+         if (n > 1) {
+           pbn_minus1 <- power_best_normal(
+             npergroup = n - 1,
+             dif = difi,
+             sd = sdi,
+             ngroups = ngroupsi
+           )
+           # mvtnorm's pmvnorm/qmvnorm target ~0.001 numerical accuracy, so
+           # allow that much slack right at the boundary
+           expect_lt(pbn_minus1, poweri + 0.001)
+         }
        }
      }
    }

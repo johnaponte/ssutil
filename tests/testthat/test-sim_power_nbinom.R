@@ -7,6 +7,7 @@ test_that("sim_power_nbinom returns valid structure and values", {
     boundary = 1,
     dispersion = 2,
     alpha = 0.05,
+    direction = "less",
     nsim = 100
   )
 
@@ -23,6 +24,7 @@ test_that("Function throws error for invalid inputs", {
     boundary = 1,
     dispersion = 2,
     alpha = 0.05,
+    direction = "less",
     nsim = 100
   ), regexp = "n1 > 0")
 
@@ -34,6 +36,7 @@ test_that("Function throws error for invalid inputs", {
     boundary = 1,
     dispersion = 2,
     alpha = 0.05,
+    direction = "greater",
     nsim = 100
   ), regexp = "ir1 > 0")
 })

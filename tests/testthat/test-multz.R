@@ -3,7 +3,7 @@
 # experiments for statistical selection, screening and multiple comparisons book
 
 expect_multz <- function(alpha, n, rho, expected_result, tol){
-  output <- multz(alpha, n, rho)
+  output <- multz(alpha, n, rho, lower.tail = FALSE)
 
   # Compare the result with an expected value by using the expect_equal function
   expect_equal(output, expected_result, tolerance = tol)
@@ -23,7 +23,8 @@ test_that("multz function calculates correct z-values", {
 
 
 multz_eq_multp <- function(alpha, n, rho, tol){
-  expect_equal(multp(multz(alpha, n, rho),n, rho), alpha, tolerance =tol)
+  z <- multz(alpha, n, rho, lower.tail = FALSE)
+  expect_equal(multp(z, n, rho, lower.tail = FALSE), alpha, tolerance = tol)
 }
 
 test_that("multz and multp agrees",{

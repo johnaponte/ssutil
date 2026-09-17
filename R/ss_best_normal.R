@@ -38,8 +38,7 @@ ss_best_normal <- function(power, dif, sd, ngroups, seed = NULL) {
   stopifnot("power must be > 0 and < 1" = power > 0 && power < 1)
   if (!is.null(seed)) stopifnot("seed must be > 0" = seed > 0)
 
-  #ceiling(2 * (sd * multz(1 - power, ngroups - 1, 0.5, seed) / dif)^2)
-  2 * (sd * multz(1 - power, ngroups - 1, 0.5, seed) / dif)^2
+  ceiling(2 * (sd * multz(power, ngroups - 1, 0.5, seed = seed) / dif)^2)
 }
 
 
@@ -72,5 +71,5 @@ power_best_normal <- function(dif, sd, ngroups, npergroup, seed = NULL) {
   stopifnot("npergroup must be > 0" = npergroup > 0)
   if (!is.null(seed)) stopifnot("seed must be > 0" = seed > 0)
   
-  1-multp((sqrt(npergroup/2)*dif)/sd,ngroups-1,0.5, seed)
+  multp((sqrt(npergroup/2)*dif)/sd, ngroups-1, 0.5, seed = seed)
 }

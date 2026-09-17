@@ -71,25 +71,50 @@ sim_power_best_binomial <- function(noutcomes, p1, dif, ngroups, npergroup, nsim
   
   
   if (length(npergroup) == 1) npergroup <- rep(npergroup, ngroups)
-
-  probm <- matrix(c(p1, rep(p1 - dif, ngroups - 1)), byrow = TRUE, ncol = noutcomes)
-  probvec <- as.vector(probm)
-  sizem <- matrix(rep(npergroup, noutcomes), byrow = FALSE, ncol = noutcomes)
-  sizevec <- as.vector(sizem)
-
-  simrest <- vapply(1:nsim, function(xx) {
-    simulone <- array(
-      rbinom(ngroups * noutcomes, sizevec, probvec) / sizevec,
-      dim = c(ngroups, noutcomes)
-    )
-    ranks <- apply(simulone, 2, rank, ties.method = "random")
-    # Success if the first group have the highest rank
-    ifelse(all(ranks[1,]== ngroups), 1, 0)
-  }, 0.0)
+  
+  
+  # # Original loop, clear but slow.
+  # probm <- matrix(c(p1, rep(p1 - dif, ngroups - 1)), byrow = TRUE, ncol = noutcomes)
+  # probvec <- as.vector(probm)
+  # sizem <- matrix(rep(npergroup, noutcomes), byrow = FALSE, ncol = noutcomes)
+  # sizevec <- as.vector(sizem)
+  # 
+  # simrest <- vapply(1:nsim, function(xx) {
+  #   simulone <- array(
+  #     rbinom(ngroups * noutcomes, sizevec, probvec) / sizevec,
+  #     dim = c(ngroups, noutcomes)
+  #   )
+  #   ranks <- apply(simulone, 2, rank, ties.method = "random")
+  #   # Success if the first group have the highest rank
+  #   ifelse(all(ranks[1,]== ngroups), 1, 0)
+  # }, 0.0)
+  # 
+  probm   <- matrix(c(p1, rep(p1 - dif, ngroups - 1)), byrow = TRUE, ncol = noutcomes)
+  probvec <- as.vector(probm)              # group-fastest, then outcome
+  sizevec <- rep(npergroup, noutcomes)     # same ordering
+  
+  total <- ngroups * noutcomes * nsim
+  
+  # Single vectorized rbinom call for ALL nsim simulations at once
+  # (size/prob recycle automatically: total is an exact multiple of ngroups*noutcomes)
+  raw <- rbinom(total, size = sizevec, prob = probvec) / sizevec
+  
+  # Reshape to (ngroups, noutcomes, nsim), then permute so rows = (outcome, sim), cols = groups
+  arr <- array(raw, dim = c(ngroups, noutcomes, nsim))
+  m   <- matrix(aperm(arr, c(2, 3, 1)), nrow = noutcomes * nsim, ncol = ngroups)
+  
+  # max.col: C-level argmax per row with random tie-break (equivalent to rank(ties="random"))
+  winner <- max.col(m, ties.method = "random")
+  
+  # Success per outcome: group 1 is the winner
+  success_mat  <- matrix(winner == 1, nrow = noutcomes, ncol = nsim)
+  # Overall success: group 1 wins in EVERY outcome for that simulation
+  sim_success  <- colSums(success_mat) == noutcomes
 
   empirical_power_result(
-    x =sum(simrest), 
-    n= length(simrest), 
-    conf.level = conf.level)
+    x = sum(sim_success),
+    n = nsim,
+    conf.level = conf.level
+  )
 }
 

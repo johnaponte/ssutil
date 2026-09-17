@@ -31,7 +31,6 @@ importFrom(MASS,
   mvrnorm
 )
 importFrom(broom,tidy)
-importFrom(gsDesign,nBinomial1Sample)
 importFrom(mvtnorm,
   pmvnorm,
   qmvnorm
@@ -41,6 +40,7 @@ importFrom(stats,
   confint,
   dbinom,
   pbinom,
+  qnorm,
   rbinom,
   rnbinom,
   rnorm,

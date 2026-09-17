@@ -47,7 +47,9 @@ power_best_binomial <- function(p1, dif, ngroups, npergroup) {
     for (i in 0:(k - 1)) {
       coeff <- choose(k - 1, i) / (1 + i)
       b2j_val <- b2j(j, n, p1, d)^i
-      B2j_val <- B2j(j - 1 - i, n, p1, d)^(k - 1 - i)
+      # Bug correction
+      #B2j_val <- B2j(j - 1 - i , n, p1, d)^(k - 1 - i)
+      B2j_val <- B2j(j - 1, n, p1, d)^(k - 1 - i)
       inner_sum <- inner_sum + coeff * b2j_val * B2j_val
     }
     Pcs_sum <- Pcs_sum + b1j_val * inner_sum
@@ -123,8 +125,60 @@ wcs_power_best_binomial <- function(dif, ngroups, npergroup) {
   fx <- function(x) {
     power_best_binomial(x, dif, ngroups, npergroup)
   }
-  
-  res <- stats::optimize(fx, interval = c(0, 1))
+  # correct bug as searching from 0 to 1 may probabilities lower than dif
+  res <- stats::optimize(fx, interval = c(dif + 1e-6, 1))
   names(res) <- c("p1", "minimum_power")
   res
 }
+
+
+
+#' Monte Carlo power for indifference-zone "best" binomial selection
+#'
+#' Group 1 is the true best (p1 + d); groups 2:ngroups have probability p1.
+#' Power = P(group 1 has the highest observed count), ties broken at random.
+#'
+#' @param p1 probability of the best group
+#' @param d difference with the rest of the groups (probability = p1-d)
+#' @param ngroups number of groups (k)
+#' @param npergroup trials per group (n)
+#' @param nsim number of Monte Carlo simulations
+#' @param seed optional seed for reproducibility
+#' @return list(power, se, ci_95, nsim)
+#' @export
+# sim_power_best_binomial <- function(p1, d, ngroups, npergroup, nsim, seed = NULL) {
+#   
+#   if (p1 < 0 || p1 > 1) stop("p1 must be in [0, 1]")
+#   if ((p1 - d) < 0 || (p1 - d) > 1) stop("p1 - d must be in [0, 1]")
+#   if (ngroups < 2) stop("ngroups must be >= 2")
+#   
+#   if (!is.null(seed)) set.seed(seed)
+#   
+#   # Group 1 is the TRUE BEST (probability p1)
+#   # Groups 2:ngroups are inferior (probability p1 - d)
+#   probs <- c(p1, rep(p1 - d, ngroups - 1))
+#   
+#   counts <- matrix(
+#     rbinom(nsim * ngroups, size = npergroup, prob = rep(probs, each = nsim)),
+#     nrow = nsim, ncol = ngroups
+#   )
+#   
+#   row_max <- apply(counts, 1, max)
+#   is_max  <- counts == row_max
+#   
+#   selected <- apply(is_max, 1, function(row) {
+#     idx <- which(row)
+#     if (length(idx) == 1L) idx else sample(idx, 1L)
+#   })
+#   
+#   successes <- selected == 1L
+#   power_hat <- mean(successes)
+#   
+#   se <- sqrt(power_hat * (1 - power_hat) / nsim)
+#   ci <- c(
+#     lower = max(0, power_hat - 1.96 * se),
+#     upper = min(1, power_hat + 1.96 * se)
+#   )
+#   
+#   list(power = power_hat, se = se, ci_95 = ci, nsim = nsim)
+# }

@@ -14,6 +14,7 @@
 #' @param dispersion Numeric. Dispersion parameter (\eqn{\phi}) for the negative binomial distribution.
 #' @param alpha Numeric. Type I error rate (two-sided).
 #' @param nsim Integer. Number of simulation iterations.
+#' @param direction = Direction of the alternative hypothesis
 #' @param conf.level Numeric. Confidence level for the empirical power estimate
 #' @examples
 #' \donttest{
@@ -23,6 +24,7 @@
 #'  rr = 0.6, boundary = 1,
 #'  dispersion = 2,
 #'  alpha = 0.05,
+#'  direction = "less"
 #'  nsim = 1000
 #' )
 #' }
@@ -39,7 +41,13 @@
 #' When rr > 1, rejection occurs if the lower limit is above the boundary.
 #' 
 #' The `alpha` parameter is two-sided as it is used to estimate two-sided confidence intervals
-#'
+#' 
+#' Direction of the alternative hypothesis:
+#'   "less" rejects when the CI upper bound of the simulation is below \code{boundary}
+#'   (e.g. non-inferiority, RR bounded above); "greater" rejects when the
+#'   CI lower bound of the simulation is above \code{boundary} (RR bounded below).
+#'   Must be specified explicitly.
+#'   
 #' @author Chris Gast
 #' @author John J. Aponte
 #' @importFrom MASS glm.nb
@@ -53,9 +61,11 @@ sim_power_nbinom <- function(n1,
                              boundary,
                              dispersion,
                              alpha,
+                             direction = c("less","greater"),
                              nsim,
                              conf.level = 0.95)
 {
+  direction <- match.arg(direction)
   stopifnot(
     n1 > 0,
     n2 > 0,
@@ -97,6 +107,13 @@ sim_power_nbinom <- function(n1,
     }
     #pwr[i] <- ifelse((lowrr - exp(sm[1] + qval * sm[2])) > 0, 1, 0)
     #pw2[i] <- ifelse(sm[4] < alpha / 2, 1, 0)
+  
+    # Reject according to the DECLARED direction
+    if (direction == "less") {
+      pwr[i] <- ifelse(ci[2] < boundary, 1, 0)
+    } else {
+      pwr[i] <- ifelse(ci[1] > boundary, 1, 0)
+    }
   }
 
   empirical_power_result(
@@ -105,6 +122,17 @@ sim_power_nbinom <- function(n1,
     conf.level = conf.level)
 }
 
-#sim_power_nbinom(n1=150, n2=150, ir1 = .55, tm = 1.7, rr =0.6, boundary = 1, dispersion = 2, alpha = 0.05, nsim = 1000)
-
+# sim_power_nbinom(
+#   n1 = 150,
+#   n2 = 150,
+#   ir1 = .55,
+#   tm = 1.7,
+#   rr = 0.6,
+#   boundary = 1,
+#   dispersion = 2,
+#   alpha = 0.05,
+#   direction = "less",
+#   nsim = 1000
+# )
+# 
 

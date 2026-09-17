@@ -4,7 +4,15 @@
 \alias{ss_ni_ve}
 \title{Sample Size and Non-Inferiority Margin for Vaccine Efficacy Trials}
 \usage{
-ss_ni_ve(ve_lci, alpha = 0.025, power = 0.9, use70 = FALSE, preserve = 0.5)
+ss_ni_ve(
+  ve_lci,
+  alpha = 0.025,
+  power = 0.9,
+  use70 = FALSE,
+  preserve = 0.5,
+  ve_exp = NULL,
+  ve_ac = NULL
+)
 }
 \arguments{
 \item{ve_lci}{Numeric. Lower bound of the current vaccine's efficacy (e.g., 0.95 for 95\% VE).}
@@ -16,6 +24,17 @@ ss_ni_ve(ve_lci, alpha = 0.025, power = 0.9, use70 = FALSE, preserve = 0.5)
 \item{use70}{Logical. If \code{TRUE}, assumes at least 30\% VE for the new vaccine (the 90–70 rule); otherwise, preserves a fixed fraction of the reference VE.}
 
 \item{preserve}{Numeric. Proportion of the current vaccine's efficacy to preserve under \code{use70 = FALSE} (default = 0.5).}
+
+\item{ve_exp}{Numeric or \code{NULL} (default). Assumed vaccine efficacy of the
+experimental vaccine versus placebo, used to compute power for the non-inferiority
+trial. If \code{NULL} (the default), the experimental vaccine is assumed to have
+the same true efficacy as the active comparator (hazard ratio of 1 between them).
+If specified, \code{ve_ac} must also be provided.}
+
+\item{ve_ac}{Numeric or \code{NULL} (default). Point estimate of the active
+comparator's vaccine efficacy versus placebo (as opposed to \code{ve_lci}, which
+is its confidence interval lower bound). Only used, and required, when \code{ve_exp}
+is specified.}
 }
 \value{
 A named list with:
@@ -39,15 +58,33 @@ described by Fleming et al. (2021).
 The method applies either the 95–95 rule or 90–70 rule, depending on whether a minimum
 VE of 30\% is assumed (\code{use70 = TRUE}) or 50\% of the current VE is preserved.
 
-This implementation approximates Table 1 of the paper using exact binomial confidence intervals
-via \code{binom.test} and the \code{nBinomial1Sample} function from \pkg{gsDesign}.
+This implementation approximates Tables 1 and 2 of the paper: the total number of
+events uses Freedman's (1982) log-rank sample size formula, generalized to allow the
+true experimental-to-comparator hazard ratio assumed for power (\code{ve_exp}) to
+differ from 1; the maximum hazard ratio to declare non-inferiority uses an exact
+binomial confidence interval via \code{binom.test}.
 }
 \examples{
-ss_ni_ve(ve_lci = 0.95)
+# Table 1: rule out margin delta, assuming EXP has the same true efficacy
+# as AC (175-event active-comparator trial, 95% VE, HR upper 95% CI = 0.0855)
+ss_ni_ve(ve_lci = 1 - 0.0855, power = 0.9)
+
+# The 90-70 rule (use70 = TRUE) rules out the more lenient margin delta0
+# instead of delta, for the same active-comparator trial as above
+ss_ni_ve(ve_lci = 1 - 0.0855, power = 0.9, use70 = TRUE)
+
+# Table 2: rule out margin delta0, assuming the experimental vaccine has a
+# fixed 60% efficacy versus placebo regardless of AC's own efficacy (here,
+# AC has 60% VE, HR upper 95% CI = 0.4997)
+ss_ni_ve(ve_lci = 1 - 0.4997, power = 0.9, use70 = TRUE, ve_exp = 0.60, ve_ac = 0.60)
 
 }
 \references{
 Fleming, T.R., Powers, J.H., & Huang, Y. (2021).
 The use of active controls and non-inferiority studies in evaluating COVID-19 vaccines.
 \emph{Clinical Trials}, 18(3), 335–342. \doi{10.1177/1740774520988244}
+
+Freedman, L.S. (1982). Tables of the number of patients required in clinical
+trials using the logrank test. \emph{Statistics in Medicine}, 1(2), 121-129.
+\doi{10.1002/sim.4780010204}
 }

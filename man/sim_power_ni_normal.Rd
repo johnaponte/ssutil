@@ -12,6 +12,7 @@ sim_power_ni_normal(
   test_req,
   test_opt,
   sd,
+  true_diff = 0,
   corr = 0,
   t_level = 0.95,
   conf.level = 0.95
@@ -31,6 +32,12 @@ sim_power_ni_normal(
 \item{test_opt}{Integer. Number of optional tests that must also show non-inferiority from the remaining tests.}
 
 \item{sd}{Numeric. Standard deviation(s) of the outcomes. Scalar or vector of length \code{ntest}.}
+
+\item{true_diff}{Numeric. True difference(s) in means (experimental minus control) used to
+simulate the data, i.e. \eqn{\mu_E - \mu_C}. Scalar or vector of length \code{ntest}.
+Defaults to 0 (no true difference between groups); set to a small negative value to
+evaluate power when the experimental group is truly slightly worse than control, or a
+positive value when it is truly better.}
 
 \item{corr}{Numeric. Correlation between the tests. Scalar (common correlation), or vector of length \code{ntest*(ntest-1)/2}.}
 

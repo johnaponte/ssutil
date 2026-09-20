@@ -13,7 +13,7 @@ hypothesis using a negative binomial model."><meta property="og:image" content="
 
     <a class="navbar-brand me-2" href="../index.html">ssutil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,7 @@ hypothesis using a negative binomial model."><meta property="og:image" content="
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Empirical Power for Negative Binomial Comparison</h1>
-      <small class="dont-index">Source: <a href="https://github.com/johnaponte/ssutil/blob/v1.1.0/R/sim_power_nbinom.R" class="external-link"><code>R/sim_power_nbinom.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/johnaponte/ssutil/blob/main/R/sim_power_nbinom.R" class="external-link"><code>R/sim_power_nbinom.R</code></a></small>
       <div class="d-none name"><code>sim_power_nbinom.Rd</code></div>
     </div>
 
@@ -65,6 +65,7 @@ hypothesis using a negative binomial model.</p>
 <span>  <span class="va">boundary</span>,</span>
 <span>  <span class="va">dispersion</span>,</span>
 <span>  <span class="va">alpha</span>,</span>
+<span>  direction <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"less"</span>, <span class="st">"greater"</span><span class="op">)</span>,</span>
 <span>  <span class="va">nsim</span>,</span>
 <span>  conf.level <span class="op">=</span> <span class="fl">0.95</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -106,6 +107,10 @@ hypothesis using a negative binomial model.</p>
 <dd><p>Numeric. Type I error rate (two-sided).</p></dd>
 
 
+<dt id="arg-direction">direction<a class="anchor" aria-label="anchor" href="#arg-direction"></a></dt>
+<dd><p>= Direction of the alternative hypothesis</p></dd>
+
+
 <dt id="arg-nsim">nsim<a class="anchor" aria-label="anchor" href="#arg-nsim"></a></dt>
 <dd><p>Integer. Number of simulation iterations.</p></dd>
 
@@ -129,6 +134,11 @@ The 'boundary' parameter defines the relative risk under the null hypothesis. Wh
 rejection occurs if the upper limit of the confidence interval is below the boundary.
 When rr &gt; 1, rejection occurs if the lower limit is above the boundary.</p>
 <p>The <code>alpha</code> parameter is two-sided as it is used to estimate two-sided confidence intervals</p>
+<p>Direction of the alternative hypothesis:
+"less" rejects when the CI upper bound of the simulation is below <code>boundary</code>
+(e.g. non-inferiority, RR bounded above); "greater" rejects when the
+CI lower bound of the simulation is above <code>boundary</code> (RR bounded below).
+Must be specified explicitly.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -149,12 +159,13 @@ When rr &gt; 1, rejection occurs if the lower limit is above the boundary.</p>
 <span class="r-in"><span> rr <span class="op">=</span> <span class="fl">0.6</span>, boundary <span class="op">=</span> <span class="fl">1</span>,</span></span>
 <span class="r-in"><span> dispersion <span class="op">=</span> <span class="fl">2</span>,</span></span>
 <span class="r-in"><span> alpha <span class="op">=</span> <span class="fl">0.05</span>,</span></span>
+<span class="r-in"><span> direction <span class="op">=</span> <span class="st">"less"</span>,</span></span>
 <span class="r-in"><span> nsim <span class="op">=</span> <span class="fl">1000</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Empirical Power Result</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------- </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Power:       0.6960</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 95% CI:      [0.6664, 0.7244]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Power:       0.6620</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95% CI:      [0.6317, 0.6913]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simulations: 1000</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>

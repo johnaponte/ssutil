@@ -3,19 +3,19 @@
 Computes the upper equicoordinate quantile for a multivariate standard
 normal distribution with unit variances and a common correlation
 coefficient `rho`. That is, it returns the value \\z\\ such that the
-joint probability \\P(X_1 \le z, \ldots, X_n \le z) = 1 - \alpha\\.
+joint probability \\P(X_1 \le z, \ldots, X_n \le z) = p\\.
 
 ## Usage
 
 ``` r
-multz(alpha, k, rho, seed = NULL)
+multz(p, k, rho, lower.tail = TRUE, seed = NULL)
 ```
 
 ## Arguments
 
-- alpha:
+- p:
 
-  Numeric. Significance level (e.g., 0.05 for a 95% confidence level).
+  Numeric. Cumulative probability (e.g., 0.95 for the 95th
 
 - k:
 
@@ -27,6 +27,11 @@ multz(alpha, k, rho, seed = NULL)
   Numeric. Common correlation coefficient between variables (typically
   between 0 and 1).
 
+- lower.tail:
+
+  Logical. If `TRUE` (default), probability is \\P(X \le z)\\; if
+  `FALSE`, \\P(X \> z)\\
+
 - seed:
 
   Optional. An object specifying if and how the random number generator
@@ -35,16 +40,14 @@ multz(alpha, k, rho, seed = NULL)
 
 ## Value
 
-Numeric. The upper equicoordinate point \\z\\ such that the joint
-probability of all variables being less than or equal to \\z\\ is \\1 -
-\alpha\\.
+Numeric. The equicoordinate quantile \\z\\
 
 ## Examples
 
 ``` r
-alpha <- 0.1  # Significance level (10%)
-k <- 3        # Number of variables
-rho <- 0.5    # Common correlation coefficient
-multz(alpha, k, rho)
+p <- 0.9    # Significance level (10%)
+k <- 3      # Number of variables
+rho <- 0.5  # Common correlation coefficient
+multz(p, k, rho)
 #> [1] 1.734036
 ```

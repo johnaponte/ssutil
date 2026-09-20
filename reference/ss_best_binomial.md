@@ -51,5 +51,5 @@ is at least the target `power`.
 
 ``` r
 ss_best_binomial(power = 0.9, p1 = 0.8, dif = 0.2, ngroups = 4)
-#> [1] 33
+#> [1] 32
 ```

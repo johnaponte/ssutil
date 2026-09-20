@@ -51,7 +51,12 @@ sim_power_equivalence_normal(
 - t_level:
 
   Numeric. Confidence level used for the t-tests (e.g., 0.95 for 95%
-  CI).
+  CI). Equivalence is assessed via a two-sided `t_level` CI, which is
+  equivalent to two one-sided tests (TOST) each at a one-sided alpha of
+  `(1 - t_level) / 2`. The default `t_level = 0.95` therefore implements
+  TOST at a one-sided alpha of 0.025; for the more common bioequivalence
+  convention of one-sided alpha = 0.05 (e.g. FDA/EMA guidance), use
+  `t_level = 0.90` instead.
 
 - conf.level:
 
@@ -90,7 +95,7 @@ sim_power_equivalence_normal(
 )
 #> Empirical Power Result
 #> ----------------------- 
-#> Power:       0.9160
-#> 95% CI:      [0.8971, 0.9324]
+#> Power:       0.9130
+#> 95% CI:      [0.8938, 0.9297]
 #> Simulations: 1000
 ```

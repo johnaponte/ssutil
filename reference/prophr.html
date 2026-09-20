@@ -11,7 +11,7 @@ proportional hazards."><meta property="og:image" content="https://johnaponte.git
 
     <a class="navbar-brand me-2" href="../index.html">ssutil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,7 +41,7 @@ proportional hazards."><meta property="og:image" content="https://johnaponte.git
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Calculate Event Probability in the Experimental Group Given a Hazard Ratio</h1>
-      <small class="dont-index">Source: <a href="https://github.com/johnaponte/ssutil/blob/v1.1.0/R/prophr.R" class="external-link"><code>R/prophr.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/johnaponte/ssutil/blob/main/R/prophr.R" class="external-link"><code>R/prophr.R</code></a></small>
       <div class="d-none name"><code>prophr.Rd</code></div>
     </div>
 
@@ -61,11 +61,11 @@ proportional hazards.</p>
 
 
 <dl><dt id="arg-p-">p0<a class="anchor" aria-label="anchor" href="#arg-p-"></a></dt>
-<dd><p>Numeric scalar. Probability of an event in the control group (between 0 and 1).</p></dd>
+<dd><p>Numeric scalar or vector. Probability of an event in the control group (between 0 and 1).</p></dd>
 
 
 <dt id="arg-hr">hr<a class="anchor" aria-label="anchor" href="#arg-hr"></a></dt>
-<dd><p>Numeric scalar. Hazard ratio (must be &gt; 0).</p></dd>
+<dd><p>Numeric scalar or vector. Hazard ratio (must be &gt; 0). Must be the same length as <code>p0</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

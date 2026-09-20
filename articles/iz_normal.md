@@ -71,7 +71,7 @@ power_best_normal(sd = 0.5, dif = 0.10, ngroups = 3, npergroup = 30)
 ``` r
 
 ss_best_normal(power = 0.8, sd = 0.5, dif = 0.1, ngroups = 3)
-#> [1] 68.27888
+#> [1] 69
 ```
 
 3.  Using simulations, what is the probability of correctly selecting

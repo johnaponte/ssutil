@@ -14,12 +14,13 @@ prophr(p0, hr)
 
 - p0:
 
-  Numeric scalar. Probability of an event in the control group (between
-  0 and 1).
+  Numeric scalar or vector. Probability of an event in the control group
+  (between 0 and 1).
 
 - hr:
 
-  Numeric scalar. Hazard ratio (must be \> 0).
+  Numeric scalar or vector. Hazard ratio (must be \> 0). Must be the
+  same length as `p0`.
 
 ## Value
 

@@ -51,5 +51,5 @@ Binomial Populations. *Bell System Technical Journal*, 36(2), 537–576.
 
 ``` r
 power_best_binomial(p1 = 0.8, dif = 0.2, ngroups = 4, npergroup = 50)
-#> [1] 0.963308
+#> [1] 0.9642818
 ```

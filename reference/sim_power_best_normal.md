@@ -87,7 +87,7 @@ In either case, the first group is assumed to be the most promising.
   )
 #> Empirical Power Result
 #> ----------------------- 
-#> Power:       0.4300
-#> 95% CI:      [0.3991, 0.4614]
+#> Power:       0.4290
+#> 95% CI:      [0.3981, 0.4603]
 #> Simulations: 1000
 ```

@@ -18,6 +18,7 @@ sim_power_nbinom(
   boundary,
   dispersion,
   alpha,
+  direction = c("less", "greater"),
   nsim,
   conf.level = 0.95
 )
@@ -60,6 +61,10 @@ sim_power_nbinom(
 
   Numeric. Type I error rate (two-sided).
 
+- direction:
+
+  = Direction of the alternative hypothesis
+
 - nsim:
 
   Integer. Number of simulation iterations.
@@ -88,6 +93,12 @@ rejection occurs if the lower limit is above the boundary.
 The `alpha` parameter is two-sided as it is used to estimate two-sided
 confidence intervals
 
+Direction of the alternative hypothesis: "less" rejects when the CI
+upper bound of the simulation is below `boundary` (e.g. non-inferiority,
+RR bounded above); "greater" rejects when the CI lower bound of the
+simulation is above `boundary` (RR bounded below). Must be specified
+explicitly.
+
 ## See also
 
 [`empirical_power_result`](https://johnaponte.github.io/ssutil/reference/empirical_power_result.md)
@@ -108,12 +119,13 @@ sim_power_nbinom(
  rr = 0.6, boundary = 1,
  dispersion = 2,
  alpha = 0.05,
+ direction = "less",
  nsim = 1000
 )
 #> Empirical Power Result
 #> ----------------------- 
-#> Power:       0.6960
-#> 95% CI:      [0.6664, 0.7244]
+#> Power:       0.6620
+#> 95% CI:      [0.6317, 0.6913]
 #> Simulations: 1000
 # }
 ```

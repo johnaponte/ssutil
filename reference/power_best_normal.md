@@ -37,14 +37,15 @@ power_best_normal(dif, sd, ngroups, npergroup, seed = NULL)
 
 ## Value
 
-Integer. Sample size required per group to achieve the specified power.
+Numeric. Probability of correctly selecting the best group.
 
 ## Note
 
-The function uses the quantile function
+The function uses
 [`multp()`](https://johnaponte.github.io/ssutil/reference/multp.md),
-which computes critical values for the selection procedure. This
-implementation assumes equal variances and independent samples.
+which computes the joint cumulative distribution for the selection
+procedure. This implementation assumes equal variances and independent
+samples.
 
 ## Examples
 

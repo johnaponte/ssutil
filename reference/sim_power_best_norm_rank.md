@@ -88,7 +88,7 @@ sim_power_best_norm_rank(
 )
 #> Empirical Power Result
 #> ----------------------- 
-#> Power:       0.7370
-#> 95% CI:      [0.7085, 0.7641]
+#> Power:       0.7250
+#> 95% CI:      [0.6962, 0.7525]
 #> Simulations: 1000
 ```

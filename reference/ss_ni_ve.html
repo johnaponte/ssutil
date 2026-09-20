@@ -11,7 +11,7 @@ described by Fleming et al. (2021)."><meta property="og:image" content="https://
 
     <a class="navbar-brand me-2" href="../index.html">ssutil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,7 +41,7 @@ described by Fleming et al. (2021)."><meta property="og:image" content="https://
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Sample Size and Non-Inferiority Margin for Vaccine Efficacy Trials</h1>
-      <small class="dont-index">Source: <a href="https://github.com/johnaponte/ssutil/blob/v1.1.0/R/ss_ni_ve.R" class="external-link"><code>R/ss_ni_ve.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/johnaponte/ssutil/blob/main/R/ss_ni_ve.R" class="external-link"><code>R/ss_ni_ve.R</code></a></small>
       <div class="d-none name"><code>ss_ni_ve.Rd</code></div>
     </div>
 
@@ -53,7 +53,15 @@ described by Fleming et al. (2021).</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ss_ni_ve</span><span class="op">(</span><span class="va">ve_lci</span>, alpha <span class="op">=</span> <span class="fl">0.025</span>, power <span class="op">=</span> <span class="fl">0.9</span>, use70 <span class="op">=</span> <span class="cn">FALSE</span>, preserve <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ss_ni_ve</span><span class="op">(</span></span>
+<span>  <span class="va">ve_lci</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">0.025</span>,</span>
+<span>  power <span class="op">=</span> <span class="fl">0.9</span>,</span>
+<span>  use70 <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  preserve <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  ve_exp <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ve_ac <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -79,6 +87,21 @@ described by Fleming et al. (2021).</p>
 <dt id="arg-preserve">preserve<a class="anchor" aria-label="anchor" href="#arg-preserve"></a></dt>
 <dd><p>Numeric. Proportion of the current vaccine's efficacy to preserve under <code>use70 = FALSE</code> (default = 0.5).</p></dd>
 
+
+<dt id="arg-ve-exp">ve_exp<a class="anchor" aria-label="anchor" href="#arg-ve-exp"></a></dt>
+<dd><p>Numeric or <code>NULL</code> (default). Assumed vaccine efficacy of the
+experimental vaccine versus placebo, used to compute power for the non-inferiority
+trial. If <code>NULL</code> (the default), the experimental vaccine is assumed to have
+the same true efficacy as the active comparator (hazard ratio of 1 between them).
+If specified, <code>ve_ac</code> must also be provided.</p></dd>
+
+
+<dt id="arg-ve-ac">ve_ac<a class="anchor" aria-label="anchor" href="#arg-ve-ac"></a></dt>
+<dd><p>Numeric or <code>NULL</code> (default). Point estimate of the active
+comparator's vaccine efficacy versus placebo (as opposed to <code>ve_lci</code>, which
+is its confidence interval lower bound). Only used, and required, when <code>ve_exp</code>
+is specified.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -95,24 +118,32 @@ described by Fleming et al. (2021).</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The method applies either the 95–95 rule or 90–70 rule, depending on whether a minimum
 VE of 30% is assumed (<code>use70 = TRUE</code>) or 50% of the current VE is preserved.</p>
-<p>This implementation approximates Table 1 of the paper using exact binomial confidence intervals
-via <code>binom.test</code> and the <code>nBinomial1Sample</code> function from <span class="pkg">gsDesign</span>.</p>
+<p>This implementation approximates Tables 1 and 2 of the paper: the total number of
+events uses Freedman's (1982) log-rank sample size formula, generalized to allow the
+true experimental-to-comparator hazard ratio assumed for power (<code>ve_exp</code>) to
+differ from 1; the maximum hazard ratio to declare non-inferiority uses an exact
+binomial confidence interval via <code>binom.test</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>Fleming, T.R., Powers, J.H., &amp; Huang, Y. (2021).
 The use of active controls and non-inferiority studies in evaluating COVID-19 vaccines.
 <em>Clinical Trials</em>, 18(3), 335–342. <a href="https://doi.org/10.1177/1740774520988244" class="external-link">doi:10.1177/1740774520988244</a></p>
+<p>Freedman, L.S. (1982). Tables of the number of patients required in clinical
+trials using the logrank test. <em>Statistics in Medicine</em>, 1(2), 121-129.
+<a href="https://doi.org/10.1002/sim.4780010204" class="external-link">doi:10.1002/sim.4780010204</a></p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">ss_ni_ve</span><span class="op">(</span>ve_lci <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Table 1: rule out margin delta, assuming EXP has the same true efficacy</span></span></span>
+<span class="r-in"><span><span class="co"># as AC (175-event active-comparator trial, 95% VE, HR upper 95% CI = 0.0855)</span></span></span>
+<span class="r-in"><span><span class="fu">ss_ni_ve</span><span class="op">(</span>ve_lci <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="fl">0.0855</span>, power <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $`Upper limit of the HR used to estimate the sample size`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0855</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $`Non-inferior margin in HR scale`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.472136</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3.419928</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $Alpha</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.025</span>
@@ -121,16 +152,73 @@ The use of active controls and non-inferiority studies in evaluating COVID-19 va
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $`Total number of events`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 36</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $`Max HR to declare NI`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.571429</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $`Max number of events in the experimental group`</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 22</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $`Non-inferior criteria`</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Preserve at least 50% of the VE in the new vaccine"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># The 90-70 rule (use70 = TRUE) rules out the more lenient margin delta0</span></span></span>
+<span class="r-in"><span><span class="co"># instead of delta, for the same active-comparator trial as above</span></span></span>
+<span class="r-in"><span><span class="fu">ss_ni_ve</span><span class="op">(</span>ve_lci <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="fl">0.0855</span>, power <span class="op">=</span> <span class="fl">0.9</span>, use70 <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`Upper limit of the HR used to estimate the sample size`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0855</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`Non-inferior margin in HR scale`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 9.785497</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Alpha</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Power</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`Total number of events`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`Max HR to declare NI`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`Max number of events in the experimental group`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`Non-inferior criteria`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "At least 30% VE in new vaccine"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Table 2: rule out margin delta0, assuming the experimental vaccine has a</span></span></span>
+<span class="r-in"><span><span class="co"># fixed 60% efficacy versus placebo regardless of AC's own efficacy (here,</span></span></span>
+<span class="r-in"><span><span class="co"># AC has 60% VE, HR upper 95% CI = 0.4997)</span></span></span>
+<span class="r-in"><span><span class="fu">ss_ni_ve</span><span class="op">(</span>ve_lci <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="fl">0.4997</span>, power <span class="op">=</span> <span class="fl">0.9</span>, use70 <span class="op">=</span> <span class="cn">TRUE</span>, ve_exp <span class="op">=</span> <span class="fl">0.60</span>, ve_ac <span class="op">=</span> <span class="fl">0.60</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`Upper limit of the HR used to estimate the sample size`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4997</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`Non-inferior margin in HR scale`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.674325</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Alpha</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.025</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $Power</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`Total number of events`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 166</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`Max HR to declare NI`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.213333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`Max number of events in the experimental group`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 91</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $`Non-inferior criteria`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "At least 30% VE in new vaccine"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

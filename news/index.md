@@ -1,6 +1,66 @@
 # Changelog
 
+## ssutil 1.2.0
+
+CRAN release: 2026-09-17
+
+- Fix bug on
+  [`power_best_binomial()`](https://johnaponte.github.io/ssutil/reference/power_best_binomial.md)
+- Improve performance of
+  [`sim_power_best_binomial()`](https://johnaponte.github.io/ssutil/reference/sim_power_best_binomial.md)
+- Add test to confirm
+  [`power_best_binomial()`](https://johnaponte.github.io/ssutil/reference/power_best_binomial.md)
+  produces a valid result using simulations.
+- constrain parameter in
+  [`wcs_power_best_binomial()`](https://johnaponte.github.io/ssutil/reference/wcs_power_best_binomial.md)
+  to avoid search probabilities lower than the difference.
+- Modify
+  [`sim_power_nbinom()`](https://johnaponte.github.io/ssutil/reference/sim_power_nbinom.md)
+  to explicitly indicate the direction of the alternative hypothesis as
+  it could be wrongly inferred from the `rr` alone.
+- Modify
+  [`multz()`](https://johnaponte.github.io/ssutil/reference/multz.md)
+  and `multq()` to follow R convention in distributions. A new parameter
+  `lower.tail` is added
+- Fix a bug an
+  [`ss_best_normal()`](https://johnaponte.github.io/ssutil/reference/ss_best_normal.md)
+  returns now an integer value
+- [`ss_ni_ve()`](https://johnaponte.github.io/ssutil/reference/ss_ni_ve.md)
+  now computes the total number of events using Freedman’s (1982)
+  log-rank sample size formula instead of
+  `gsDesign::nBinomial1Sample()`, which better reproduces Table 1 of
+  Fleming et al. (2021) and removes the `gsDesign` package dependency
+- Added `ve_exp`/`ve_ac` parameters to
+  [`ss_ni_ve()`](https://johnaponte.github.io/ssutil/reference/ss_ni_ve.md),
+  allowing the experimental vaccine’s assumed efficacy to differ from
+  the active comparator’s, which reproduces Table 2 of Fleming et
+  al. (2021)
+- Added a `true_diff` parameter to
+  [`sim_power_ni_normal()`](https://johnaponte.github.io/ssutil/reference/sim_power_ni_normal.md)
+  so simulations are no longer restricted to a true difference of 0
+  between groups, allowing sensitivity evaluation when the experimental
+  group is truly slightly worse or better than control
+- Fixed
+  [`prophr()`](https://johnaponte.github.io/ssutil/reference/prophr.md)
+  to accept vector inputs for `p0`/`hr` without an “condition has length
+  \> 1” error
+- Corrected documentation:
+  [`sim_power_best_bin_rank()`](https://johnaponte.github.io/ssutil/reference/sim_power_best_bin_rank.md)
+  selects the group with the *highest* total rank as best (roxygen said
+  “lowest”);
+  [`power_best_normal()`](https://johnaponte.github.io/ssutil/reference/power_best_normal.md)
+  returns a probability, not an integer sample size;
+  [`sim_power_ni_normal()`](https://johnaponte.github.io/ssutil/reference/sim_power_ni_normal.md)’s
+  and
+  [`sim_power_equivalence_normal()`](https://johnaponte.github.io/ssutil/reference/sim_power_equivalence_normal.md)’s
+  `t_level` examples/docs clarified
+- Removed dead/superseded code and a missing-comma typo in
+  [`sim_power_nbinom()`](https://johnaponte.github.io/ssutil/reference/sim_power_nbinom.md)’s
+  example
+
 ## ssutil 1.1.0
+
+CRAN release: 2026-09-06
 
 - Added the
   [`power_events_rate()`](https://johnaponte.github.io/ssutil/reference/power_events_rate.md)

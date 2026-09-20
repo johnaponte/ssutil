@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ssutil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Selecting the best group using the Indifference-Zone approach for binomial outcomes</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/johnaponte/ssutil/blob/v1.1.0/vignettes/iz_binomial.Rmd" class="external-link"><code>vignettes/iz_binomial.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/johnaponte/ssutil/blob/main/vignettes/iz_binomial.Rmd" class="external-link"><code>vignettes/iz_binomial.Rmd</code></a></small>
       <div class="d-none name"><code>iz_binomial.Rmd</code></div>
     </div>
 
@@ -124,7 +124,7 @@ has an event probability of 90% and the indifference-zone threshold is
 </ol>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/power_best_binomial.html">power_best_binomial</a></span><span class="op">(</span>p1 <span class="op">=</span> <span class="fl">0.9</span>, dif <span class="op">=</span> <span class="fl">0.1</span>, ngroups <span class="op">=</span> <span class="fl">3</span>, npergroup <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.7584432</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.7704134</span></span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li>What is the sample size required per group to achieve 90% power for
 correctly selecting the best group among three groups, assuming the best
@@ -133,7 +133,7 @@ threshold is 10%.</li>
 </ol>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/ss_best_binomial.html">ss_best_binomial</a></span><span class="op">(</span>power <span class="op">=</span> <span class="fl">0.9</span>, p1 <span class="op">=</span> <span class="fl">0.9</span>, dif <span class="op">=</span> <span class="fl">0.1</span>, ngroups <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 64</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 63</span></span></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
 <li>Using simulations, what is the probability of correctly selecting
 the best group in a trial with three groups of 30 participants each?
@@ -152,8 +152,8 @@ indifference-zone threshold is 10%.</li>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Empirical Power Result</span></span>
 <span><span class="co">#&gt; ----------------------- </span></span>
-<span><span class="co">#&gt; Power:       0.7740</span></span>
-<span><span class="co">#&gt; 95% CI:      [0.7468, 0.7996]</span></span>
+<span><span class="co">#&gt; Power:       0.7610</span></span>
+<span><span class="co">#&gt; 95% CI:      [0.7333, 0.7871]</span></span>
 <span><span class="co">#&gt; Simulations: 1000</span></span></code></pre></div>
 <ol start="4" style="list-style-type: decimal">
 <li>What is the lowest power in a study where the indifference-zone is
@@ -162,10 +162,10 @@ setup to 10%, there are 3 groups and 50 participants per group?</li>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/wcs_power_best_binomial.html">wcs_power_best_binomial</a></span><span class="op">(</span>dif <span class="op">=</span> <span class="fl">0.1</span>, ngroups <span class="op">=</span> <span class="fl">3</span>, npergroup <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $p1</span></span>
-<span><span class="co">#&gt; [1] 0.5541703</span></span>
+<span><span class="co">#&gt; [1] 0.554606</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $minimum_power</span></span>
-<span><span class="co">#&gt; [1] 0.7410576</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.7452203</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="examples-using-multiple-outcomes">Examples using multiple outcomes<a class="anchor" aria-label="anchor" href="#examples-using-multiple-outcomes"></a>
@@ -206,8 +206,8 @@ for all outcomes.</li>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Empirical Power Result</span></span>
 <span><span class="co">#&gt; ----------------------- </span></span>
-<span><span class="co">#&gt; Power:       0.1670</span></span>
-<span><span class="co">#&gt; 95% CI:      [0.1444, 0.1916]</span></span>
+<span><span class="co">#&gt; Power:       0.1640</span></span>
+<span><span class="co">#&gt; 95% CI:      [0.1416, 0.1884]</span></span>
 <span><span class="co">#&gt; Simulations: 1000</span></span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
 <li>Same setup, but define the best group based on overall ranking

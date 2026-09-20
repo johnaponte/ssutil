@@ -62,7 +62,7 @@ number of groups (`ngroups`), and the sample size per group
 ``` r
 
 power_best_binomial(p1 = 0.9, dif = 0.1, ngroups = 3, npergroup = 30)
-#> [1] 0.7584432
+#> [1] 0.7704134
 ```
 
 2.  What is the sample size required per group to achieve 90% power for
@@ -73,7 +73,7 @@ power_best_binomial(p1 = 0.9, dif = 0.1, ngroups = 3, npergroup = 30)
 ``` r
 
 ss_best_binomial(power = 0.9, p1 = 0.9, dif = 0.1, ngroups = 3)
-#> [1] 64
+#> [1] 63
 ```
 
 3.  Using simulations, what is the probability of correctly selecting
@@ -94,8 +94,8 @@ sim_power_best_binomial(
 )
 #> Empirical Power Result
 #> ----------------------- 
-#> Power:       0.7740
-#> 95% CI:      [0.7468, 0.7996]
+#> Power:       0.7610
+#> 95% CI:      [0.7333, 0.7871]
 #> Simulations: 1000
 ```
 
@@ -106,10 +106,10 @@ sim_power_best_binomial(
 
 wcs_power_best_binomial(dif = 0.1, ngroups = 3, npergroup = 50)
 #> $p1
-#> [1] 0.5541703
+#> [1] 0.554606
 #> 
 #> $minimum_power
-#> [1] 0.7410576
+#> [1] 0.7452203
 ```
 
 ## Examples using multiple outcomes
@@ -157,8 +157,8 @@ sim_power_best_binomial(
 )
 #> Empirical Power Result
 #> ----------------------- 
-#> Power:       0.1670
-#> 95% CI:      [0.1444, 0.1916]
+#> Power:       0.1640
+#> 95% CI:      [0.1416, 0.1884]
 #> Simulations: 1000
 ```
 

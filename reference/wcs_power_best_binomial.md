@@ -54,9 +54,9 @@ with the supplied parameters, then uses
 ``` r
 wcs_power_best_binomial(dif = 0.1, ngroups = 3, npergroup = 50)
 #> $p1
-#> [1] 0.5541703
+#> [1] 0.554606
 #> 
 #> $minimum_power
-#> [1] 0.7410576
+#> [1] 0.7452203
 #> 
 ```

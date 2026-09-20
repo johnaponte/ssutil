@@ -9,7 +9,7 @@ based on binomial outcomes, via simulation."><meta property="og:image" content="
 
     <a class="navbar-brand me-2" href="../index.html">ssutil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,7 +39,7 @@ based on binomial outcomes, via simulation."><meta property="og:image" content="
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Simulate Power to Rank the Best Group Using Binomial Outcomes</h1>
-      <small class="dont-index">Source: <a href="https://github.com/johnaponte/ssutil/blob/v1.1.0/R/sim_power_best_bin_rank.R" class="external-link"><code>R/sim_power_best_bin_rank.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/johnaponte/ssutil/blob/main/R/sim_power_best_bin_rank.R" class="external-link"><code>R/sim_power_best_bin_rank.R</code></a></small>
       <div class="d-none name"><code>sim_power_best_bin_rank.Rd</code></div>
     </div>
 
@@ -71,11 +71,13 @@ based on binomial outcomes, via simulation.</p>
 
 
 <dt id="arg-p-">p1<a class="anchor" aria-label="anchor" href="#arg-p-"></a></dt>
-<dd><p>Numeric. Event probability in the best group (scalar or vector of length <code>noutcomes</code>).</p></dd>
+<dd><p>Numeric. Event probability in the first group, i.e. the true best
+group (scalar or vector of length <code>noutcomes</code>).</p></dd>
 
 
 <dt id="arg-dif">dif<a class="anchor" aria-label="anchor" href="#arg-dif"></a></dt>
-<dd><p>Numeric. Difference between the best group and the rest (scalar or vector of length <code>noutcomes</code>).</p></dd>
+<dd><p>Numeric. Amount by which the first (true best) group's probability
+exceeds the other <code>ngroups - 1</code> groups (scalar or vector of length <code>noutcomes</code>).</p></dd>
 
 
 <dt id="arg-weights">weights<a class="anchor" aria-label="anchor" href="#arg-weights"></a></dt>
@@ -108,12 +110,17 @@ See also <code><a href="empirical_power_result.html">empirical_power_result</a><
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Each outcome is assumed to follow an independent binomial distribution. The
-best group is defined as having a probability at least <code>dif</code> higher than the
-other groups. The function sums weighted ranks across multiple outcomes to
-determine the top group.</p>
+first group is always the true best group: it is simulated with event
+probability <code>p1</code>, while the other <code>ngroups - 1</code> groups share probability
+<code>p1 - dif</code>. The function sums weighted ranks across multiple outcomes to
+determine the top group, and estimates the empirical power to correctly
+identify the first group as the best.</p>
 <p>If multiple outcomes are defined, weights can be applied to prioritize some
-outcomes over others. Weights are automatically scaled to sum 1. The group
-with the lowest total rank is considered the best.</p>
+outcomes over others. Weights are automatically scaled to sum 1. For each
+outcome, groups are ranked from lowest (1) to highest (<code>ngroups</code>) observed
+proportion; the group with the highest total weighted rank across outcomes
+is considered the best. Power is the proportion of simulations in which
+that group is the first group.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

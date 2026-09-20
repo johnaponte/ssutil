@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ssutil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,11 +37,30 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/johnaponte/ssutil/blob/v1.1.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/johnaponte/ssutil/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.1.0" id="ssutil-110">ssutil 1.1.0<a class="anchor" aria-label="anchor" href="#ssutil-110"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.2.0" id="ssutil-120">ssutil 1.2.0<a class="anchor" aria-label="anchor" href="#ssutil-120"></a></h2><p class="text-muted">CRAN release: 2026-09-17</p>
+<ul><li>Fix bug on <code><a href="../reference/power_best_binomial.html">power_best_binomial()</a></code>
+</li>
+<li>Improve performance of <code><a href="../reference/sim_power_best_binomial.html">sim_power_best_binomial()</a></code>
+</li>
+<li>Add test to confirm <code><a href="../reference/power_best_binomial.html">power_best_binomial()</a></code> produces a valid result using simulations.</li>
+<li>constrain parameter in <code><a href="../reference/wcs_power_best_binomial.html">wcs_power_best_binomial()</a></code> to avoid search probabilities lower than the difference.</li>
+<li>Modify <code><a href="../reference/sim_power_nbinom.html">sim_power_nbinom()</a></code> to explicitly indicate the direction of the alternative hypothesis as it could be wrongly inferred from the <code>rr</code> alone.</li>
+<li>Modify <code><a href="../reference/multz.html">multz()</a></code> and <code>multq()</code> to follow R convention in distributions. A new parameter <code>lower.tail</code> is added</li>
+<li>Fix a bug an <code><a href="../reference/ss_best_normal.html">ss_best_normal()</a></code> returns now an integer value</li>
+<li>
+<code><a href="../reference/ss_ni_ve.html">ss_ni_ve()</a></code> now computes the total number of events using Freedman’s (1982) log-rank sample size formula instead of <code>gsDesign::nBinomial1Sample()</code>, which better reproduces Table 1 of Fleming et al. (2021) and removes the <code>gsDesign</code> package dependency</li>
+<li>Added <code>ve_exp</code>/<code>ve_ac</code> parameters to <code><a href="../reference/ss_ni_ve.html">ss_ni_ve()</a></code>, allowing the experimental vaccine’s assumed efficacy to differ from the active comparator’s, which reproduces Table 2 of Fleming et al. (2021)</li>
+<li>Added a <code>true_diff</code> parameter to <code><a href="../reference/sim_power_ni_normal.html">sim_power_ni_normal()</a></code> so simulations are no longer restricted to a true difference of 0 between groups, allowing sensitivity evaluation when the experimental group is truly slightly worse or better than control</li>
+<li>Fixed <code><a href="../reference/prophr.html">prophr()</a></code> to accept vector inputs for <code>p0</code>/<code>hr</code> without an “condition has length &gt; 1” error</li>
+<li>Corrected documentation: <code><a href="../reference/sim_power_best_bin_rank.html">sim_power_best_bin_rank()</a></code> selects the group with the <em>highest</em> total rank as best (roxygen said “lowest”); <code><a href="../reference/power_best_normal.html">power_best_normal()</a></code> returns a probability, not an integer sample size; <code><a href="../reference/sim_power_ni_normal.html">sim_power_ni_normal()</a></code>’s and <code><a href="../reference/sim_power_equivalence_normal.html">sim_power_equivalence_normal()</a></code>’s <code>t_level</code> examples/docs clarified</li>
+<li>Removed dead/superseded code and a missing-comma typo in <code><a href="../reference/sim_power_nbinom.html">sim_power_nbinom()</a></code>’s example</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.0" id="ssutil-110">ssutil 1.1.0<a class="anchor" aria-label="anchor" href="#ssutil-110"></a></h2><p class="text-muted">CRAN release: 2026-09-06</p>
 <ul><li>Added the <code><a href="../reference/power_events_rate.html">power_events_rate()</a></code> function to compute the exact binomial probability of observing at least a given number of events, across combinations of sample sizes and risks.</li>
 <li>Updated the “Power for rare events” vignette (formerly “Detectable Event Rate for Safety Signal Detection”) to cover <code><a href="../reference/power_events_rate.html">power_events_rate()</a></code> alongside <code><a href="../reference/power_single_rate.html">power_single_rate()</a></code>.</li>
 <li>Corrected several grammar, spelling, and terminology errors across the package vignettes.</li>

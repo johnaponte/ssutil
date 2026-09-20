@@ -80,7 +80,7 @@ sim_power_best_binomial(
 )
 #> Empirical Power Result
 #> ----------------------- 
-#> Power:       0.9050
-#> 95% CI:      [0.8851, 0.9225]
+#> Power:       0.9150
+#> 95% CI:      [0.8960, 0.9315]
 #> Simulations: 1000
 ```

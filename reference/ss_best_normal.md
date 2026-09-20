@@ -64,5 +64,5 @@ Multiple Comparisons.* Wiley Series in Probability and Statistics. ISBN:
 
 ``` r
 ss_best_normal( power = 0.8, dif = 0.5, sd = 1, ngroups = 3)
-#> [1] 10.92462
+#> [1] 11
 ```

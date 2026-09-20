@@ -13,7 +13,7 @@ group means lie entirely within the interval defined by llimit and ulimit."><met
 
     <a class="navbar-brand me-2" href="../index.html">ssutil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,7 @@ group means lie entirely within the interval defined by llimit and ulimit."><met
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Empirical Power for Equivalence (Normal Outcomes)</h1>
-      <small class="dont-index">Source: <a href="https://github.com/johnaponte/ssutil/blob/v1.1.0/R/sim_power_equivalence_normal.R" class="external-link"><code>R/sim_power_equivalence_normal.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/johnaponte/ssutil/blob/main/R/sim_power_equivalence_normal.R" class="external-link"><code>R/sim_power_equivalence_normal.R</code></a></small>
       <div class="d-none name"><code>sim_power_equivalence_normal.Rd</code></div>
     </div>
 
@@ -97,7 +97,12 @@ group means lie entirely within the interval defined by <code>llimit</code> and 
 
 
 <dt id="arg-t-level">t_level<a class="anchor" aria-label="anchor" href="#arg-t-level"></a></dt>
-<dd><p>Numeric. Confidence level used for the t-tests (e.g., 0.95 for 95% CI).</p></dd>
+<dd><p>Numeric. Confidence level used for the t-tests (e.g., 0.95 for 95% CI).
+Equivalence is assessed via a two-sided <code>t_level</code> CI, which is equivalent to two
+one-sided tests (TOST) each at a one-sided alpha of <code>(1 - t_level) / 2</code>. The
+default <code>t_level = 0.95</code> therefore implements TOST at a one-sided alpha of 0.025;
+for the more common bioequivalence convention of one-sided alpha = 0.05 (e.g. FDA/EMA
+guidance), use <code>t_level = 0.90</code> instead.</p></dd>
 
 
 <dt id="arg-conf-level">conf.level<a class="anchor" aria-label="anchor" href="#arg-conf-level"></a></dt>
@@ -136,8 +141,8 @@ the specified equivalence limits.</p>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Empirical Power Result</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------- </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Power:       0.9160</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 95% CI:      [0.8971, 0.9324]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Power:       0.9130</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95% CI:      [0.8938, 0.9297]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simulations: 1000</span>
 </code></pre></div>
     </div>

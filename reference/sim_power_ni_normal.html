@@ -11,7 +11,7 @@ non-inferiority rules based on user-defined required and optional tests."><meta 
 
     <a class="navbar-brand me-2" href="../index.html">ssutil</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,7 +41,7 @@ non-inferiority rules based on user-defined required and optional tests."><meta 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Empirical Power for Non-Inferiority (Normal Outcomes)</h1>
-      <small class="dont-index">Source: <a href="https://github.com/johnaponte/ssutil/blob/v1.1.0/R/sim_power_non_inferiority.R" class="external-link"><code>R/sim_power_non_inferiority.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/johnaponte/ssutil/blob/main/R/sim_power_non_inferiority.R" class="external-link"><code>R/sim_power_non_inferiority.R</code></a></small>
       <div class="d-none name"><code>sim_power_ni_normal.Rd</code></div>
     </div>
 
@@ -61,6 +61,7 @@ non-inferiority rules based on user-defined required and optional tests.</p>
 <span>  <span class="va">test_req</span>,</span>
 <span>  <span class="va">test_opt</span>,</span>
 <span>  <span class="va">sd</span>,</span>
+<span>  true_diff <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  corr <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  t_level <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  conf.level <span class="op">=</span> <span class="fl">0.95</span></span>
@@ -97,6 +98,14 @@ non-inferiority rules based on user-defined required and optional tests.</p>
 
 <dt id="arg-sd">sd<a class="anchor" aria-label="anchor" href="#arg-sd"></a></dt>
 <dd><p>Numeric. Standard deviation(s) of the outcomes. Scalar or vector of length <code>ntest</code>.</p></dd>
+
+
+<dt id="arg-true-diff">true_diff<a class="anchor" aria-label="anchor" href="#arg-true-diff"></a></dt>
+<dd><p>Numeric. True difference(s) in means (experimental minus control) used to
+simulate the data, i.e. \(\mu_E - \mu_C\). Scalar or vector of length <code>ntest</code>.
+Defaults to 0 (no true difference between groups); set to a small negative value to
+evaluate power when the experimental group is truly slightly worse than control, or a
+positive value when it is truly better.</p></dd>
 
 
 <dt id="arg-corr">corr<a class="anchor" aria-label="anchor" href="#arg-corr"></a></dt>
@@ -148,12 +157,12 @@ than the specified non-inferiority limit. Overall non-inferiority is declared if
 <span class="r-in"><span>  test_opt <span class="op">=</span> <span class="fl">3</span>,</span></span>
 <span class="r-in"><span>  sd <span class="op">=</span> <span class="fl">0.4</span>,</span></span>
 <span class="r-in"><span>  corr <span class="op">=</span> <span class="fl">0</span>,</span></span>
-<span class="r-in"><span>  t_level <span class="op">=</span> <span class="fl">0.05</span></span></span>
+<span class="r-in"><span>  t_level <span class="op">=</span> <span class="fl">0.95</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Empirical Power Result</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------- </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Power:       1.0000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 95% CI:      [0.9963, 1.0000]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Power:       0.9990</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95% CI:      [0.9944, 1.0000]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simulations: 1000</span>
 </code></pre></div>
     </div>

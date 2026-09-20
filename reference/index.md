@@ -11,7 +11,7 @@
 - [`is.empirical_power_result()`](https://johnaponte.github.io/ssutil/reference/is.empirical_power_result.md)
   : Check if an object is a sim_power_result
 - [`multp()`](https://johnaponte.github.io/ssutil/reference/multp.md) :
-  Calculate the Multivariate Normal Probability
+  Multivariate Normal Equicoordinate Cumulative Distribution Function
 - [`multz()`](https://johnaponte.github.io/ssutil/reference/multz.md) :
   Calculate the Upper Equicoordinate Point of a Multivariate Normal
   Distribution

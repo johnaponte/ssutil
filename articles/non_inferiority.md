@@ -23,7 +23,7 @@ serotypes? Non-inferiority is achieved if the geometric mean ratio
 between the candidate vaccine and the reference is greater than 0.5 for
 the first two antigens, and for three of the other five.
 
-This example simulates 1000 trials with 125 participants per group, 7
+This example simulates 1000 trials with 500 participants per group, 7
 independent outcomes, a standard deviation of 0.8 on the log10 scale for
 all outcomes, and a common non-inferiority margin equivalent to
 log10(2/3). Non-inferiority is required in the first two outcomes, and
@@ -36,21 +36,21 @@ set.seed(123)
 
 res <- sim_power_ni_normal(
   nsim = 1000,
-  npergroup = 125,
+  npergroup = 500,
   ntest = 7,
   ni_limit = log10(2/3),
   test_req = 2,
   test_opt = 3,
   sd = 0.8,
   corr = 0,
-  t_level = 0.05
+  t_level = 0.95
 )
 
 res
 #> Empirical Power Result
 #> ----------------------- 
-#> Power:       0.9120
-#> 95% CI:      [0.8927, 0.9288]
+#> Power:       0.8680
+#> 95% CI:      [0.8454, 0.8884]
 #> Simulations: 1000
 ```
 

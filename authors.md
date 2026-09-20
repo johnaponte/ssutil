@@ -10,15 +10,15 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/johnaponte/ssutil/blob/v1.1.0/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/johnaponte/ssutil/blob/main/DESCRIPTION)
 
 Aponte J (2026). *ssutil: Sample Size Calculation Tools*. R package
-version 1.1.0, <https://johnaponte.github.io/ssutil/>.
+version 1.2.0, <https://johnaponte.github.io/ssutil/>.
 
     @Manual{,
       title = {ssutil: Sample Size Calculation Tools},
       author = {John J. Aponte},
       year = {2026},
-      note = {R package version 1.1.0},
+      note = {R package version 1.2.0},
       url = {https://johnaponte.github.io/ssutil/},
     }
